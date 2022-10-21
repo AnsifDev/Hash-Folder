@@ -1,7 +1,6 @@
 import os
 import sys
 
-
 def getConfigs() -> dict:
     configStrCodes = []
     
