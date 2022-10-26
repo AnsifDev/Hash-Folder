@@ -91,7 +91,7 @@ def main():
 
         repo = sys.argv[2]
         if argLen > 3: repo_dir = os.path.abspath(os.path.expanduser(sys.argv[3]))
-        else: repo_dir = os.path.dirname(os.getcwd())+repo.replace(os.path.dirname(repo), "")
+        else: repo_dir = os.path.dirname(os.getcwd())+repo.replace(os.path.dirname(repo), "") 
         os.system("gh repo clone "+repo+" \""+repo_dir+"\"")
         os.chdir(repo_dir)
         os.system("git config user.name "+name)
