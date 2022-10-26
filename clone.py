@@ -50,7 +50,7 @@ def main():
         print("====== Login complete ======")
     
     repo = input("\n>> gh repo clone ")
-    chdir(os.path.dirname(os.getcwd()))
+    os.chdir(os.path.dirname(os.getcwd()))
     os.system("gh repo clone "+repo)
 
 def getPassPhrase():
