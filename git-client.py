@@ -1,9 +1,5 @@
-from ast import While
 import os
 import sys
-from numpy import False_
-
-import pexpect
 
 aptInit = """type -p curl >/dev/null || sudo apt install curl -y
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
