@@ -34,6 +34,7 @@ def generateSSH():
         elif "/" in filename: print("Error: Only file name is allowed not path!!!")
         elif not is_valid_filename(filename): print("Error: Not a valid filename!!!")
         else:
+            filename = os.path.expanduser("~/.ssh/"+filename)
             keyname = input("Enter a key name: ")
             os.system("ssh-keygen -t ed25519 -C \""+keyname+"\" -f "+filename)
             return
@@ -48,6 +49,7 @@ def generateSSH():
         elif not is_valid_filename(filename): print("Error: Not a valid filename!!!\n")
         else: break
     
+    filename = os.path.expanduser("~/.ssh/"+filename)
     keyname = input("Enter a key name: ")
     os.system("ssh-keygen -t ed25519 -C \""+keyname+"\" -f "+filename)
     
