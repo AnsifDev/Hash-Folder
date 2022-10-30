@@ -1,12 +1,9 @@
+#!/usr/bin/python3
+
+from mainActivity import MainActivity
+import mainActivity
 import os
 import sys
-
-aptInit = """type -p curl >/dev/null || sudo apt install curl -y
-curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
-&& sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
-&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-&& sudo apt update \
-&& sudo apt install gh -y"""
 
 def init():
     if os.system("git --version") != 0:
@@ -17,7 +14,7 @@ def init():
     if os.system("gh --version") != 0:
         print("==========Installing gh==========")
         os.system("sudo apt update")
-        if os.system("sudo apt-get install gh") != 0: os.system(aptInit)
+        if os.system("sudo apt-get install gh") != 0: os.system(mainActivity.gh_install_cmd)
     print()
 
 def is_valid_filename(filename):
@@ -64,9 +61,8 @@ def main():
     argLen = len(sys.argv)
 
     if argLen < 2:
-        print("Invalid syntax:")
-        help()
-        exit(1)
+        MainActivity().onCreate()
+        return
 
     cmd = sys.argv[1]
 
