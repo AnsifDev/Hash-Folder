@@ -1,3 +1,4 @@
+from threading import Thread
 import gi
 
 gi.require_version("Gtk", "3.0")
@@ -18,9 +19,9 @@ class InstallDialog:
         self.cancel.connect("clicked", self.btn_clicked)
     
     def btn_clicked(self, btn):
-        self.onExit(self.reqId, btn == self.ok)
+        Thread(target=self.onExit, args=[self.reqId, btn == self.ok]).start()
         self.dg.destroy()
 
     def show(self):
-        self.dg.show()
+        self.dg.run()
 

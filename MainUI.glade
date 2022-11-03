@@ -1,308 +1,264 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkApplicationWindow" id="window1">
     <property name="can-focus">False</property>
     <property name="border-width">4</property>
     <property name="resizable">False</property>
+    <property name="default-height">200</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkPaned">
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">4</property>
+        <property name="can-focus">True</property>
+        <property name="valign">center</property>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="spacing">8</property>
+            <property name="margin-right">2</property>
+            <property name="margin-end">2</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">2</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkCheckButton" id="check_ssh">
+                <property name="label" translatable="yes">Create SSH Key</property>
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Choose Folder to Clone the Repository:</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">start</property>
+                <property name="draw-indicator">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
+                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkFileChooserButton" id="btn_choose_file">
+              <!-- n-columns=2 n-rows=4 -->
+              <object class="GtkGrid" id="ssh_tools">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can-focus">False</property>
-                <property name="action">select-folder</property>
-                <property name="title" translatable="yes">Choose Folder</property>
+                <property name="margin-left">8</property>
+                <property name="margin-start">8</property>
+                <property name="row-spacing">2</property>
+                <property name="column-spacing">8</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Enter File Name:</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Enter the Key Name:</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Enter a Password:</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Confirm Password:</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_ssh_file">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_ssh_key">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_ssh_pass">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="visibility">False</property>
+                    <property name="invisible-char">•</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_ssh_cpass">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="visibility">False</property>
+                    <property name="invisible-char">•</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
               </object>
               <packing>
-                <property name="expand">True</property>
+                <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="resize">False</property>
+            <property name="shrink">False</property>
           </packing>
         </child>
         <child>
-          <object class="GtkPaned">
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-left">2</property>
+            <property name="margin-start">2</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">2</property>
             <child>
-              <object class="GtkBox">
+              <object class="GtkCheckButton" id="check_relogin">
+                <property name="label" translatable="yes">Re Login</property>
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-end">2</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">2</property>
-                <child>
-                  <object class="GtkCheckButton" id="check_ssh">
-                    <property name="label" translatable="yes">Create SSH Key</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="halign">start</property>
-                    <property name="draw-indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <!-- n-columns=2 n-rows=4 -->
-                  <object class="GtkGrid" id="ssh_tools">
-                    <property name="visible">True</property>
-                    <property name="sensitive">False</property>
-                    <property name="can-focus">False</property>
-                    <property name="margin-start">8</property>
-                    <property name="row-spacing">2</property>
-                    <property name="column-spacing">8</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Enter File Name:</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Enter the Key Name:</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Enter a Password:</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Confirm Password:</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry_ssh_file">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry_ssh_key">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry_ssh_pass">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="visibility">False</property>
-                        <property name="invisible-char">•</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry_ssh_cpass">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="visibility">False</property>
-                        <property name="invisible-char">•</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">start</property>
+                <property name="draw-indicator">True</property>
               </object>
               <packing>
-                <property name="resize">False</property>
-                <property name="shrink">False</property>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <!-- n-columns=2 n-rows=3 -->
+              <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="margin-start">2</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">2</property>
+                <property name="margin-left">8</property>
+                <property name="margin-start">8</property>
+                <property name="row-spacing">2</property>
+                <property name="column-spacing">8</property>
                 <child>
-                  <object class="GtkCheckButton" id="check_relogin">
-                    <property name="label" translatable="yes">Re Login</property>
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
+                    <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="draw-indicator">True</property>
+                    <property name="label" translatable="yes">Enter the User Name:</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
-                  <!-- n-columns=2 n-rows=3 -->
-                  <object class="GtkGrid">
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="margin-start">8</property>
-                    <property name="row-spacing">2</property>
-                    <property name="column-spacing">8</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Enter the User Name:</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Enter the Email ID:</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Enter the Repo Name</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry_git_name">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry_git_email">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry_git_repo">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Enter the Email ID:</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Enter the Repo Name</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_git_name">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_git_email">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_git_repo">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="resize">False</property>
-                <property name="shrink">False</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="resize">False</property>
+            <property name="shrink">False</property>
           </packing>
         </child>
       </object>
@@ -333,6 +289,8 @@
     <property name="can-focus">False</property>
     <property name="border-width">5</property>
     <property name="title" translatable="yes">Error</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="default-width">360</property>
     <property name="default-height">180</property>
     <property name="destroy-with-parent">True</property>
@@ -415,6 +373,8 @@
     <property name="can-focus">False</property>
     <property name="border-width">5</property>
     <property name="title" translatable="yes">Install Request</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="default-width">360</property>
     <property name="default-height">180</property>
     <property name="destroy-with-parent">True</property>

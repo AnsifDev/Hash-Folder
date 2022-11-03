@@ -1,7 +1,7 @@
 import gi
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk
+from gi.repository import Gtk, GLib
 
 class ErrorDialog:
     def __init__(self, msg) -> None:
@@ -14,10 +14,10 @@ class ErrorDialog:
         dg_msg.set_text(msg)
         ok = builder.get_object("err_dg_ok")
         ok.connect("clicked", self.btn_clicked)
-    
+
     def btn_clicked(self, btn):
         self.dg.destroy()
 
     def show(self):
-        self.dg.show()
+        self.dg.run()
 
