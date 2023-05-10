@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <object class="AdwApplicationWindow" id="window">
+        <property name="default-width">600</property>
+        <property name="default-height">450</property>
+        <child>
+            <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                    <object class="AdwHeaderBar"/>
+                </child>
+                <child>
+                    <object class="HashtagPreferencesGroup" id="listview">
+                        <property name="margin-top">32</property>
+                        <property name="margin-bottom">32</property>
+                        <property name="margin-start">32</property>
+                        <property name="margin-end">32</property>
+                        <property name="title">Trail Run</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="add">
+                        <property name="margin-top">8</property>
+                        <property name="margin-bottom">8</property>
+                        <property name="margin-start">32</property>
+                        <property name="margin-end">32</property>
+                        <property name="label">Add</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="remove">
+                        <property name="margin-top">8</property>
+                        <property name="margin-bottom">8</property>
+                        <property name="margin-start">32</property>
+                        <property name="margin-end">32</property>
+                        <property name="label">Remove</property>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </object>
+</interface>
