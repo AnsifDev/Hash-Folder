@@ -1,7 +1,7 @@
 import os
 from gi.repository import Adw, Gtk
 from .DialogSSH import DialogSSH
-from .util import ExtTerminal, parse_yml_file
+from ..util import ExtTerminal, parse_yml_file
 from .HomePage import HomePage
 
 @Gtk.Template(filename='ui/login_page.ui')

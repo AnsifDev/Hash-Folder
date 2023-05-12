@@ -1,28 +1,8 @@
-# window.py
-#
-# Copyright 2023 Ansif
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
-
 import os
-from gi.repository import Adw
 from gi.repository import Gtk
 from .LoginPage import LoginPage
 from .HomePage import HomePage
-from .util import parse_yml_file, ExtTerminal
+from ..util import parse_yml_file, ExtTerminal
 
 cmds="""#!/bin/bash
 type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
@@ -33,9 +13,9 @@ sudo apt update
 sudo apt install gh -y
 """
 
-@Gtk.Template(filename='ui/window.ui')
-class Linuxapp1Window(Adw.ApplicationWindow):
-    __gtype_name__ = 'Linuxapp1Window'
+@Gtk.Template(filename='ui/app_window.ui')
+class AppWindow(Gtk.ApplicationWindow):
+    __gtype_name__ = 'AppWindow'
 
     base_connector = Gtk.Template.Child()
     logout = Gtk.Template.Child()
@@ -58,7 +38,7 @@ class Linuxapp1Window(Adw.ApplicationWindow):
             self.close_install_app_file()
             if response == 0: self.on_apps_ready()
             else:
-                dg = Adw.MessageDialog.new(self, "App Install Failed", "Installation failed. Please retry or install the gh pacakage manually.\nErr code: "+str(response))
+                dg = Gtk.MessageDialog.new(self, "App Install Failed", "Installation failed. Please retry or install the gh pacakage manually.\nErr code: "+str(response))
                 dg.add_response("cancel", "Quit")
                 dg.add_response("install", "Retry")
                 dg.set_response_appearance("install", 1)
@@ -76,7 +56,7 @@ class Linuxapp1Window(Adw.ApplicationWindow):
             if usrDat["github.com"]["git_protocol"] == "ssh":
                 self.connect_home_page(usrDat["github.com"]["user"])
             else:
-                dg = Adw.MessageDialog.new(self, "Unsupported Protocol", "Currently logged in method is in not ssh protocol. Please re-login with ssh protocol")
+                dg = Gtk.MessageDialog.new(self, "Unsupported Protocol", "Currently logged in method is in not ssh protocol. Please re-login with ssh protocol")
                 dg.add_response("cancel", "Cancel")
                 dg.add_response("login", "Re Login")
                 dg.set_response_appearance("login", 1)
@@ -90,7 +70,7 @@ class Linuxapp1Window(Adw.ApplicationWindow):
         appsReady = os.system("gh --version") == 0
         if appsReady: self.on_apps_ready()
         else:
-            dg = Adw.MessageDialog.new(self, "App Installs Required", "Some apps required to run this program is not present in this system. Please proceed to install all dependency apps.\nApp required: git client (package: gh)")
+            dg = Gtk.MessageDialog.new(self, "App Installs Required", "Some apps required to run this program is not present in this system. Please proceed to install all dependency apps.\nApp required: git client (package: gh)")
             dg.add_response("cancel", "Cancel")
             dg.add_response("install", "Install All")
             dg.set_response_appearance("install", 1)

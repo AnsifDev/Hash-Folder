@@ -1,8 +1,8 @@
-from gi.repository import Adw, Gtk
-from .util import ExtTerminal
+from gi.repository import Gtk
+from ..util import ExtTerminal
 
 @Gtk.Template(filename='ui/dg_new_repo.ui')
-class DialogNewRepo(Adw.Window):
+class DialogNewRepo(Gtk.Window):
     __gtype_name__ = 'DialogNewRepo'
 
     create = Gtk.Template.Child()
@@ -23,7 +23,7 @@ class DialogNewRepo(Adw.Window):
             self.callback(self, userdata)
         else: 
             self.callback(self, None)
-            dg = Adw.MessageDialog.new(self.get_transient_for(), "Repository Setup Failed", "Unexpected Error occured. Repository not created\nErr code: "+str(response))
+            dg = Gtk.MessageDialog.new(self.get_transient_for(), "Repository Setup Failed", "Unexpected Error occured. Repository not created\nErr code: "+str(response))
             dg.add_response("ok", "OK")
             dg.present()
 

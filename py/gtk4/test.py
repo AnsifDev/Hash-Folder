@@ -57,7 +57,7 @@ class ExtTerminal:
         def on_window_exit(widget):
             args[2] = None
         
-        builder = Gtk.Builder.new_from_file("ui/terminal_task.ui")
+        builder = Gtk.Builder.new_from_file("ui/gtk4terminal_task.ui")
 
         window = builder.get_object("window")
         window.set_transient_for(self.parent)
@@ -138,7 +138,7 @@ class ExtTerminal:
         self.__task_alive = False
 
     def __build_new_window(self, parent):
-        builder = Gtk.Builder.new_from_file("ui/terminal_task.ui")
+        builder = Gtk.Builder.new_from_file("ui/gtk4terminal_task.ui")
         win = builder.get_object("window")
         win.set_transient_for(parent)
         win.connect("close-request", self.__window_destroyed)
