@@ -1,7 +1,7 @@
 import os
 import shlex
 from threading import Thread
-from .portConfig import getConfigs, saveConfig
+from .gtk4.portConfig import getConfigs, saveConfig
 from gi.repository import Gtk, Adw, GLib, Vte, Gio
 
 class ExtTerminal:
@@ -25,7 +25,7 @@ class ExtTerminal:
         def on_window_exit(widget):
             kwargs["callback"] = None
         
-        builder = Gtk.Builder.new_from_file("ui/terminal_task.ui")
+        builder = Gtk.Builder.new_from_file("ui/gtk4terminal_task.ui")
 
         window = builder.get_object("window")
         window.set_transient_for(self.parent)

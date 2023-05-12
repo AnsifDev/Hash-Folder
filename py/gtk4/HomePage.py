@@ -2,7 +2,7 @@ import json
 import os
 import webbrowser
 from gi.repository import Gtk, Adw, Gio
-from .util import ExtTerminal, ch_port, rm_port, ViewHolder, ListViewAdapter
+from ..util import ExtTerminal, ch_port, rm_port, ViewHolder, ListViewAdapter
 from .DialogEmail import DialogEmail
 from .DialogNewRepo import DialogNewRepo
 
@@ -70,7 +70,7 @@ class myListViewAdapter(ListViewAdapter):
     def get_item_count(self) -> int:
         return len(self.online_data)
 
-@Gtk.Template(filename='ui/home_page.ui')
+@Gtk.Template(filename='ui/gtk4home_page.ui')
 class HomePage(Gtk.Box):
     __gtype_name__ = 'HomePage'
 

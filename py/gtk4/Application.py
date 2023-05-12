@@ -1,24 +1,5 @@
 #!/bin/python3
 
-# main.py
-#
-# Copyright 2023 Ansif
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
-
 import sys
 import gi
 
@@ -26,11 +7,13 @@ gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 gi.require_version('Vte', '3.91')
 
+from . import gtk3_App
+
 from gi.repository import Gtk, Gio, Adw
-from py.window import Linuxapp1Window
+from .AppWindow import AppWindow
 
 
-class Linuxapp1Application(Adw.Application):
+class GitCloner(Adw.Application):
     """The main application singleton class."""
 
     def __init__(self):
@@ -45,7 +28,7 @@ class Linuxapp1Application(Adw.Application):
         """
         self.win = self.props.active_window
         if not self.win:
-            self.win = Linuxapp1Window(application=self)
+            self.win = AppWindow(application=self)
         self.win.present()
 
     # def on_button_clicked(self, widget):
@@ -76,11 +59,3 @@ class Linuxapp1Application(Adw.Application):
         self.add_action(action)
         if shortcuts:
             self.set_accels_for_action(f"app.{name}", shortcuts)
-
-
-def main():
-    """The application's entry point."""
-    app = Linuxapp1Application()
-    return app.run(sys.argv)
-
-main()

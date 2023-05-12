@@ -1,7 +1,7 @@
 import os
 from gi.repository import Adw, Gtk
 
-@Gtk.Template(filename='ui/dg_email.ui')
+@Gtk.Template(filename='ui/gtk4dg_email.ui')
 class DialogEmail(Adw.Window):
     __gtype_name__ = 'DialogEmail'
 

@@ -1,10 +1,10 @@
 import os
 from gi.repository import Adw, Gtk
 from .DialogSSH import DialogSSH
-from .util import ExtTerminal, parse_yml_file
+from ..util import ExtTerminal, parse_yml_file
 from .HomePage import HomePage
 
-@Gtk.Template(filename='ui/login_page.ui')
+@Gtk.Template(filename='ui/gtk4login_page.ui')
 class LoginPage(Gtk.Box):
     __gtype_name__ = 'LoginPage'
 
@@ -23,7 +23,7 @@ class LoginPage(Gtk.Box):
                 usrDat = parse_yml_file(os.path.expanduser("~/.config/gh/hosts.yml"))
                 username = usrDat["github.com"]["user"]
                 if os.path.exists(os.path.expanduser("~/.ssh/"+username)):
-                    self.window.connect_home_page(username)
+                    self.complete_login(username)
                 else:
                     dg = DialogSSH(self.window, username, self.on_ssh_key_done)
                     dg.present()
@@ -43,7 +43,7 @@ class LoginPage(Gtk.Box):
 
     def on_ssh_key_done(self, dialog, keyname):
         cmd = "gh ssh-key add ~/.ssh/"+dialog.keyname.replace(" ","\\ ")+".pub -t \""+keyname+"\""
-        self.ssh_load_task.run(cmd, True, self.on_terminal_task_performed, dialog.keyname)
+        self.ssh_load_task.run(cmd, True, self.on_terminal_task_performed, keyname)
     
     def on_window_destroy(self, window):
         pass

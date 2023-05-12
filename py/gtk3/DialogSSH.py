@@ -1,10 +1,9 @@
 import os
-from gi.repository import Adw
 from gi.repository import Gtk
-from .util import ExtTerminal
+from ..util import ExtTerminal
 
 @Gtk.Template(filename='ui/dg_ssh.ui')
-class DialogSSH(Adw.Window):
+class DialogSSH(Gtk.Window):
     __gtype_name__ = 'DialogSSH'
 
     create = Gtk.Template.Child()
