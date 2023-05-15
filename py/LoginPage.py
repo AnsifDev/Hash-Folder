@@ -43,7 +43,7 @@ class LoginPage(Gtk.Box):
 
     def on_ssh_key_done(self, dialog, keyname):
         cmd = "gh ssh-key add ~/.ssh/"+dialog.keyname.replace(" ","\\ ")+".pub -t \""+keyname+"\""
-        self.ssh_load_task.run(cmd, True, self.on_terminal_task_performed, keyname)
+        self.ssh_load_task.run(cmd, True, self.on_terminal_task_performed, dialog.keyname)
     
     def on_window_destroy(self, window):
         pass
