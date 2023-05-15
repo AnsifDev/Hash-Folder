@@ -23,7 +23,7 @@ class LoginPage(Gtk.Box):
                 usrDat = parse_yml_file(os.path.expanduser("~/.config/gh/hosts.yml"))
                 username = usrDat["github.com"]["user"]
                 if os.path.exists(os.path.expanduser("~/.ssh/"+username)):
-                    self.complete_login(username)
+                    self.window.connect_home_page(username)
                 else:
                     dg = DialogSSH(self.window, username, self.on_ssh_key_done)
                     dg.present()
