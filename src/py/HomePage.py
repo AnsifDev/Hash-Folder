@@ -132,28 +132,29 @@ class HomePage(Gtk.Box):
             dg = DialogEmail(self.window, self.on_email_dg_response)
             dg.present()
         elif widget == self.custom_btn:
-            if version_code >= 22.04:
-                self.custom_dg = self.parseGtkFileDialog("Choose Folder")
+            self.custom_dg = self.parseGtkFileDialog("Choose Folder")
+            if version_code >= 23.04:
+                self.custom_dg.select_folder(self.window, None, self.on_folder_choosed, None)
+            elif version_code >= 22.04:
                 self.custom_dg.present()
                 self.custom_dg.connect("response", self.on_folder_choosed, None)
             else:
-                dg = self.parseGtkFileDialog("Choose Folder")
-                response = dg.run()
+                response = self.custom_dg.run()
                 if response == Gtk.ResponseType.OK:
-                    folder = dg.get_filename()
+                    folder = self.custom_dg.get_filename()
                     self.acc_config["custom_folder"] = folder
                     self.custom_folder.set_subtitle(folder)
                 else:
                     if self.custom_folder.check_button.get_active():
                         if "custom_folder" not in self.acc_config:
                             self.default_folder.check_button.set_active(True)
-                dg.destroy()
+                self.custom_dg.destroy()
         elif widget == self.add_repo:
             dg = DialogNewRepo(self.window, self.on_repo_create)
             dg.present()
         elif widget == self.refresh_repo:
             filename = os.path.join(app_cache, "temp.json")
-            cmd = "gh repo list --json name --json id --json visibility --json diskUsage --json nameWithOwner > "+filename
+            cmd = "gh repo list --json name --json id --json visibility --json diskUsage --json nameWithOwner > "+filename.replace(" ", "\\ ")
             self.repo_fetch_task.run(cmd, True, self.on_terminal_task_complete, filename)
         elif widget == self.en_search:
             self.sort_repos()
@@ -161,7 +162,7 @@ class HomePage(Gtk.Box):
     def on_repo_create(self, widget, reponame):
         if reponame:
             filename = os.path.join(app_cache, "temp.json")
-            cmd = "gh repo view "+reponame+" --json name --json id --json visibility --json diskUsage --json nameWithOwner > "+filename
+            cmd = "gh repo view "+reponame+" --json name --json id --json visibility --json diskUsage --json nameWithOwner > "+filename.replace(" ", "\\ ")
             self.post_repo_create_task.run(cmd, True, self.on_terminal_task_complete, filename)
 
     def on_email_dg_response(self, widget, email):
@@ -223,32 +224,39 @@ class HomePage(Gtk.Box):
             case self.custom_folder.check_button:
                 self.acc_config["folder"] = "custom"
                 if "custom_folder" not in self.acc_config: 
-                    if version_code >= 22.04:
-                        self.custom_dg = self.parseGtkFileDialog("Choose Folder")
+                    self.custom_dg = self.parseGtkFileDialog("Choose Folder")
+                    if version_code >= 23.04:
+                        self.custom_dg.select_folder(self.window, None, self.on_folder_choosed, None)
+                    elif version_code >= 22.04:
                         self.custom_dg.present()
                         self.custom_dg.connect("response", self.on_folder_choosed, None)
                     else:
-                        dg = self.parseGtkFileDialog("Choose Folder")
-                        response = dg.run()
+                        response = self.custom_dg.run()
                         if response == Gtk.ResponseType.OK:
-                            folder = dg.get_filename()
+                            folder = self.custom_dg.get_filename()
                             self.acc_config["custom_folder"] = folder
                             self.custom_folder.set_subtitle(folder)
                         else:
                             if self.custom_folder.check_button.get_active():
                                 if "custom_folder" not in self.acc_config:
                                     self.default_folder.check_button.set_active(True)
-                        dg.destroy()
+                        self.custom_dg.destroy()
             case self.ask_folder.check_button: self.acc_config["folder"] = "ask"
 
     def parseGtkFileDialog(self, title):
-        dg = Gtk.FileChooserDialog()
-        dg.set_title(title)
-        dg.set_transient_for(self.window)
-        dg.set_modal(True)
-        dg.set_action(Gtk.FileChooserAction.SELECT_FOLDER)
-        dg.add_button("Select", Gtk.ResponseType.OK)
-        dg.add_button("Cancel", Gtk.ResponseType.CANCEL)
+        if version_code >= 23.04:
+            dg = Gtk.FileDialog()
+            dg.set_title(title)
+            dg.set_modal(True)
+            dg.set_initial_folder(Gio.File.new_for_path(self.home))
+        else:
+            dg = Gtk.FileChooserDialog()
+            dg.set_title(title)
+            dg.set_transient_for(self.window)
+            dg.set_modal(True)
+            dg.set_action(Gtk.FileChooserAction.SELECT_FOLDER)
+            dg.add_button("Select", Gtk.ResponseType.OK)
+            dg.add_button("Cancel", Gtk.ResponseType.CANCEL)
         return dg
 
     def refresh(self, username):
@@ -258,7 +266,7 @@ class HomePage(Gtk.Box):
         self.logout.set_visible(True)
         
         filename = os.path.join(app_cache, "temp.json")
-        cmd = "gh repo list --json name --json id --json visibility --json diskUsage --json nameWithOwner > "+filename
+        cmd = "gh repo list --json name --json id --json visibility --json diskUsage --json nameWithOwner > "+filename.replace(" ", "\\ ")
         self.repo_fetch_task.run(cmd, True, self.on_terminal_task_complete, filename)
 
         self.load_account_data(username)
@@ -323,7 +331,8 @@ class HomePage(Gtk.Box):
                 result_ok = True
             except: result_ok = False
         else: 
-            result_ok = result == Gtk.ResponseType.OK
+            result_ok = result == int(Gtk.ResponseType.OK)
+            widget.destroy()
             folder = widget.get_file()
 
         if result_ok:
