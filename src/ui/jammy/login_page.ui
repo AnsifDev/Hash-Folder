@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="LoginPage" parent="GtkBox">
+    <property name="valign">fill</property>
+    <property name="width-request">300</property>
+    <property name="height-request">250</property>
+    <property name="orientation">vertical</property>
+    <property name="margin-top">16</property>
+    <property name="margin-bottom">24</property>
+    <property name="margin-start">12</property>
+    <property name="margin-end">12</property>
+    <property name="spacing">8</property>
+    <child>
+      <object class="AdwAvatar">
+        <property name="size">100</property>
+        <property name="show-initials">true</property>
+        <property name="margin-top">32</property>
+        <property name="margin-bottom">8</property>
+        <property name="margin-start">8</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="label">Welcome to Git Repository Cloner</property>
+        <style>
+          <class name="title-1"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="label">    This app is just a tool to let you simply clone repositories which are private in your account. Public repos also supported to get cloned. Uses SSH Protocol to transfer data. Primary purpose is to bring a syncing folders across devices which is private.</property>
+        <property name="wrap">true</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="login_git">
+        <property name="margin-top">12</property>
+        <property name="label">Login to gitHub.com (SSH Protocol)</property>
+        <signal name="clicked" handler="on_button_clicked"/>
+        <style>
+          <class name="pill"/>
+          <class name="suggested-action"/>
+        </style>
+      </object>
+    </child>
+  </template>
+</interface>

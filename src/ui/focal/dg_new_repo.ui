@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="DialogNewRepo" parent="GtkWindow">
+    <property name="default-width">500</property>
+    <property name="modal">true</property>
+    <property name="resizable">false</property>
+    <property name="deletable">false</property>
+    <property name="title">Repository Setup Wizard</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">8</property>
+        <property name="margin-bottom">16</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-top">32</property>
+            <property name="margin-bottom">8</property>
+            <property name="pixel-size">100</property>
+            <property name="icon-name">network-server-symbolic</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label">Create a new Repository</property>
+            <style>
+              <class name="title-1"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkListBox">
+            <property name="visible">True</property>
+            <property name="margin-top">24</property>
+            <property name="margin-bottom">8</property>
+            <property name="margin-start">12</property>
+            <property name="margin-end">12</property>
+            <property name="selection-mode">none</property>
+            <style>
+              <class name="card"/>"
+            </style>
+            <child>
+              <object class="HashtagEntryRow" id="en_reponame">
+                <property name="visible">True</property>
+                <property name="title">Repository Name</property>
+                <signal name="changed" handler="on_text_changed"/>
+              </object>
+            </child>
+            <child>
+              <object class="HashtagActionRow">
+                <property name="visible">True</property>
+                <property name="title" translatable="yes">Set Repository Visibility</property>
+                <child>
+                  <object class="GtkComboBoxText" id="combo_visibility">
+                    <property name="visible">True</property>
+                    <items>
+                      <item translatable="yes">Private (Recomended)</item>
+                      <item translatable="yes">Public</item>
+                    </items>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="warning_layout">
+            <property name="visible">True</property>
+            <property name="margin-start">16</property>
+            <property name="margin-end">16</property>
+            <property name="spacing">8</property>
+            <property name="orientation">horizontal</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon-name">dialog-warning-symbolic</property>
+                <property name="margin-start">16</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="warning_label">
+                <property name="visible">True</property>
+                <property name="label">Reponame must contain atleast one character and not contain any spaces</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="header_bar">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="title">Repository Setup Wizard</property>
+        <property name="show-close-button">True</property>
+        <child>
+          <object class="GtkButton" id="create">
+            <property name="visible">True</property>
+            <property name="label">Setup</property>
+            <property name="sensitive">false</property>
+            <signal name="clicked" handler="on_button_clicked"/>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="cancel">
+            <property name="visible">True</property>
+            <property name="label">Cancel</property>
+            <signal name="clicked" handler="on_button_clicked"/>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

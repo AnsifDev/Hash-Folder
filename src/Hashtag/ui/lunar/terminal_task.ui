@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <object class="AdwWindow" id="window">
+        <property name="modal">true</property>
+        <property name="resizable">false</property>
+        <property name="deletable">false</property>
+        <property name="title">Performing Task</property>
+        <child>
+            <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                    <object class="AdwHeaderBar">
+                        <child type="end">
+                            <object class="GtkButton" id="btn_copy">
+                                <property name="icon-name">edit-copy-symbolic</property>
+                            </object>
+                        </child>
+                        <child type="end">
+                            <object class="GtkButton" id="btn_paste">
+                                <property name="icon-name">edit-paste-symbolic</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+                <child><object class="AdwBin" id="place_holder"/></child>
+            </object>
+        </child>
+    </object>
+    <object class="GtkLabel" id="task_label">
+        <property name="label">Setting things ready, Please wait</property>
+        <property name="margin-top">32</property>
+        <property name="margin-bottom">32</property>
+        <property name="margin-start">32</property>
+        <property name="margin-end">32</property>
+    </object>
+</interface>

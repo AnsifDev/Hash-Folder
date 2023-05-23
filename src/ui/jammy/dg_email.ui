@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="DialogEmail" parent="AdwWindow">
+    <property name="default-width">500</property>
+    <property name="modal">true</property>
+    <property name="resizable">false</property>
+    <property name="deletable">false</property>
+    <property name="title">SSH Key Setup</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="margin-bottom">24</property>
+        <property name="spacing">8</property>
+        <child>
+          <object class="AdwHeaderBar">
+            <child type="end">
+              <object class="GtkButton" id="create">
+                <property name="label">Set Email</property>
+                <property name="sensitive">false</property>
+                <signal name="clicked" handler="on_button_clicked"/>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+            <child type="start">
+              <object class="GtkButton" id="cancel">
+                <property name="label">Cancel</property>
+                <signal name="clicked" handler="on_button_clicked"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkListBox">
+            <property name="margin-top">16</property>
+            <property name="margin-start">16</property>
+            <property name="margin-end">16</property>
+            <property name="margin-bottom">8</property>
+            <property name="selection-mode">none</property>
+            <style>
+              <class name="boxed-list"/>"
+            </style>
+            <child>
+              <object class="HashtagEntryRow" id="en_email">
+                <property name="title">Enter email</property>
+                <signal name="changed" handler="on_text_changed"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="warning_layout">
+            <property name="margin-start">16</property>
+            <property name="margin-end">16</property>
+            <property name="spacing">8</property>
+            <property name="orientation">horizontal</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">dialog-warning-symbolic</property>
+                <property name="margin-start">16</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="warning_label">
+                <property name="label">Provide a proper email id</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
