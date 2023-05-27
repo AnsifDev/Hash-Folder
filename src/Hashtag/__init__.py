@@ -6,7 +6,6 @@ from gi.repository import Gdk, Gtk, Gio
 def get_ui_file_path(filename: str):
     return get_src_ui_file_path(filename, "src/Hashtag/ui") 
 
-print(version_code >= 22.04)
 if version_code >= 22.04: 
     from gi.repository import Adw
     from .PreferencesGroup import PreferencesGroup

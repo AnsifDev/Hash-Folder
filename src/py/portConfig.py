@@ -8,7 +8,7 @@ def getConfigs() -> dict:
         file = open(os.path.expanduser("~/.ssh/config"), "r")
         configStrCodes = file.readlines()
         file.close()
-    else: print("Log: File not exists")
+    else: print("Log: SSH config file not exists")
 
     #Removing unwanted spaces and empty lines
     i = 0
@@ -38,7 +38,7 @@ def getConfigs() -> dict:
     for group in groups:
         configId = group.pop("Host")
         if "Host" in group:
-            print("found")
+            # print("found")
             group.pop("Host")
         configs[configId] = dict(group).copy()
 

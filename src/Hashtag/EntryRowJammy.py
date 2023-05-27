@@ -84,17 +84,6 @@ class EntryRow(Adw.PreferencesRow, Gtk.Editable):
         self.finish_delegate()
         Adw.PreferencesRow.do_dispose(self)
 
-    # def do_state_flags_changed(self, *args):
-    #     flags = self.get_state_flags()
-    #     selected_flag = Gtk.StateFlags.SELECTED
-    #     focused_flag = Gtk.StateFlags.FOCUSED
-    #     active_flag = Gtk.StateFlags.ACTIVE
-    #     normal_flag = Gtk.StateFlags.NORMAL
-    #     if flags & selected_flag > 0: print("Selected", self._en_entry.has_focus())
-    #     if flags & focused_flag > 0: print("Focused", self._en_entry.has_focus())
-    #     if flags & active_flag > 0: print("Active", self._en_entry.has_focus())
-    #     if flags & normal_flag > 0: print("Normal", self._en_entry.has_focus())
-
     def do_focus(self, *args):
         self._en_entry.grab_focus()
         return False
@@ -126,13 +115,11 @@ class EntryRow(Adw.PreferencesRow, Gtk.Editable):
             self._en_entry.grab_focus()
 
     def _title_prop_changed(self, *args):
-        # print("Title Changed", self.get_title())
         title = self.get_title()
         self._title_viewer.set_text(title)
         self._empty_title.set_text(title)
     
     def _en_activate(self, *args):
-        # print(self.__apply_button_shown, self._show_apply_button)
         if self._show_apply_button and self.__apply_button_shown:
             self.__apply_button_shown = False
             self._btn_apply.set_visible(False)

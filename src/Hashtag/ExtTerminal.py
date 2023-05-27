@@ -16,7 +16,6 @@ class ExtTerminal:
     def __on_child_exit(self, response):
         self.parent.release()
         args = self.__queue.pop()
-        print(args["userdata"])
         if args["callback"]: args["callback"](self, response, args["userdata"])
 
     def run(self, cmd: str, silent: bool, callback, userdata = None):

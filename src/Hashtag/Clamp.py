@@ -11,7 +11,6 @@ class Clamp(Bin):
             total_width = size.width
             size.width = self.max_width
             size.x = (total_width-self.max_width)/2
-            #print(size.width, size.x)
             self.size_allocate(size)
 
     def __init__(self) -> None:

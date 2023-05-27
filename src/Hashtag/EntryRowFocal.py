@@ -25,7 +25,6 @@ class EntryRow(Gtk.ListBoxRow, Gtk.Editable):
   
     def __row_activated(self, widget, row): 
         if self == row:
-            print("Activating")
             self._en_edit.mnemonic_activate(False)
 
     def _parent_changed(self, *args):

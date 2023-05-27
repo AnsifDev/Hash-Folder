@@ -106,7 +106,6 @@ class Linuxapp1Window(Adw.ApplicationWindow if version_code >= 22.04 else Gtk.Ap
     
     @Gtk.Template.Callback()
     def on_visible(self, widget):
-        print("visible")
         appsReady = os.system("gh --version") == 0
         if appsReady: self.on_apps_ready()
         else:

@@ -23,7 +23,6 @@ class PasswordEntryRow(EntryRow):
         return super()._focus_changed(*args)
 
     def do_realize(self):
-        print("realized")
         display = self.get_display()
         seat = display.get_default_seat()
         if seat: self.__keyboard = seat.get_keyboard()

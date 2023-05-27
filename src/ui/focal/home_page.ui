@@ -164,6 +164,7 @@
     <child>
       <object class="HashtagPreferencesGroup" id="repo_filter_grp">
         <property name="title">Repository Filter and Search</property>
+        <property name="visible">True</property>
         <property name="margin-top">4</property>
         <property name="margin-bottom">4</property>
         <child>
