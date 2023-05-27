@@ -1,4 +1,6 @@
 *
+!git-cloner
+!*.css
 !*.py
 !*.ui
 !*/

@@ -65,11 +65,11 @@ class myListViewAdapter(Hashtag.ListViewAdapter):
         self.local_data = local_data
 
     def get_view_holder(self) -> Hashtag.ViewHolder:
-        print("Log: view_holder created")
+        # print("Log: view_holder created")
         return myViewHolder()
     
     def get_widget(self, view_holder: myViewHolder, position: int) -> Gtk.Widget:
-        print("Log: view_holder binded with data index "+str(position))
+        # print("Log: view_holder binded with data index "+str(position))
         def on_button_clicked(widget):
             match widget:
                 case view_holder.open_btn: self.open_callback(position) if self.open_callback else None
@@ -394,7 +394,7 @@ class HomePage(Gtk.Box):
             filename = os.path.join(app_cache, "repos.json")
             json_str = ""
             if response != 0:
-                if os.path.exists(userdata):
+                if os.path.exists(filename):
                     file = open(filename)
                     json_str = file.read()
                     file.close()
@@ -405,12 +405,12 @@ class HomePage(Gtk.Box):
                 file = open(userdata)
                 json_str = file.read()
                 file.close()
-                os.system("cp "+userdata+" "+filename)
+                os.system("cp "+userdata.replace(" ", "\\ ")+" "+filename.replace(" ", "\\ "))
 
             if json_str == "": json_str = "[]"
             repos = json.loads(json_str)
             
-            self.repoList.clear()
+            self.repo_full_list.clear()
             for item in repos:
                 self.repo_full_list.append(item)
 

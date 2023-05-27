@@ -38,7 +38,8 @@ class DialogNewRepo(Adw.Window if version_code >= 22.04 else Gtk.Window):
         else: 
             reponame = self.en_reponame.get_text().strip()
             cmd = "gh repo create "+reponame
-            if self.combo_visibility.get_active() == 0: cmd = cmd+" --private"
+            visibility = self.combo_visibility.get_selected() if version_code >= 22.04 else self.combo_visibility.get_active()
+            if visibility == 0: cmd = cmd+" --private"
             else: cmd = cmd+" --public"
             self.repo_create_task.run(cmd+" --add-readme", True, self.on_terminal_task_complete, reponame)
         self.close()

@@ -1,23 +1,21 @@
+import json
 from os import path, system, mkdir
 import gi
-# import lsb_release
 
 app_cache = path.abspath(".cache")
 app_config = path.abspath(".config")
 
-if not path.exists(app_cache): mkdir(app_cache)
-if not path.exists(app_config): mkdir(app_config)
+__filename = path.join(app_config, "app_config.json")
 
-filename = path.join(app_cache, "temp.dat")
-cmd = "lsb_release -r > "+filename.replace(" ", "\\ ")
-system(cmd)
+if path.exists(__filename):
+    __file = open(__filename)
+    __config = json.loads(__file.read())
+    __file.close()
+else:
+    print("App configuration error: Configuration Missing")
+    exit(1)
 
-file = open(filename)
-file_str = file.read()
-file.close()
-
-version_code = float(file_str.split(":")[1].strip())
-# version_code = float(lsb_release.get_distro_information()["RELEASE"])
+version_code = __config["current_runtime_env"]
 # version_code = 20.04
 print(version_code)
 
