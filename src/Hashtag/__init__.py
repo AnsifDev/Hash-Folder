@@ -13,12 +13,12 @@ if runtime_env >= 22.04:
 else: 
     from .PreferencesGroupFocal import PreferencesGroup
 
-if runtime_env >= 23.04: 
+if runtime_env >= 22.04: 
     from .MessageDialog import AdwMsg as MessageDialog
-    from .ExtTerminalLunar import ExtTerminal
+    from .ExtTerminal import ExtTerminal
 else: 
     from .MessageDialog import MessageDialog
-    from .ExtTerminal import ExtTerminal
+    from .ExtTerminalFocal import ExtTerminal
 
 match runtime_env:
     case 20.04:
