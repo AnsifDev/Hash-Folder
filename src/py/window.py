@@ -22,10 +22,9 @@ from gi.repository import Gtk
 from .LoginPage import LoginPage
 from .HomePage import HomePage
 from .util import parse_yml_file
-# from ..Hashtag.ExtTerminal import ExtTerminal
-from .. import Hashtag, version_code, get_ui_file_path, app_cache
+from .. import Hashtag, runtime_env, get_ui_file_path, app_cache_path, app_config, update_app_config
 
-if version_code >= 22.04:
+if runtime_env >= 22.04:
     from gi.repository import Adw
 
 cmds="""#!/bin/bash
@@ -39,7 +38,7 @@ sudo apt install gh -y
 """
 
 @Gtk.Template(filename=get_ui_file_path("window.ui"))
-class Linuxapp1Window(Adw.ApplicationWindow if version_code >= 22.04 else Gtk.ApplicationWindow):
+class Linuxapp1Window(Adw.ApplicationWindow if runtime_env >= 22.04 else Gtk.ApplicationWindow):
     __gtype_name__ = 'Linuxapp1Window'
 
     base_connector = Gtk.Template.Child()
@@ -67,7 +66,7 @@ class Linuxapp1Window(Adw.ApplicationWindow if version_code >= 22.04 else Gtk.Ap
             os.system("gh auth logout -h github.com")
         elif response == "install":
             self.open_install_app_file()
-            filename = os.path.join(app_cache, "app-install")
+            filename = os.path.join(app_cache_path, "app-install")
             self.install_task.run("bash "+filename, False, self.on_terminal_task_performed)
         
     def on_terminal_task_performed(self, widget, response, userdata):
@@ -78,13 +77,18 @@ class Linuxapp1Window(Adw.ApplicationWindow if version_code >= 22.04 else Gtk.Ap
                 dg = Hashtag.MessageDialog(self, "App Install Failed", "Installation failed. Please retry or install the gh pacakage manually.\nErr code: "+str(response))
                 dg.add_response("cancel", "Quit")
                 dg.add_response("install", "Retry")
-                if version_code >= 23.04:
+                if runtime_env >= 23.04:
                     dg.set_response_appearance("install", 1)
                     dg.set_response_appearance("cancel", 2)
                 dg.connect("response", self.on_dialog_response)
                 dg.present()
 
     def on_apps_ready(self):
+        if app_config["current_runtime_env"] != app_config["detected_runtime_env"]:
+            dg = Hashtag.MessageDialog(self, "Debug Mode Activated", "Turn the debug mode off for better and updated experience")
+            dg.add_response("ok", "OK")
+            dg.present()
+
         yml_path = os.path.expanduser("~/.config/gh/hosts.yml")
         if os.path.exists(yml_path):
             usrDat = parse_yml_file(yml_path)
@@ -97,7 +101,7 @@ class Linuxapp1Window(Adw.ApplicationWindow if version_code >= 22.04 else Gtk.Ap
                 dg = Hashtag.MessageDialog(self, "Unsupported Protocol", "Currently logged in method is in not ssh protocol. Please re-login with ssh protocol")
                 dg.add_response("cancel", "Cancel")
                 dg.add_response("login", "Re Login")
-                if version_code >= 23.04:
+                if runtime_env >= 23.04:
                     dg.set_response_appearance("login", 1)
                     dg.set_response_appearance("cancel", 2)
                 dg.connect("response", self.on_dialog_response)
@@ -112,7 +116,7 @@ class Linuxapp1Window(Adw.ApplicationWindow if version_code >= 22.04 else Gtk.Ap
             dg = Hashtag.MessageDialog(self, "App Installs Required", "Some apps required to run this program is not present in this system. Please proceed to install all dependency apps.\nApp required: git client (package: gh)")
             dg.add_response("cancel", "Cancel")
             dg.add_response("install", "Install All")
-            if version_code >= 23.04:
+            if runtime_env >= 23.04:
                 dg.set_response_appearance("install", 1)
                 dg.set_response_appearance("cancel", 2)
             dg.connect("response", self.on_dialog_response)
@@ -121,6 +125,26 @@ class Linuxapp1Window(Adw.ApplicationWindow if version_code >= 22.04 else Gtk.Ap
     def connect_login_page(self):
         self.base_connector.set_child(self.login_page)
         self.destroy_callback = self.login_page.on_window_destroy
+
+        if not app_config["version_warning_shown"]:
+            match runtime_env:
+                case 20.04: 
+                    dg = Hashtag.MessageDialog(self, "Outdated Ubuntu Detected", "Seriously bro? Its Ubuntu 20.04, Its will lose its support so soon. Also I am not implementing new features to this version. Update ubuntu asap bro, new LTS version is way too beautiful than this version")
+                    dg.add_response("ok", "OK")
+                    dg.present()
+                case 22.04:
+                    dg = Hashtag.MessageDialog(self, "Keep Updating Ubuntu", "Update your ubuntu to 24.04 LTS when it is available. This version misses some built in features which the next LTS version will have. You are currently running Ubuntu 22.04 LTS")
+                    dg.add_response("ok", "OK")
+                    dg.present()
+                    app_config["version_warning_shown"] = True
+                    update_app_config()
+                case _:
+                    if runtime_env < 24.04:
+                        dg = Hashtag.MessageDialog(self, "Keep Ubuntu in a LTS version", "Intermediate version of ubuntu is not recomended as it lose its support very soon. Update to the next and latest (Ubuntu 24.04) LTS version when it is available")
+                        dg.add_response("ok", "OK")
+                        dg.present()
+                        app_config["version_warning_shown"] = True
+                        update_app_config()
     
     def connect_home_page(self, username):
         self.base_connector.set_child(self.home_page)
@@ -128,14 +152,14 @@ class Linuxapp1Window(Adw.ApplicationWindow if version_code >= 22.04 else Gtk.Ap
         self.destroy_callback = self.home_page.on_window_destroy
 
     def open_install_app_file(self):
-        filename = os.path.join(app_cache, "app-install")
+        filename = os.path.join(app_cache_path, "app-install")
         file = open(filename, "w")
         file.write(cmds)
         file.close()
         os.system("chmod +x "+filename)
     
     def close_install_app_file(self):
-        filename = os.path.join(app_cache, "app-install")
+        filename = os.path.join(app_cache_path, "app-install")
         os.system("rm "+filename)
 
     def on_window_destroy(self, window, *args):
@@ -145,7 +169,7 @@ class Linuxapp1Window(Adw.ApplicationWindow if version_code >= 22.04 else Gtk.Ap
         super().__init__(**kwargs)
         self.login_page = LoginPage(self)
         self.home_page = HomePage(self)
-        if version_code >= 22.04: self.connect("close-request", self.on_window_destroy)
+        if runtime_env >= 22.04: self.connect("close-request", self.on_window_destroy)
         else: self.connect("delete-event", self.on_window_destroy)
         self.destroy_callback = None
         self.install_task = Hashtag.ExtTerminal(self)

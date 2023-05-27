@@ -1,7 +1,7 @@
 from gi.repository import Gtk
-from .. import version_code
+from .. import runtime_env
 
-if version_code >= 22.04: from gi.repository import Adw
+if runtime_env >= 22.04: from gi.repository import Adw
 
 def AdwMsg(win, title, subtitle=None):
     return Adw.MessageDialog.new(win, title, subtitle)
@@ -18,7 +18,7 @@ class MessageDialog:
         self.dialog.add_button(label, self.__id_map.index(id))
     
     def present(self):
-        if version_code >= 22.04:
+        if runtime_env >= 22.04:
             self.dialog.present()
             self.dialog.connect("response", self._callbacks)
         else:

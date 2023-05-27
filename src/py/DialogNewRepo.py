@@ -1,11 +1,11 @@
 from gi.repository import Gtk
-from .. import Hashtag, version_code, get_ui_file_path
+from .. import Hashtag, runtime_env, get_ui_file_path
 
-if version_code >= 22.04:
+if runtime_env >= 22.04:
     from gi.repository import Adw
 
 @Gtk.Template(filename=get_ui_file_path("dg_new_repo.ui"))
-class DialogNewRepo(Adw.Window if version_code >= 22.04 else Gtk.Window):
+class DialogNewRepo(Adw.Window if runtime_env >= 22.04 else Gtk.Window):
     __gtype_name__ = 'DialogNewRepo'
 
     create = Gtk.Template.Child()
@@ -21,7 +21,7 @@ class DialogNewRepo(Adw.Window if version_code >= 22.04 else Gtk.Window):
         self.callback = callback
         self.repo_create_task = Hashtag.ExtTerminal(parent)
 
-        if version_code < 22.04: self.combo_visibility.set_active(0)
+        if runtime_env < 22.04: self.combo_visibility.set_active(0)
 
     def on_terminal_task_complete(self, widget, response, userdata):
         if response == 0:
@@ -38,7 +38,7 @@ class DialogNewRepo(Adw.Window if version_code >= 22.04 else Gtk.Window):
         else: 
             reponame = self.en_reponame.get_text().strip()
             cmd = "gh repo create "+reponame
-            visibility = self.combo_visibility.get_selected() if version_code >= 22.04 else self.combo_visibility.get_active()
+            visibility = self.combo_visibility.get_selected() if runtime_env >= 22.04 else self.combo_visibility.get_active()
             if visibility == 0: cmd = cmd+" --private"
             else: cmd = cmd+" --public"
             self.repo_create_task.run(cmd+" --add-readme", True, self.on_terminal_task_complete, reponame)

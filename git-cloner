@@ -4,7 +4,7 @@ import sys
 from os import system, path, mkdir
 
 def __detect_runtime_env():
-    filename = path.join(app_cache, "temp.dat")
+    filename = path.join(app_cache_path, "temp.dat")
     cmd = "lsb_release -r > "+filename.replace(" ", "\\ ")
     system(cmd)
 
@@ -17,16 +17,19 @@ def __detect_runtime_env():
 def main():
     """The application's entry point."""
 
-    config_path = path.join(app_config, "app_config.json")
+    config_path = path.join(app_config_path, "app_config.json")
     if path.exists(config_path):
         config_file = open(config_path)
         config = json.loads(config_file.read())
         config_file.close()
     else:
         runtime_env = __detect_runtime_env()
+        if runtime_env < 20.04:
+            AssertionError("Ubuntu version must be 20.04 or above\nApp cannot run with its normal configuration, Try running in debug mode: ./git-cloner focal")
         config = {
             "detected_runtime_env": runtime_env,
-            "current_runtime_env": runtime_env
+            "current_runtime_env": runtime_env,
+            "version_warning_shown": False
         }
         
 
@@ -58,10 +61,10 @@ def main():
     return app.run()
 
 
-app_cache = path.abspath(".cache")
-app_config = path.abspath(".config")
+app_cache_path = path.abspath(".cache")
+app_config_path = path.abspath(".config")
 
-if not path.exists(app_cache): mkdir(app_cache)
-if not path.exists(app_config): mkdir(app_config)
+if not path.exists(app_cache_path): mkdir(app_cache_path)
+if not path.exists(app_config_path): mkdir(app_config_path)
 
 if __name__ == "__main__": main()

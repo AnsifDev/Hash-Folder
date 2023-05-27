@@ -1,12 +1,12 @@
 import os
 from gi.repository import Gtk
-from .. import version_code, get_ui_file_path
+from .. import runtime_env, get_ui_file_path
 
-if version_code >= 22.04:
+if runtime_env >= 22.04:
     from gi.repository import Adw
 
 @Gtk.Template(filename=get_ui_file_path("dg_email.ui"))
-class DialogEmail(Adw.Window if version_code >= 22.04 else Gtk.Window):
+class DialogEmail(Adw.Window if runtime_env >= 22.04 else Gtk.Window):
     __gtype_name__ = 'DialogEmail'
 
     create = Gtk.Template.Child()
@@ -33,5 +33,5 @@ class DialogEmail(Adw.Window if version_code >= 22.04 else Gtk.Window):
         self.callback = callback
         self.set_transient_for(parent)
         self.positive_return = False
-        if version_code >= 22.04: self.connect("close-request", self.on_button_clicked)
+        if runtime_env >= 22.04: self.connect("close-request", self.on_button_clicked)
         else: self.connect("delete-event", self.on_button_clicked)

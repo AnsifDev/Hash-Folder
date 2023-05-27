@@ -5,9 +5,9 @@ from gi.repository import Gtk, Gtk, Gio
 from .util import ch_port, rm_port
 from .DialogEmail import DialogEmail
 from .DialogNewRepo import DialogNewRepo
-from .. import Hashtag, version_code, get_ui_file_path, app_cache, app_config
+from .. import Hashtag, runtime_env, get_ui_file_path, app_cache_path, app_config_path
 
-if version_code >= 22.04:
+if runtime_env >= 22.04:
     from gi.repository import Adw
 
 class myViewHolder(Hashtag.ViewHolder):
@@ -15,7 +15,7 @@ class myViewHolder(Hashtag.ViewHolder):
     def __init__(self) -> None:
         super().__init__()
 
-        if version_code < 22.04:
+        if runtime_env < 22.04:
             self.action_row = Hashtag.ActionRow()
             image = Gtk.Image()
             image.set_from_icon_name("network-server-symbolic", 1)
@@ -27,9 +27,9 @@ class myViewHolder(Hashtag.ViewHolder):
             self.action_row = Adw.ActionRow()
             self.action_row.set_icon_name("network-server-symbolic")
 
-        self.open_btn = self.get_flat_gtk_button("Open", 8 if version_code >= 22.04 else 4, "folder-open-symbolic")
-        self.clone_btn = self.get_flat_gtk_button("Clone", 8 if version_code >= 22.04 else 4, "folder-download-symbolic")
-        self.info_btn = self.get_flat_gtk_button("Info", 8 if version_code >= 22.04 else 4, "dialog-information-symbolic")
+        self.open_btn = self.get_flat_gtk_button("Open", 8 if runtime_env >= 22.04 else 4, "folder-open-symbolic")
+        self.clone_btn = self.get_flat_gtk_button("Clone", 8 if runtime_env >= 22.04 else 4, "folder-download-symbolic")
+        self.info_btn = self.get_flat_gtk_button("Info", 8 if runtime_env >= 22.04 else 4, "dialog-information-symbolic")
 
         self.action_row.add_suffix(self.open_btn)
         self.action_row.add_suffix(self.clone_btn)
@@ -37,10 +37,10 @@ class myViewHolder(Hashtag.ViewHolder):
 
     def get_flat_gtk_button(self, label, margin = 0, icon_name = None):
         custom_btn = Gtk.Button()
-        if version_code >= 22.04: custom_btn.set_label(label)
+        if runtime_env >= 22.04: custom_btn.set_label(label)
         else: custom_btn.show()
         if icon_name:
-            if version_code >= 22.04: custom_btn.set_icon_name(icon_name)
+            if runtime_env >= 22.04: custom_btn.set_icon_name(icon_name)
             else:
                 image = Gtk.Image()
                 image.set_from_icon_name(icon_name, 1)
@@ -49,7 +49,7 @@ class myViewHolder(Hashtag.ViewHolder):
         if margin > 0:
             custom_btn.set_margin_top(margin)
             custom_btn.set_margin_bottom(margin)
-        if version_code >= 22.04: custom_btn.add_css_class("flat")
+        if runtime_env >= 22.04: custom_btn.add_css_class("flat")
         else: custom_btn.get_style_context().add_class("flat")
         return custom_btn
 
@@ -85,7 +85,7 @@ class myListViewAdapter(Hashtag.ListViewAdapter):
 
         view_holder.action_row.set_title(self.online_data[position]["name"])
         view_holder.action_row.set_subtitle(self.online_data[position]["visibility"])
-        if version_code < 22.04: view_holder.action_row.show()
+        if runtime_env < 22.04: view_holder.action_row.show()
 
         return view_holder.action_row
     
@@ -123,7 +123,7 @@ class HomePage(Gtk.Box):
             dg = Hashtag.MessageDialog(self.window, "Logout?", "Are you going to logout?")
             dg.add_response("cancel", "Cancel")
             dg.add_response("logout", "Logout")
-            if version_code >= 23.04:
+            if runtime_env >= 23.04:
                 dg.set_response_appearance("logout", 2)
                 dg.set_response_appearance("cancel", 0)
             dg.connect("response", self.on_dialog_response)
@@ -133,9 +133,9 @@ class HomePage(Gtk.Box):
             dg.present()
         elif widget == self.custom_btn:
             self.custom_dg = self.parseGtkFileDialog("Choose Folder")
-            if version_code >= 23.04:
+            if runtime_env >= 23.04:
                 self.custom_dg.select_folder(self.window, None, self.on_folder_choosed, None)
-            elif version_code >= 22.04:
+            elif runtime_env >= 22.04:
                 self.custom_dg.present()
                 self.custom_dg.connect("response", self.on_folder_choosed, None)
             else:
@@ -153,7 +153,7 @@ class HomePage(Gtk.Box):
             dg = DialogNewRepo(self.window, self.on_repo_create)
             dg.present()
         elif widget == self.refresh_repo:
-            filename = os.path.join(app_cache, "temp.json")
+            filename = os.path.join(app_cache_path, "temp.json")
             cmd = "gh repo list --json name --json id --json visibility --json diskUsage --json nameWithOwner > "+filename.replace(" ", "\\ ")
             self.repo_fetch_task.run(cmd, True, self.on_terminal_task_complete, filename)
         elif widget == self.en_search:
@@ -161,7 +161,7 @@ class HomePage(Gtk.Box):
 
     def on_repo_create(self, widget, reponame):
         if reponame:
-            filename = os.path.join(app_cache, "temp.json")
+            filename = os.path.join(app_cache_path, "temp.json")
             cmd = "gh repo view "+reponame+" --json name --json id --json visibility --json diskUsage --json nameWithOwner > "+filename.replace(" ", "\\ ")
             self.post_repo_create_task.run(cmd, True, self.on_terminal_task_complete, filename)
 
@@ -225,9 +225,9 @@ class HomePage(Gtk.Box):
                 self.acc_config["folder"] = "custom"
                 if "custom_folder" not in self.acc_config: 
                     self.custom_dg = self.parseGtkFileDialog("Choose Folder")
-                    if version_code >= 23.04:
+                    if runtime_env >= 23.04:
                         self.custom_dg.select_folder(self.window, None, self.on_folder_choosed, None)
-                    elif version_code >= 22.04:
+                    elif runtime_env >= 22.04:
                         self.custom_dg.present()
                         self.custom_dg.connect("response", self.on_folder_choosed, None)
                     else:
@@ -244,7 +244,7 @@ class HomePage(Gtk.Box):
             case self.ask_folder.check_button: self.acc_config["folder"] = "ask"
 
     def parseGtkFileDialog(self, title):
-        if version_code >= 23.04:
+        if runtime_env >= 23.04:
             dg = Gtk.FileDialog()
             dg.set_title(title)
             dg.set_modal(True)
@@ -261,11 +261,11 @@ class HomePage(Gtk.Box):
 
     def refresh(self, username):
         self.username = username
-        if version_code >= 22.04: self.avt.set_text(username)
+        if runtime_env >= 22.04: self.avt.set_text(username)
         self.greet.set_label("Hey "+username)
         self.logout.set_visible(True)
         
-        filename = os.path.join(app_cache, "temp.json")
+        filename = os.path.join(app_cache_path, "temp.json")
         cmd = "gh repo list --json name --json id --json visibility --json diskUsage --json nameWithOwner > "+filename.replace(" ", "\\ ")
         self.repo_fetch_task.run(cmd, True, self.on_terminal_task_complete, filename)
 
@@ -290,7 +290,7 @@ class HomePage(Gtk.Box):
         if "custom_folder" in self.acc_config: self.custom_folder.set_subtitle(self.acc_config["custom_folder"])
 
     def load_account_data(self, username):
-        filename = os.path.join(app_config, "accounts.json")
+        filename = os.path.join(app_config_path, "accounts.json")
         if os.path.exists(filename):
             file = open(filename)
             self.accounts = json.loads(file.read())
@@ -324,7 +324,7 @@ class HomePage(Gtk.Box):
             dg.destroy()
 
     def on_folder_choosed(self, widget, result, index):
-        if version_code >= 23.04:
+        if runtime_env >= 23.04:
             try:
                 file = widget.select_folder_finish(result)
                 folder = file.get_path()
@@ -363,7 +363,7 @@ class HomePage(Gtk.Box):
             dg = Hashtag.MessageDialog(self.window, "Error", "Git User Email is not configured")
             dg.add_response("cancel", "Cancel")
             dg.add_response("config", "Configure Now")
-            if version_code >= 23.04:
+            if runtime_env >= 23.04:
                 dg.set_response_appearance("config", 1)
                 dg.set_response_appearance("cancel", 0)
             dg.connect("response", self.on_dialog_response)
@@ -391,7 +391,7 @@ class HomePage(Gtk.Box):
                 dg.add_response("ok", "OK")
                 dg.present()
         elif widget == self.repo_fetch_task:
-            filename = os.path.join(app_cache, "repos.json")
+            filename = os.path.join(app_cache_path, "repos.json")
             json_str = ""
             if response != 0:
                 if os.path.exists(filename):
@@ -436,7 +436,7 @@ class HomePage(Gtk.Box):
         if not self.stay_logged.get_state(): os.system("gh auth logout -h github.com")
         rm_port()
 
-        filename = os.path.join(app_config, "accounts.json")
+        filename = os.path.join(app_config_path, "accounts.json")
         file = open(filename, "w")
         file.write(json.dumps(self.accounts))
         file.close()
@@ -454,7 +454,7 @@ class HomePage(Gtk.Box):
         self.ask_folder.check_button.connect("toggled", self.on_checked_changed)
 
         self.custom_btn = Gtk.Button()
-        if version_code >= 22.04:
+        if runtime_env >= 22.04:
             self.custom_btn.set_icon_name("document-edit-symbolic")
             self.custom_btn.add_css_class("flat")
         else:
@@ -464,15 +464,15 @@ class HomePage(Gtk.Box):
             self.custom_btn.set_image(image)
             self.custom_btn.show()
             self.custom_btn.get_style_context().add_class("flat")
-        self.custom_btn.set_margin_top(8 if version_code >= 22.04 else 4)
-        self.custom_btn.set_margin_bottom(8 if version_code >= 22.04 else 4)
+        self.custom_btn.set_margin_top(8 if runtime_env >= 22.04 else 4)
+        self.custom_btn.set_margin_bottom(8 if runtime_env >= 22.04 else 4)
         self.custom_btn.connect("clicked", self.on_button_clicked)
         self.custom_folder.add_suffix(self.custom_btn)
-        if version_code >= 22.04:
+        if runtime_env >= 22.04:
             self.custom_dg = self.parseGtkFileDialog("Choose Folder")
             self.ask_dg = self.parseGtkFileDialog("Choose Folder")
 
-        if version_code >= 22.04:
+        if runtime_env >= 22.04:
             self.custom_folder.check_button.set_group(self.default_folder.check_button)
             self.ask_folder.check_button.set_group(self.default_folder.check_button)
         else:

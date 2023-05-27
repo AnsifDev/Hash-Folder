@@ -1,12 +1,12 @@
 import os
 from gi.repository import Gtk
-from .. import Hashtag, version_code, get_ui_file_path
+from .. import Hashtag, runtime_env, get_ui_file_path
 
-if version_code >= 22.04:
+if runtime_env >= 22.04:
     from gi.repository import Adw
 
 @Gtk.Template(filename=get_ui_file_path("dg_ssh.ui"))
-class DialogSSH(Adw.Window if version_code >= 22.04 else Gtk.Window):
+class DialogSSH(Adw.Window if runtime_env >= 22.04 else Gtk.Window):
     __gtype_name__ = 'DialogSSH'
 
     create = Gtk.Template.Child()

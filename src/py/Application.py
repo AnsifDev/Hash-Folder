@@ -5,16 +5,16 @@ import gi
 
 from gi.repository import Gtk, Gio
 from .window import Linuxapp1Window
-from .. import version_code
+from .. import runtime_env
 
-if version_code >= 22.04:
+if runtime_env >= 22.04:
     from gi.repository import Adw
 
-class Application(Adw.Application if version_code >= 22.04 else Gtk.Application):
+class Application(Adw.Application if runtime_env >= 22.04 else Gtk.Application):
     """The main application singleton class."""
 
     def __init__(self):
-        flags = Gio.ApplicationFlags.FLAGS_NONE if version_code < 23.04 else Gio.ApplicationFlags.DEFAULT_FLAGS
+        flags = Gio.ApplicationFlags.FLAGS_NONE if runtime_env < 23.04 else Gio.ApplicationFlags.DEFAULT_FLAGS
         super().__init__(application_id='hashtag.linux.gitcloner',
                          flags=flags)
 
