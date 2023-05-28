@@ -39,7 +39,7 @@ def main():
         match sys.argv[1]:
             case "focal": config["current_runtime_env"] = 20.04
             case "jammy": config["current_runtime_env"] = 22.04
-            case "focal": config["current_runtime_env"] = 23.04
+            case "lunar": config["current_runtime_env"] = 23.04
             case _: 
                 print("Debug mode activation failed: codename unknown")
                 config["current_runtime_env"] = config["detected_runtime_env"]
