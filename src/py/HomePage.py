@@ -317,11 +317,17 @@ class HomePage(Gtk.Box):
             case "ask": folder = None
         if folder: self.start_clone(folder, index)
         else: 
-            dg = self.parseGtkFileDialog("Choose Folder")
-            response = dg.run()
-            if response == Gtk.ResponseType.OK:
-                self.start_clone(dg.get_filename(), index)
-            dg.destroy()
+            self.ask_dg = self.parseGtkFileDialog("Choose Folder")
+            if runtime_env >= 23.04:
+                self.ask_dg.select_folder(self.window, None, self.on_folder_choosed, index)
+            elif runtime_env >= 22.04:
+                self.ask_dg.present()
+                self.ask_dg.connect("response", self.on_folder_choosed, index)
+            else:
+                response = self.ask_dg.run()
+                if response == Gtk.ResponseType.OK:
+                    self.start_clone(self.ask_dg.get_filename(), index)
+                self.ask_dg.destroy()
 
     def on_folder_choosed(self, widget, result, index):
         if runtime_env >= 23.04:
