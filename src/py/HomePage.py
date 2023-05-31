@@ -71,11 +71,10 @@ class myListViewAdapter(Hashtag.ListViewAdapter):
     def get_widget(self, view_holder: myViewHolder, position: int) -> Gtk.Widget:
         # print("Log: view_holder binded with data index "+str(position))
         def on_button_clicked(widget):
-            match widget:
-                case view_holder.open_btn: self.open_callback(position) if self.open_callback else None
-                case view_holder.clone_btn: self.clone_callback(position) if self.clone_callback else None
-                case view_holder.info_btn: 
-                    webbrowser.open_new("https://github.com/"+self.online_data[position]["nameWithOwner"])
+            if widget == view_holder.open_btn: self.open_callback(position) if self.open_callback else None
+            elif widget == view_holder.clone_btn: self.clone_callback(position) if self.clone_callback else None
+            elif widget == view_holder.info_btn: 
+                webbrowser.open_new("https://github.com/"+self.online_data[position]["nameWithOwner"])
 
         view_holder.connect_signal(view_holder.open_btn, "clicked", on_button_clicked)
         view_holder.connect_signal(view_holder.clone_btn, "clicked", on_button_clicked)
@@ -215,33 +214,33 @@ class HomePage(Gtk.Box):
         self.repo_listview.notify_data_changed()
 
     def on_checked_changed(self, widget):
-        match widget:
-            case self.private_first.check_button: self.sort_repos()
-            case self.local_first.check_button: self.sort_repos()
+        if widget == self.private_first.check_button: self.sort_repos()
+        elif widget ==  self.local_first.check_button: self.sort_repos()
+        
         if not widget.get_active(): return
-        match widget:
-            case self.default_folder.check_button: self.acc_config["folder"] = "default"
-            case self.custom_folder.check_button:
-                self.acc_config["folder"] = "custom"
-                if "custom_folder" not in self.acc_config: 
-                    self.custom_dg = self.parseGtkFileDialog("Choose Folder")
-                    if runtime_env >= 23.04:
-                        self.custom_dg.select_folder(self.window, None, self.on_folder_choosed, None)
-                    elif runtime_env >= 22.04:
-                        self.custom_dg.present()
-                        self.custom_dg.connect("response", self.on_folder_choosed, None)
+        
+        if widget == self.default_folder.check_button: self.acc_config["folder"] = "default"
+        elif widget == self.custom_folder.check_button:
+            self.acc_config["folder"] = "custom"
+            if "custom_folder" not in self.acc_config: 
+                self.custom_dg = self.parseGtkFileDialog("Choose Folder")
+                if runtime_env >= 23.04:
+                    self.custom_dg.select_folder(self.window, None, self.on_folder_choosed, None)
+                elif runtime_env >= 22.04:
+                    self.custom_dg.present()
+                    self.custom_dg.connect("response", self.on_folder_choosed, None)
+                else:
+                    response = self.custom_dg.run()
+                    if response == Gtk.ResponseType.OK:
+                        folder = self.custom_dg.get_filename()
+                        self.acc_config["custom_folder"] = folder
+                        self.custom_folder.set_subtitle(folder)
                     else:
-                        response = self.custom_dg.run()
-                        if response == Gtk.ResponseType.OK:
-                            folder = self.custom_dg.get_filename()
-                            self.acc_config["custom_folder"] = folder
-                            self.custom_folder.set_subtitle(folder)
-                        else:
-                            if self.custom_folder.check_button.get_active():
-                                if "custom_folder" not in self.acc_config:
-                                    self.default_folder.check_button.set_active(True)
-                        self.custom_dg.destroy()
-            case self.ask_folder.check_button: self.acc_config["folder"] = "ask"
+                        if self.custom_folder.check_button.get_active():
+                            if "custom_folder" not in self.acc_config:
+                                self.default_folder.check_button.set_active(True)
+                    self.custom_dg.destroy()
+        elif widget == self.ask_folder.check_button: self.acc_config["folder"] = "ask"
 
     def parseGtkFileDialog(self, title):
         if runtime_env >= 23.04:
@@ -283,10 +282,10 @@ class HomePage(Gtk.Box):
         self.stay_logged.set_active(self.acc_config["stay_logged"])
         self.use_port.set_active(self.acc_config["use_port"])
         if "email" in self.acc_config: self.row_email.set_subtitle(self.acc_config["email"])
-        match self.acc_config["folder"]:
-            case "default": self.default_folder.check_button.set_active(True)
-            case "custom": self.custom_folder.check_button.set_active(True)
-            case "ask": self.ask_folder.check_button.set_active(True)
+        if self.acc_config["folder"] == "default": self.default_folder.check_button.set_active(True)
+        elif self.acc_config["folder"] == "custom": self.custom_folder.check_button.set_active(True)
+        elif self.acc_config["folder"] == "ask": self.ask_folder.check_button.set_active(True)
+        
         if "custom_folder" in self.acc_config: self.custom_folder.set_subtitle(self.acc_config["custom_folder"])
 
     def load_account_data(self, username):
@@ -311,10 +310,10 @@ class HomePage(Gtk.Box):
 
     def on_row_selected(self, index):
         repo = self.repoList[index]
-        match self.acc_config["folder"]:
-            case "default": folder = os.path.join(self.home, self.username, repo["name"])
-            case "custom": folder = os.path.join(self.acc_config["custom_folder"], repo["name"])
-            case "ask": folder = None
+        if self.acc_config["folder"] == "default": folder = os.path.join(self.home, self.username, repo["name"])
+        elif self.acc_config["folder"] == "custom": folder = os.path.join(self.acc_config["custom_folder"], repo["name"])
+        elif self.acc_config["folder"] == "ask": folder = None
+        
         if folder: self.start_clone(folder, index)
         else: 
             self.ask_dg = self.parseGtkFileDialog("Choose Folder")

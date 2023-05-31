@@ -33,7 +33,11 @@ def update_app_config():
     __file.close()
 
 def get_ui_file_path(filename: str, ui_path="src/ui"):
-    match runtime_env:
-        case 20.04: return path.join(ui_path, "focal", filename)
-        case 22.04: return path.join(ui_path, "jammy", filename)
-        case 23.04: return path.join(ui_path, "lunar", filename)
+    if runtime_env == 20.04: return path.join(ui_path, "focal", filename)
+    elif runtime_env == 22.04: return path.join(ui_path, "jammy", filename)
+    elif runtime_env == 23.04: return path.join(ui_path, "lunar", filename)
+    
+    # match runtime_env:
+    #     case 20.04: return path.join(ui_path, "focal", filename)
+    #     case 22.04: return path.join(ui_path, "jammy", filename)
+    #     case 23.04: return path.join(ui_path, "lunar", filename)

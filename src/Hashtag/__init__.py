@@ -20,15 +20,14 @@ else:
     from .MessageDialog import MessageDialog
     from .ExtTerminalFocal import ExtTerminal
 
-match runtime_env:
-    case 20.04:
-        from .ActionRow import ActionRow
-        from .Bin import Bin
-        from .Clamp import Clamp
-        from .EntryRowFocal import EntryRow
-        from .PasswordEntryRowFocal import PasswordEntryRow
-        from .RadioButtonRow import RadioButtonRow
-    case 22.04:
+if runtime_env == 20.04:
+    from .ActionRow import ActionRow
+    from .Bin import Bin
+    from .Clamp import Clamp
+    from .EntryRowFocal import EntryRow
+    from .PasswordEntryRowFocal import PasswordEntryRow
+    from .RadioButtonRow import RadioButtonRow
+elif runtime_env == 22.04:
         from  .EntryRowJammy import EntryRow
         from .PasswordEntryRowJammy import PasswordEntryRow
 

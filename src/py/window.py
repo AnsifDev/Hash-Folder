@@ -127,24 +127,23 @@ class Linuxapp1Window(Adw.ApplicationWindow if runtime_env >= 22.04 else Gtk.App
         self.destroy_callback = self.login_page.on_window_destroy
 
         if not app_config["version_warning_shown"]:
-            match runtime_env:
-                case 20.04: 
-                    dg = Hashtag.MessageDialog(self, "Outdated Ubuntu Detected", "Seriously bro? Its Ubuntu 20.04, Its will lose its support so soon. Also I am not implementing new features to this version. Update ubuntu asap bro, new LTS version is way too beautiful than this version")
-                    dg.add_response("ok", "OK")
-                    dg.present()
-                case 22.04:
-                    dg = Hashtag.MessageDialog(self, "Keep Updating Ubuntu", "Update your ubuntu to 24.04 LTS when it is available. This version misses some built in features which the next LTS version will have. You are currently running Ubuntu 22.04 LTS")
+            if runtime_env == 20.04: 
+                dg = Hashtag.MessageDialog(self, "Outdated Ubuntu Detected", "Seriously bro? Its Ubuntu 20.04, Its will lose its support so soon. Also I am not implementing new features to this version. Update ubuntu asap bro, new LTS version is way too beautiful than this version")
+                dg.add_response("ok", "OK")
+                dg.present()
+            elif runtime_env == 22.04:
+                dg = Hashtag.MessageDialog(self, "Keep Updating Ubuntu", "Update your ubuntu to 24.04 LTS when it is available. This version misses some built in features which the next LTS version will have. You are currently running Ubuntu 22.04 LTS")
+                dg.add_response("ok", "OK")
+                dg.present()
+                app_config["version_warning_shown"] = True
+                update_app_config()
+            else:
+                if runtime_env < 24.04:
+                    dg = Hashtag.MessageDialog(self, "Keep Ubuntu in a LTS version", "Intermediate version of ubuntu is not recomended as it lose its support very soon. Update to the next and latest (Ubuntu 24.04) LTS version when it is available")
                     dg.add_response("ok", "OK")
                     dg.present()
                     app_config["version_warning_shown"] = True
                     update_app_config()
-                case _:
-                    if runtime_env < 24.04:
-                        dg = Hashtag.MessageDialog(self, "Keep Ubuntu in a LTS version", "Intermediate version of ubuntu is not recomended as it lose its support very soon. Update to the next and latest (Ubuntu 24.04) LTS version when it is available")
-                        dg.add_response("ok", "OK")
-                        dg.present()
-                        app_config["version_warning_shown"] = True
-                        update_app_config()
     
     def connect_home_page(self, username):
         self.base_connector.set_child(self.home_page)
