@@ -439,7 +439,7 @@ class HomePage(Gtk.Box):
         self.acc_config["stay_logged"] = self.stay_logged.get_state()
 
         if not self.stay_logged.get_state(): os.system("gh auth logout -h github.com")
-        rm_port()
+        # rm_port()
 
         filename = os.path.join(app_config_path, "accounts.json")
         file = open(filename, "w")
