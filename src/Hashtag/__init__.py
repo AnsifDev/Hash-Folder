@@ -17,6 +17,7 @@ if runtime_env >= 23.04:
     from .MessageDialog import AdwMsg as MessageDialog
     from .ExtTerminal import ExtTerminal
 elif runtime_env >= 22.04:
+    from .MessageDialog import MessageDialog
     from .ExtTerminal import ExtTerminal
 else: 
     from .MessageDialog import MessageDialog
