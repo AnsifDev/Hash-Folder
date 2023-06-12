@@ -338,7 +338,7 @@ class HomePage(Gtk.Box):
         else: 
             result_ok = result == int(Gtk.ResponseType.OK)
             widget.destroy()
-            folder = widget.get_file()
+            folder = widget.get_file().get_path()
 
         if result_ok:
             if widget == self.ask_dg: self.start_clone(folder, index)
