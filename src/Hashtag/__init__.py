@@ -10,27 +10,32 @@ if runtime_env >= 22.04:
     from gi.repository import Adw
     from .PreferencesGroup import PreferencesGroup
     from gi.repository.Adw import ActionRow
+    from .ExtTerminal import ExtTerminal
 else: 
     from .PreferencesGroupFocal import PreferencesGroup
-
-if runtime_env >= 23.04: 
-    from .MessageDialog import AdwMsg as MessageDialog
-    from .ExtTerminal import ExtTerminal
-elif runtime_env >= 22.04:
-    from .MessageDialog import MessageDialog
-    from .ExtTerminal import ExtTerminal
-else: 
-    from .MessageDialog import MessageDialog
     from .ExtTerminalFocal import ExtTerminal
 
-if runtime_env == 20.04:
+if runtime_env >= 23.04: from .MessageDialog import AdwMsg as MessageDialog
+else: from .MessageDialog import MessageDialog
+
+# if runtime_env >= 23.04: 
+#     from .MessageDialog import AdwMsg as MessageDialog
+#     from .ExtTerminal import ExtTerminal
+# elif runtime_env >= 22.04:
+#     from .MessageDialog import MessageDialog
+#     from .ExtTerminal import ExtTerminal
+# else: 
+#     from .MessageDialog import MessageDialog
+#     from .ExtTerminalFocal import ExtTerminal
+
+if runtime_env <= 20.04:
     from .ActionRow import ActionRow
     from .Bin import Bin
     from .Clamp import Clamp
     from .EntryRowFocal import EntryRow
     from .PasswordEntryRowFocal import PasswordEntryRow
     from .RadioButtonRow import RadioButtonRow
-elif runtime_env == 22.04:
+elif runtime_env <= 22.04:
     from  .EntryRowJammy import EntryRow
     from .PasswordEntryRowJammy import PasswordEntryRow
 
