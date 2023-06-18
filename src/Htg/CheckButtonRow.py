@@ -3,7 +3,7 @@ from . import ActionRow
 from .. import runtime_env
 
 class CheckButtonRow(ActionRow):
-    __gtype_name__ = 'HashtagCheckButtonRow'
+    __gtype_name__ = 'HtgCheckButtonRow'
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)

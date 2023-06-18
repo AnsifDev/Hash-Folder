@@ -98,17 +98,17 @@
         <property name="margin-top">8</property>
         <property name="margin-bottom">4</property>
         <child>
-          <object class="HashtagCheckButtonRow" id="default_folder">
+          <object class="HtgCheckButtonRow" id="default_folder">
             <property name="title">Use Default Folder</property>
           </object>
         </child>
         <child>
-          <object class="HashtagCheckButtonRow" id="custom_folder">
+          <object class="HtgCheckButtonRow" id="custom_folder">
             <property name="title">Use Custom Folder</property>
           </object>
         </child>
         <child>
-          <object class="HashtagCheckButtonRow" id="ask_folder">
+          <object class="HtgCheckButtonRow" id="ask_folder">
             <property name="title">Ask Each Time</property>
           </object>
         </child>
@@ -120,17 +120,17 @@
         <property name="margin-top">4</property>
         <property name="margin-bottom">4</property>
         <child>
-          <object class="HashtagCheckButtonRow" id="private_first">
+          <object class="HtgCheckButtonRow" id="private_first">
             <property name="title">Sort Based on Visiblity</property>
           </object>
         </child>
         <child>
-          <object class="HashtagCheckButtonRow" id="local_first">
+          <object class="HtgCheckButtonRow" id="local_first">
             <property name="title">Show Downloaded First</property>
           </object>
         </child>
         <child>
-          <object class="HashtagEntryRow" id="en_search">
+          <object class="HtgEntryRow" id="en_search">
             <property name="title">Search Repository</property>
             <property name="show-apply-button">true</property>
             <signal name="apply" handler="on_button_clicked"/>
@@ -139,7 +139,7 @@
       </object>
     </child>
     <child>
-      <object class="HashtagPreferencesGroup" id="repo_listview">
+      <object class="HtgPreferencesGroup" id="repo_listview">
         <property name="margin-top">4</property>
         <property name="margin-bottom">4</property>
           <property name="title">Repositories</property>

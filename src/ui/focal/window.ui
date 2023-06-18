@@ -27,7 +27,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
-                  <object class="HashtagClamp" id="base_connector">
+                  <object class="HtgClamp" id="base_connector">
                     <property name="visible">True</property>
                     <property name="vexpand">true</property>
                     <property name="valign">fill</property>

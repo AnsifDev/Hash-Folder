@@ -57,19 +57,19 @@
               <class name="boxed-list"/>"
             </style>
             <child>
-              <object class="HashtagEntryRow" id="en_keyname">
+              <object class="HtgEntryRow" id="en_keyname">
                 <property name="title">Keyname for Git Account</property>
                 <signal name="changed" handler="on_text_changed"/>
               </object>
             </child>
             <child>
-              <object class="HashtagPasswordEntryRow" id="en_pass">
+              <object class="HtgPasswordEntryRow" id="en_pass">
                 <property name="title">Password</property>
                 <signal name="changed" handler="on_text_changed"/>
               </object>
             </child>
             <child>
-              <object class="HashtagPasswordEntryRow" id="en_repass">
+              <object class="HtgPasswordEntryRow" id="en_repass">
                 <property name="title">Retype Password</property>
                 <signal name="changed" handler="on_text_changed"/>
               </object>

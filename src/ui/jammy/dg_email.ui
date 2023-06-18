@@ -42,7 +42,7 @@
               <class name="boxed-list"/>"
             </style>
             <child>
-              <object class="HashtagEntryRow" id="en_email">
+              <object class="HtgEntryRow" id="en_email">
                 <property name="title">Enter email</property>
                 <signal name="changed" handler="on_text_changed"/>
               </object>

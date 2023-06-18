@@ -4,7 +4,7 @@ from .. import get_ui_file_path as get_src_ui_file_path, runtime_env
 from gi.repository import Gdk, Gtk, Gio
 
 def get_ui_file_path(filename: str):
-    return get_src_ui_file_path(filename, "src/Hashtag/ui") 
+    return get_src_ui_file_path(filename, "src/Htg/ui") 
 
 if runtime_env >= 22.04: 
     from gi.repository import Adw
@@ -46,7 +46,7 @@ from .ViewHolder import ViewHolder
 if runtime_env < 22.04:        
     screen = Gdk.Screen.get_default()
     provider = Gtk.CssProvider()
-    provider.load_from_path("src/Hashtag/styles.css")
+    provider.load_from_path("src/Htg/styles.css")
     Gtk.StyleContext.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
 def __cmd_runner(cmd): os.system(cmd)

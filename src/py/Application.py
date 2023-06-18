@@ -15,7 +15,7 @@ class Application(Adw.Application if runtime_env >= 22.04 else Gtk.Application):
 
     def __init__(self):
         flags = Gio.ApplicationFlags.FLAGS_NONE if runtime_env < 23.04 else Gio.ApplicationFlags.DEFAULT_FLAGS
-        super().__init__(application_id='hashtag.linux.gitcloner',
+        super().__init__(application_id='Htg.linux.gitcloner',
                          flags=flags)
 
     def do_activate(self):
@@ -39,7 +39,7 @@ class Application(Adw.Application if runtime_env >= 22.04 else Gtk.Application):
     #     """Callback for the app.about action."""
     #     about = Gtk.AboutWindow(transient_for=self.props.active_window,
     #                             application_name='Repo Cloner',
-    #                             application_icon='hashtag.linux.linuxapp1',
+    #                             application_icon='Htg.linux.linuxapp1',
     #                             developer_name='Ansif',
     #                             version='0.1.0',
     #                             developers=['Ansif'],

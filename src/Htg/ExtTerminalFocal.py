@@ -41,7 +41,7 @@ class ExtTerminal:
     #     def on_window_exit(widget, *args):
     #         kwargs["callback"] = None
         
-    #     builder = Gtk.Builder.new_from_file("src/Hashtag/ui/terminal_task.ui")
+    #     builder = Gtk.Builder.new_from_file("src/Htg/ui/terminal_task.ui")
 
     #     window = builder.get_object("window")
     #     window.connect("delete-event", on_window_exit)

@@ -2,7 +2,7 @@ from gi.repository import Gtk
 from . import ActionRow
 
 class RadioButtonRow(ActionRow):
-    __gtype_name__ = 'HashtagRadioButtonRow'
+    __gtype_name__ = 'HtgRadioButtonRow'
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)

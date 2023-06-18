@@ -1,7 +1,7 @@
 from gi.repository import Gtk
 
 class Bin(Gtk.Bin):
-    __gtype_name__ = "HashtagBin"
+    __gtype_name__ = "HtgBin"
     _child = None
 
     def set_child(self, widget):

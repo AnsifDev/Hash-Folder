@@ -3,7 +3,7 @@ from gi.repository import Gtk, GObject
 from . import ListViewAdapter, get_ui_file_path
 
 class PreferencesGroup(Gtk.Box):
-    __gtype_name__ = "HashtagPreferencesGroup"
+    __gtype_name__ = "HtgPreferencesGroup"
 
     __header_suffix_widget = None
 

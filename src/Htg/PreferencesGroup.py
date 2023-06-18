@@ -2,7 +2,7 @@ from . import ListViewAdapter
 from gi.repository import Adw
 
 class PreferencesGroup(Adw.PreferencesGroup):
-    __gtype_name__ = 'HashtagPreferencesGroup'
+    __gtype_name__ = 'HtgPreferencesGroup'
 
     _listview_adapter = None
     _children = []

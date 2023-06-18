@@ -2,8 +2,8 @@ import os
 from gi.repository import Gtk
 from .DialogSSH import DialogSSH
 from .util import parse_yml_file
-# from ..Hashtag.ExtTerminal import ExtTerminal
-from .. import Hashtag, get_ui_file_path
+# from ..Htg.ExtTerminal import ExtTerminal
+from .. import Htg, get_ui_file_path
 #from .HomePage import HomePage
 
 @Gtk.Template(filename=get_ui_file_path("login_page.ui"))
@@ -30,13 +30,13 @@ class LoginPage(Gtk.Box):
                     dg = DialogSSH(self.window, username, self.on_ssh_key_done)
                     dg.present()
             else:
-                dg = Hashtag.MessageDialog(self.window, "Login Failed", "Login attempt got failed. Please retry\nErr code:"+str(response))
+                dg = Htg.MessageDialog(self.window, "Login Failed", "Login attempt got failed. Please retry\nErr code:"+str(response))
                 dg.add_response("ok", "OK")
                 dg.present()
         elif widget == self.ssh_load_task:
             if response == 0: self.window.connect_home_page(userdata)
             else:
-                dg = Hashtag.MessageDialog(self.window, "Login Failed", "SSH Key Upload Failed. Please retry\nErr code:"+str(response))
+                dg = Htg.MessageDialog(self.window, "Login Failed", "SSH Key Upload Failed. Please retry\nErr code:"+str(response))
                 dg.add_response("ok", "OK")
                 dg.present()
                 filename = userdata.replace(" ","\\ ")
@@ -54,5 +54,5 @@ class LoginPage(Gtk.Box):
     def __init__(self, window) -> None:
         super().__init__()
         self.window = window
-        self.login_task = Hashtag.ExtTerminal(window)
-        self.ssh_load_task = Hashtag.ExtTerminal(window)
+        self.login_task = Htg.ExtTerminal(window)
+        self.ssh_load_task = Htg.ExtTerminal(window)

@@ -1,7 +1,7 @@
 from . import EntryRow
 
 class PasswordEntryRow(EntryRow):
-    __gtype_name__ = "HashtagPasswordEntryRow"
+    __gtype_name__ = "HtgPasswordEntryRow"
 
     def __init__(self) -> None:
         super().__init__()

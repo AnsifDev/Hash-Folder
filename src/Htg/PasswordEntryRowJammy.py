@@ -2,7 +2,7 @@ from gi.repository import Gtk, Adw, GObject
 from . import EntryRow
 
 class PasswordEntryRow(EntryRow):
-    __gtype_name__ = "HashtagPasswordEntryRow"
+    __gtype_name__ = "HtgPasswordEntryRow"
 
     __password_shown = False
     __keyboard = None

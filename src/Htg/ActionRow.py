@@ -2,7 +2,7 @@ from gi.repository import Gtk, GObject
 from . import get_ui_file_path
 
 class ActionRow(Gtk.ListBoxRow):
-    __gtype_name__ = "HashtagActionRow"
+    __gtype_name__ = "HtgActionRow"
 
     _title_widget = None
     _subtitle_widget = None

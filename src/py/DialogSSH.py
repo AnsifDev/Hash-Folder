@@ -1,6 +1,6 @@
 import os
 from gi.repository import Gtk
-from .. import Hashtag, runtime_env, get_ui_file_path
+from .. import Htg, runtime_env, get_ui_file_path
 
 if runtime_env >= 22.04:
     from gi.repository import Adw
@@ -28,7 +28,7 @@ class DialogSSH(Adw.Window if runtime_env >= 22.04 else Gtk.Window):
 
     def ssh_gen(self, keyname, password, keylabel):
         cmd = "ssh-keygen -t ed25519 -C \""+keyname+"\" -f ~/.ssh/"+keyname.replace(" ", "\\ ")+" -N \""+password+"\""
-        Hashtag.ExtTerminal(self.get_transient_for()).run(cmd, True, self.on_terminal_task_complete, keylabel)
+        Htg.ExtTerminal(self.get_transient_for()).run(cmd, True, self.on_terminal_task_complete, keylabel)
 
     def troubleshoot(self):
         if (len(str(self.en_keyname.get_text())) < 5): return "Keyname must have atleast 5 characters"

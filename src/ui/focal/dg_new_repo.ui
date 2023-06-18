@@ -43,14 +43,14 @@
               <class name="card"/>"
             </style>
             <child>
-              <object class="HashtagEntryRow" id="en_reponame">
+              <object class="HtgEntryRow" id="en_reponame">
                 <property name="visible">True</property>
                 <property name="title">Repository Name</property>
                 <signal name="changed" handler="on_text_changed"/>
               </object>
             </child>
             <child>
-              <object class="HashtagActionRow">
+              <object class="HtgActionRow">
                 <property name="visible">True</property>
                 <property name="title" translatable="yes">Set Repository Visibility</property>
                 <child>

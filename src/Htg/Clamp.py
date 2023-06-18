@@ -1,7 +1,7 @@
 from . import Bin
 
 class Clamp(Bin):
-    __gtype_name__ = "HashtagClamp"
+    __gtype_name__ = "HtgClamp"
     max_width = 600
 
     def _size_allocated(self, widget, userdata):

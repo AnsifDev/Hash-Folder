@@ -2,7 +2,7 @@ from gi.repository import Gtk, Adw, GObject
 from . import get_ui_file_path
 
 class EntryRow(Adw.PreferencesRow, Gtk.Editable):
-    __gtype_name__ = "HashtagEntryRow"
+    __gtype_name__ = "HtgEntryRow"
     __gsignals__ = {
         'apply': (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, ()),
     }

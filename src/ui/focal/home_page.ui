@@ -71,13 +71,13 @@
       </object>
     </child>
     <child>
-      <object class="HashtagPreferencesGroup">
+      <object class="HtgPreferencesGroup">
         <property name="visible">True</property>
         <property name="title">General Configuration</property>
         <property name="margin-top">8</property>
         <property name="margin-bottom">4</property>
         <child>
-          <object class="HashtagActionRow">
+          <object class="HtgActionRow">
             <property name="visible">True</property>
             <property name="title">Stay Logged In</property>
             <property name="selectable">false</property>
@@ -95,7 +95,7 @@
           </object>
         </child>
         <child>
-          <object class="HashtagActionRow">
+          <object class="HtgActionRow">
             <property name="visible">True</property>
             <property name="title">Use SSH Port 443</property>
             <property name="subtitle">Some computers may block ssh repo cloning on its default port settings</property>
@@ -115,7 +115,7 @@
           </object>
         </child>
         <child>
-          <object class="HashtagActionRow" id="row_email">
+          <object class="HtgActionRow" id="row_email">
             <property name="visible">True</property>
             <property name="title" translatable="yes">Git User Email ID</property>
             <property name="subtitle" translatable="yes">[Not set]</property>
@@ -136,25 +136,25 @@
       </object>
     </child>
     <child>
-      <object class="HashtagPreferencesGroup" id="repo_grp">
+      <object class="HtgPreferencesGroup" id="repo_grp">
         <property name="visible">True</property>
         <property name="title">Repository Clone Folder</property>
         <property name="margin-top">8</property>
         <property name="margin-bottom">4</property>
         <child>
-          <object class="HashtagRadioButtonRow" id="default_folder">
+          <object class="HtgRadioButtonRow" id="default_folder">
             <property name="visible">True</property>
             <property name="title">Use Default Folder</property>
           </object>
         </child>
         <child>
-          <object class="HashtagRadioButtonRow" id="custom_folder">
+          <object class="HtgRadioButtonRow" id="custom_folder">
             <property name="visible">True</property>
             <property name="title">Use Custom Folder</property>
           </object>
         </child>
         <child>
-          <object class="HashtagRadioButtonRow" id="ask_folder">
+          <object class="HtgRadioButtonRow" id="ask_folder">
             <property name="visible">True</property>
             <property name="title">Ask Each Time</property>
           </object>
@@ -162,25 +162,25 @@
       </object>
     </child>
     <child>
-      <object class="HashtagPreferencesGroup" id="repo_filter_grp">
+      <object class="HtgPreferencesGroup" id="repo_filter_grp">
         <property name="title">Repository Filter and Search</property>
         <property name="visible">True</property>
         <property name="margin-top">4</property>
         <property name="margin-bottom">4</property>
         <child>
-          <object class="HashtagCheckButtonRow" id="private_first">
+          <object class="HtgCheckButtonRow" id="private_first">
             <property name="visible">True</property>
             <property name="title">Sort Based on Visiblity</property>
           </object>
         </child>
         <child>
-          <object class="HashtagCheckButtonRow" id="local_first">
+          <object class="HtgCheckButtonRow" id="local_first">
             <property name="visible">True</property>
             <property name="title">Show Downloaded First</property>
           </object>
         </child>
         <child>
-          <object class="HashtagEntryRow" id="en_search">
+          <object class="HtgEntryRow" id="en_search">
             <property name="visible">True</property>
             <property name="title">Search Repository</property>
             <signal name="apply" handler="on_button_clicked"/>
@@ -189,7 +189,7 @@
       </object>
     </child>
     <child>
-      <object class="HashtagPreferencesGroup" id="repo_listview">
+      <object class="HtgPreferencesGroup" id="repo_listview">
         <property name="visible">true</property>
         <property name="margin-top">4</property>
         <property name="margin-bottom">4</property>

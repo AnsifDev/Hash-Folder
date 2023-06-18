@@ -22,7 +22,7 @@ from gi.repository import Gtk
 from .LoginPage import LoginPage
 from .HomePage import HomePage
 from .util import parse_yml_file
-from .. import Hashtag, runtime_env, get_ui_file_path, app_cache_path, app_config, update_app_config
+from .. import Htg, runtime_env, get_ui_file_path, app_cache_path, app_config, update_app_config
 
 if runtime_env >= 22.04:
     from gi.repository import Adw
@@ -57,7 +57,7 @@ class Linuxapp1Window(Adw.ApplicationWindow if runtime_env >= 22.04 else Gtk.App
             self.set_sensitive(True)
 
     def getBuilderForBase(self, name):
-        return Gtk.Builder.new_from_resource('/hashtag/linux/linuxapp1/'+name+'.ui')
+        return Gtk.Builder.new_from_resource('/Htg/linux/linuxapp1/'+name+'.ui')
 
     def on_dialog_response(self, widget, response):
         if response == "cancel": self.close()
@@ -74,7 +74,7 @@ class Linuxapp1Window(Adw.ApplicationWindow if runtime_env >= 22.04 else Gtk.App
             self.close_install_app_file()
             if response == 0: self.on_apps_ready()
             else:
-                dg = Hashtag.MessageDialog(self, "App Install Failed", "Installation failed. Please retry or install the gh pacakage manually.\nErr code: "+str(response))
+                dg = Htg.MessageDialog(self, "App Install Failed", "Installation failed. Please retry or install the gh pacakage manually.\nErr code: "+str(response))
                 dg.add_response("cancel", "Quit")
                 dg.add_response("install", "Retry")
                 if runtime_env >= 23.04:
@@ -85,7 +85,7 @@ class Linuxapp1Window(Adw.ApplicationWindow if runtime_env >= 22.04 else Gtk.App
 
     def on_apps_ready(self):
         if app_config["current_runtime_env"] != app_config["detected_runtime_env"]:
-            dg = Hashtag.MessageDialog(self, "Debug Mode Activated", "Turn the debug mode off for better and updated experience")
+            dg = Htg.MessageDialog(self, "Debug Mode Activated", "Turn the debug mode off for better and updated experience")
             dg.add_response("ok", "OK")
             dg.present()
 
@@ -98,7 +98,7 @@ class Linuxapp1Window(Adw.ApplicationWindow if runtime_env >= 22.04 else Gtk.App
             if usrDat["github.com"]["git_protocol"] == "ssh":
                 self.connect_home_page(usrDat["github.com"]["user"])
             else:
-                dg = Hashtag.MessageDialog(self, "Unsupported Protocol", "Currently logged in method is in not ssh protocol. Please re-login with ssh protocol")
+                dg = Htg.MessageDialog(self, "Unsupported Protocol", "Currently logged in method is in not ssh protocol. Please re-login with ssh protocol")
                 dg.add_response("cancel", "Cancel")
                 dg.add_response("login", "Re Login")
                 if runtime_env >= 23.04:
@@ -113,7 +113,7 @@ class Linuxapp1Window(Adw.ApplicationWindow if runtime_env >= 22.04 else Gtk.App
         appsReady = os.system("gh --version") == 0
         if appsReady: self.on_apps_ready()
         else:
-            dg = Hashtag.MessageDialog(self, "App Installs Required", "Some apps required to run this program is not present in this system. Please proceed to install all dependency apps.\nApp required: git client (package: gh)")
+            dg = Htg.MessageDialog(self, "App Installs Required", "Some apps required to run this program is not present in this system. Please proceed to install all dependency apps.\nApp required: git client (package: gh)")
             dg.add_response("cancel", "Cancel")
             dg.add_response("install", "Install All")
             if runtime_env >= 23.04:
@@ -128,18 +128,18 @@ class Linuxapp1Window(Adw.ApplicationWindow if runtime_env >= 22.04 else Gtk.App
 
         if not app_config["version_warning_shown"]:
             if runtime_env == 20.04: 
-                dg = Hashtag.MessageDialog(self, "Outdated Ubuntu Detected", "Seriously bro? Its Ubuntu 20.04, Its will lose its support so soon. Also I am not implementing new features to this version. Update ubuntu asap bro, new LTS version is way too beautiful than this version")
+                dg = Htg.MessageDialog(self, "Outdated Ubuntu Detected", "Seriously bro? Its Ubuntu 20.04, Its will lose its support so soon. Also I am not implementing new features to this version. Update ubuntu asap bro, new LTS version is way too beautiful than this version")
                 dg.add_response("ok", "OK")
                 dg.present()
             elif runtime_env == 22.04:
-                dg = Hashtag.MessageDialog(self, "Keep Updating Ubuntu", "Update your ubuntu to 24.04 LTS when it is available. This version misses some built in features which the next LTS version will have. You are currently running Ubuntu 22.04 LTS")
+                dg = Htg.MessageDialog(self, "Keep Updating Ubuntu", "Update your ubuntu to 24.04 LTS when it is available. This version misses some built in features which the next LTS version will have. You are currently running Ubuntu 22.04 LTS")
                 dg.add_response("ok", "OK")
                 dg.present()
                 app_config["version_warning_shown"] = True
                 update_app_config()
             else:
                 if runtime_env < 24.04:
-                    dg = Hashtag.MessageDialog(self, "Keep Ubuntu in a LTS version", "Intermediate version of ubuntu is not recomended as it lose its support very soon. Update to the next and latest (Ubuntu 24.04) LTS version when it is available")
+                    dg = Htg.MessageDialog(self, "Keep Ubuntu in a LTS version", "Intermediate version of ubuntu is not recomended as it lose its support very soon. Update to the next and latest (Ubuntu 24.04) LTS version when it is available")
                     dg.add_response("ok", "OK")
                     dg.present()
                     app_config["version_warning_shown"] = True
@@ -171,5 +171,5 @@ class Linuxapp1Window(Adw.ApplicationWindow if runtime_env >= 22.04 else Gtk.App
         if runtime_env >= 22.04: self.connect("close-request", self.on_window_destroy)
         else: self.connect("delete-event", self.on_window_destroy)
         self.destroy_callback = None
-        self.install_task = Hashtag.ExtTerminal(self)
+        self.install_task = Htg.ExtTerminal(self)
         

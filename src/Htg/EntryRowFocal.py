@@ -2,7 +2,7 @@ from gi.repository import Gtk, GObject
 from . import get_ui_file_path
 
 class EntryRow(Gtk.ListBoxRow, Gtk.Editable):
-    __gtype_name__ = "HashtagEntryRow"
+    __gtype_name__ = "HtgEntryRow"
 
     __parent_handler_id = None
     __parent = None

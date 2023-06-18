@@ -1,5 +1,5 @@
 from gi.repository import Gtk
-from .. import Hashtag, runtime_env, get_ui_file_path
+from .. import Htg, runtime_env, get_ui_file_path
 
 if runtime_env >= 22.04:
     from gi.repository import Adw
@@ -19,7 +19,7 @@ class DialogNewRepo(Adw.Window if runtime_env >= 22.04 else Gtk.Window):
 
         self.set_transient_for(parent)
         self.callback = callback
-        self.repo_create_task = Hashtag.ExtTerminal(parent)
+        self.repo_create_task = Htg.ExtTerminal(parent)
 
         if runtime_env < 22.04: self.combo_visibility.set_active(0)
 
@@ -28,7 +28,7 @@ class DialogNewRepo(Adw.Window if runtime_env >= 22.04 else Gtk.Window):
             self.callback(self, userdata)
         else: 
             self.callback(self, None)
-            dg = Hashtag.MessageDialog(self.get_transient_for(), "Repository Setup Failed", "Unexpected Error occured. Repository not created\nErr code: "+str(response))
+            dg = Htg.MessageDialog(self.get_transient_for(), "Repository Setup Failed", "Unexpected Error occured. Repository not created\nErr code: "+str(response))
             dg.add_response("ok", "OK")
             dg.present()
 

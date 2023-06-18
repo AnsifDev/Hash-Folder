@@ -58,7 +58,7 @@
               <class name="boxed-list"/>"
             </style>
             <child>
-              <object class="HashtagEntryRow" id="en_reponame">
+              <object class="HtgEntryRow" id="en_reponame">
                 <property name="title">Repository Name</property>
                 <signal name="changed" handler="on_text_changed"/>
               </object>

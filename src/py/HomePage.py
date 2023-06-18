@@ -5,18 +5,18 @@ from gi.repository import Gtk, Gtk, Gio
 from .util import ch_port, rm_port
 from .DialogEmail import DialogEmail
 from .DialogNewRepo import DialogNewRepo
-from .. import Hashtag, runtime_env, get_ui_file_path, app_cache_path, app_config_path
+from .. import Htg, runtime_env, get_ui_file_path, app_cache_path, app_config_path
 
 if runtime_env >= 22.04:
     from gi.repository import Adw
 
-class myViewHolder(Hashtag.ViewHolder):
+class myViewHolder(Htg.ViewHolder):
     
     def __init__(self) -> None:
         super().__init__()
 
         if runtime_env < 22.04:
-            self.action_row = Hashtag.ActionRow()
+            self.action_row = Htg.ActionRow()
             image = Gtk.Image()
             image.set_from_icon_name("network-server-symbolic", 1)
             image.set_margin_start(8)
@@ -53,7 +53,7 @@ class myViewHolder(Hashtag.ViewHolder):
         else: custom_btn.get_style_context().add_class("flat")
         return custom_btn
 
-class myListViewAdapter(Hashtag.ListViewAdapter):
+class myListViewAdapter(Htg.ListViewAdapter):
 
     open_callback = None
     clone_callback = None
@@ -64,7 +64,7 @@ class myListViewAdapter(Hashtag.ListViewAdapter):
         self.online_data = online_data
         self.local_data = local_data
 
-    def get_view_holder(self) -> Hashtag.ViewHolder:
+    def get_view_holder(self) -> Htg.ViewHolder:
         # print("Log: view_holder created")
         return myViewHolder()
     
@@ -119,7 +119,7 @@ class HomePage(Gtk.Box):
     @Gtk.Template.Callback()
     def on_button_clicked(self, widget):
         if widget == self.logout:
-            dg = Hashtag.MessageDialog(self.window, "Logout?", "Are you going to logout?")
+            dg = Htg.MessageDialog(self.window, "Logout?", "Are you going to logout?")
             dg.add_response("cancel", "Cancel")
             dg.add_response("logout", "Logout")
             if runtime_env >= 23.04:
@@ -355,9 +355,9 @@ class HomePage(Gtk.Box):
     def on_row_open_clicked(self, index):
         id = self.repoList[index]["id"]
         folder = self.acc_config["local_repo"][id]
-        if os.path.exists(folder): Hashtag.launch_file(folder, self.window)
+        if os.path.exists(folder): Htg.launch_file(folder, self.window)
         else:
-            dg = Hashtag.MessageDialog(self.window, "Folder Not Found")
+            dg = Htg.MessageDialog(self.window, "Folder Not Found")
             dg.add_response("ok", "OK")
             dg.present()
             self.acc_config["local_repo"].pop(self.repoList[index]["id"])
@@ -365,7 +365,7 @@ class HomePage(Gtk.Box):
 
     def start_clone(self, folder, index):
         if "email" not in self.acc_config:
-            dg = Hashtag.MessageDialog(self.window, "Error", "Git User Email is not configured")
+            dg = Htg.MessageDialog(self.window, "Error", "Git User Email is not configured")
             dg.add_response("cancel", "Cancel")
             dg.add_response("config", "Configure Now")
             if runtime_env >= 23.04:
@@ -392,7 +392,7 @@ class HomePage(Gtk.Box):
                 self.repo_full_list.sort(key= lambda a: a["name"])
                 self.sort_repos()
             else:
-                dg = Hashtag.MessageDialog(self.window, "Data Fetch Failed", "Couldn't able to read repository data. Please check the network connectivity and refetch\nErr code: "+str(response))
+                dg = Htg.MessageDialog(self.window, "Data Fetch Failed", "Couldn't able to read repository data. Please check the network connectivity and refetch\nErr code: "+str(response))
                 dg.add_response("ok", "OK")
                 dg.present()
         elif widget == self.repo_fetch_task:
@@ -403,7 +403,7 @@ class HomePage(Gtk.Box):
                     file = open(filename)
                     json_str = file.read()
                     file.close()
-                dg = Hashtag.MessageDialog(self.window, "Data Fetch Failed", "Couldn't able to read repository data. Please check the network connectivity and refetch\nErr code: "+str(response))
+                dg = Htg.MessageDialog(self.window, "Data Fetch Failed", "Couldn't able to read repository data. Please check the network connectivity and refetch\nErr code: "+str(response))
                 dg.add_response("ok", "OK")
                 dg.present()
             else:
@@ -429,9 +429,9 @@ class HomePage(Gtk.Box):
                 if response == 0:
                     os.system("git config -f "+folder.replace(" ", "\\ ")+"/.git/config user.name \""+self.username+"\"")
                     os.system("git config -f "+folder.replace(" ", "\\ ")+"/.git/config user.email \""+self.acc_config["email"]+"\"") 
-                    Hashtag.launch_file(folder, self.window)
+                    Htg.launch_file(folder, self.window)
                 else:
-                    dg = Hashtag.MessageDialog(self.window, "Clone Failed", "Err code: "+str(response))
+                    dg = Htg.MessageDialog(self.window, "Clone Failed", "Err code: "+str(response))
                     dg.add_response("ok", "OK")
                     dg.present()
 
@@ -483,9 +483,9 @@ class HomePage(Gtk.Box):
         else:
             self.custom_folder.check_button.join_group(self.default_folder.check_button)
             self.ask_folder.check_button.join_group(self.default_folder.check_button)
-        self.clone_task = Hashtag.ExtTerminal(window)
-        self.repo_fetch_task = Hashtag.ExtTerminal(window)
-        self.post_repo_create_task = Hashtag.ExtTerminal(window)
+        self.clone_task = Htg.ExtTerminal(window)
+        self.repo_fetch_task = Htg.ExtTerminal(window)
+        self.post_repo_create_task = Htg.ExtTerminal(window)
 
         self.local_first.check_button.connect("toggled", self.on_checked_changed)
         self.private_first.check_button.connect("toggled", self.on_checked_changed)
