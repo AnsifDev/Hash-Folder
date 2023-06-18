@@ -85,6 +85,8 @@ class Linuxapp1Window(Adw.ApplicationWindow if runtime_env >= 22.04 else Gtk.App
 
     def on_apps_ready(self):
         if app_config["current_runtime_env"] != app_config["detected_runtime_env"]:
+            if runtime_env >= 22.04: self.add_css_class("devel")
+            else: self.get_style_context().add_class("devel")
             dg = Htg.MessageDialog(self, "Debug Mode Activated", "Turn the debug mode off for better and updated experience")
             dg.add_response("ok", "OK")
             dg.present()
