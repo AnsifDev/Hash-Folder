@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<interface>
+    <object class="GtkStack" id="stack">
+        <child><object class="GtkStackPage">
+            <property name="name">empty</property>
+            <property name="child">
+                <object class="AdwStatusPage">
+                    <property name="title">Select Repository For Details</property>
+                    <property name="icon-name">network-server-symbolic</property>
+                </object>
+            </property>
+        </object></child>
+        <child><object class="GtkStackPage">
+            <property name="name">content</property>
+            <property name="child">
+                <object class="AdwClamp">
+                    <property name="vexpand">true</property>
+                    <property name="valign">center</property>
+                    <child><object class="GtkButton">
+                        <property name="margin-start">8</property>
+                        <property name="margin-end">8</property>
+                        <property name="label">Close Main</property>
+                        <style><class name="pill"/></style>
+                    </object></child>
+                </object>
+            </property>
+        </object></child>
+    </object>
+</interface>
