@@ -3,8 +3,11 @@
 import sys
 from Htg import Application
 
+from py.MyApp import MyApp
+if not issubclass(MyApp, Application): raise Exception("Invalid Application Class")
+
 Manifest = { "components": dict() }
-App = Application("hastag.linux.git-cloner", Manifest, "src")
+App = MyApp("hastag.linux.git-cloner", Manifest, "src")
 
 Manifest["launcher"] = "TestActivity"
 

@@ -1,8 +1,6 @@
 import Htg
 from gi.repository import Adw
 
-from .Settings import Settings
-
 class TestActivity(Htg.Activity):
     def _on_create(self):
         self._set_content("repo_view.ui", "leaflet")
@@ -19,16 +17,9 @@ class TestActivity(Htg.Activity):
         self.__finish_view = self.find_view_by_id("finish_view")
         self.__finish_view.connect("clicked", self.__on_btn_clicked)
 
-        self.__settings = Settings("window")
-        self.__settings.bind_property("width", self._get_window(), "default-width", 600)
-        self.__settings.bind_property("height", self._get_window(), "default-height", 400)
-        self.__settings.bind_property("maximized", self._get_window(), "maximized", False)
-        self.__settings.bind_property("fullscreened", self._get_window(), "fullscreened", False)
-
         return super()._on_create()
     
     def _on_destroy(self):
-        self.__settings.save()
         return super()._on_destroy()
     
     def __on_btn_clicked(self, source, *args):
