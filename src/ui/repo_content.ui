@@ -17,7 +17,7 @@
                 <object class="AdwClamp">
                     <property name="vexpand">true</property>
                     <property name="valign">center</property>
-                    <child><object class="GtkButton">
+                    <child><object class="GtkButton" id="finish_view">
                         <property name="margin-start">8</property>
                         <property name="margin-end">8</property>
                         <property name="label">Close Main</property>

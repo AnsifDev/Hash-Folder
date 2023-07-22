@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<interface>
+    <object class="AdwClamp" id="root">
+        <property name="tightening-threshold">250</property>
+        <child><object class="AdwBin">
+            <property name="margin-start">16</property>
+            <property name="margin-end">16</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="vexpand">true</property>
+            <child><object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">8</property>
+                <property name="vexpand">false</property>
+                <child><object class="GtkLabel">
+                    <property name="label">This is sidebar</property>
+                    <style><class name="title-2"/></style>
+                </object></child>
+                <child><object class="GtkButton" id="launch">
+                    <property name="label">Launch Main</property>
+                    <style><class name="pill"/></style>
+                </object></child>
+            </object></child>
+        </object></child>
+    </object>
+</interface>
