@@ -1,2 +1,7 @@
-*
-!git-cloner
+/*
+!/.gitignore
+!/meson.build
+!/org.htg.hashfolder.json
+!/src
+!/dependencies
+!/.meson_tools

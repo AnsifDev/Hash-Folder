@@ -1,0 +1,25 @@
+.bottom-bar {
+    background-color: @headerbar_bg_color;
+}
+
+.my-frame {
+    border: 1px solid @borders;
+    border-radius: 10px;
+}
+
+.my-textview {
+    border: 1px solid @borders;
+    border-radius: 5px;
+    background-color: #00000000;
+}
+
+.term-card {
+    border-radius: 10px;
+    background-color: #000;
+}
+
+.term-head {
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    background-color: @headerbar_bg_color;
+}

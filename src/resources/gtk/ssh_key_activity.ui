@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+	<object class="HtgActivityPage" id="root">
+        <child>
+			<object class="GtkProgressBar" id="progress">
+				<style><class name="osd"/></style>
+			</object>
+		</child>
+        <child>
+            <object class="HtgBreakpointBin">
+                <child>
+                    <object class="HtgBreakpoint" id="breakpoint">
+                        <property name="threshold-width">500</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="AdwClamp">
+                        <child>
+                            <object class="GtkBox" id="base_box">
+                                <property name="orientation">vertical</property>
+                                <property name="valign">center</property>
+                                <style><class name="my-frame"/></style>
+                                <child>
+                                    <object class="GtkBox" id="content_box">
+                                        <property name="orientation">vertical</property>
+                                        <property name="height-request">400</property>
+                                        <property name="spacing">16</property>
+                                        <child>
+                                            <object class="GtkLabel">
+                                                <property name="label">Connectivity Configurations</property>
+                                                <property name="margin-top">48</property>
+                                                <property name="margin-bottom">16</property>
+                                                <property name="margin-start">16</property>
+                                                <property name="margin-end">16</property>
+                                                <style><class name="title-1"/></style>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="AdwPreferencesGroup" id="ssh_configs">
+                                                <property name="margin-start">16</property>
+                                                <property name="margin-end">16</property>
+                                                <property name="title">SSH Configuration</property>
+                                                <child>
+                                                    <object class="AdwEntryRow" id="dev_name">
+                                                        <property name="title">Device Name</property>
+                                                        <child>
+                                                            <object class="GtkImage" id="dev_name_valid">
+                                                                <property name="margin-end">8</property>
+                                                                <property name="margin-start">8</property>
+                                                                <property name="icon-name">error-symbolic</property>
+                                                                <property name="tooltip-text">Must contain atleast 5 characters. Characters: _-[a-z][A-Z][0-9] are only allowed. First character must not be - or [0-9]</property>
+                                                                <style><class name="error"/></style>
+                                                            </object>
+                                                        </child>
+                                                    </object>
+                                                </child>
+                                                <child>
+                                                    <object class="AdwPasswordEntryRow" id="key_pass">
+                                                        <property name="title">Enter SSH Key Password</property>
+                                                        <child>
+                                                            <object class="GtkImage" id="key_pass_valid">
+                                                                <property name="margin-end">8</property>
+                                                                <property name="margin-start">8</property>
+                                                                <property name="icon-name">error-symbolic</property>
+                                                                <property name="tooltip-text">Must contain atleast 8 characters</property>
+                                                                <style><class name="error"/></style>
+                                                            </object>
+                                                        </child>
+                                                    </object>
+                                                </child>
+                                                <child>
+                                                    <object class="AdwPasswordEntryRow" id="key_cpass">
+                                                        <property name="title">Re-enter SSH Key Password</property>
+                                                        <child>
+                                                            <object class="GtkImage" id="key_cpass_valid">
+                                                                <property name="margin-end">8</property>
+                                                                <property name="margin-start">8</property>
+                                                                <property name="icon-name">error-symbolic</property>
+                                                                <property name="tooltip-text">Must match both the passwords</property>
+                                                                <style><class name="error"/></style>
+                                                            </object>
+                                                        </child>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="AdwPreferencesGroup">
+                                                <property name="margin-start">16</property>
+                                                <property name="margin-end">16</property>
+                                                <property name="title">Git Configuration</property>
+                                                <child>
+                                                    <object class="AdwEntryRow" id="disp_name">
+                                                        <property name="title">Display Name</property>
+                                                        <child>
+                                                            <object class="GtkImage" id="disp_name_valid">
+                                                                <property name="margin-end">8</property>
+                                                                <property name="margin-start">8</property>
+                                                                <property name="icon-name">error-symbolic</property>
+                                                                <property name="tooltip-text">Must contain atleast 1 character</property>
+                                                                <style><class name="error"/></style>
+                                                            </object>
+                                                        </child>
+                                                    </object>
+                                                </child>
+                                                <child>
+                                                    <object class="AdwEntryRow" id="email">
+                                                        <property name="title">Email</property>
+                                                        <child>
+                                                            <object class="GtkImage" id="email_valid">
+                                                                <property name="margin-end">8</property>
+                                                                <property name="margin-start">8</property>
+                                                                <property name="icon-name">error-symbolic</property>
+                                                                <property name="tooltip-text">Characters: ._-+~[a-z][A-Z][0-9] are only allowed. Exactly one @ character must be present.</property>
+                                                                <style><class name="error"/></style>
+                                                            </object>
+                                                        </child>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkBox" id="bottom_box">
+                                        <property name="hexpand">true</property>
+                                        <property name="margin-top">24</property>
+                                        <!-- <style><class name="bottom-bar"/></style> -->
+                                        <child>
+                                            <object class="GtkBox">
+                                                <property name="orientation">horizontal</property>
+                                                <property name="hexpand">true</property>
+                                                <property name="halign">start</property>
+                                                <child>
+                                                    <object class="GtkButton" id="cancel_btn">
+                                                        <property name="label">Cancel</property>
+                                                        <property name="margin-start">8</property>
+                                                        <property name="margin-top">8</property>
+                                                        <property name="margin-bottom">8</property>
+                                                        <property name="width-request">100</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkBox">
+                                                <property name="orientation">horizontal</property>
+                                                <property name="hexpand">true</property>
+                                                <property name="halign">end</property>
+                                                <child>
+                                                    <object class="GtkButton" id="create_btn">
+                                                        <style><class name="suggested-action"/></style>
+                                                        <property name="label">Continue</property>
+                                                        <property name="sensitive">false</property>
+                                                        <property name="margin-end">8</property>
+                                                        <property name="margin-top">8</property>
+                                                        <property name="margin-bottom">8</property>
+                                                        <property name="width-request">100</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </object>
+</interface>

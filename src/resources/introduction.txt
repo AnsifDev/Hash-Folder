@@ -1,0 +1,10 @@
+    Thanks for choosing me... The purpose of my build is to provide you a syncing folder powered by github.
+
+Aim: You can create a perfectly syncable folder which can be used in your labs, for keeping your program files, makes you accessible anywhere you want. All you want is:
+
+1. Login to github using this app.
+2. Create an SSH Key via this app.
+3. Clone or create the repositories you want.
+3. Log out from this app and web browser.
+
+All you need is the SSH-Key Password, you can continue syncing the repositories you just downloaded even if you logged out.

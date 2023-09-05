@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.htg.hashfolder</id>
+  
+  <name>Hash Folder</name>
+  <summary>Hash Folder</summary>
+  
+  <metadata_license>FTL</metadata_license>
+  <project_license>AGPL-3.0-or-later</project_license>
+  
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
+  
+  <description>
+    <p>
+      Hash Folder
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">org.htg.hashfolder.desktop</launchable>
+
+  <releases>
+    <release version="master" date="2023-09-05" />
+  </releases>
+  <developer_name>Hashtag Team</developer_name>
+</component>

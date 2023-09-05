@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+	<object class="HtgActivityPage" id="root">
+		<child>
+			<object class="GtkProgressBar" id="progress">
+				<style><class name="osd"/></style>
+			</object>
+		</child>
+		<child>
+			<object class="GtkScrolledWindow">
+				<property name="hscrollbar-policy">never</property>
+				<property name="vexpand">true</property>
+				<child>
+					<object class="AdwClamp">
+						<child>
+							<object class="GtkBox">
+								<property name="orientation">vertical</property>
+								<property name="spacing">16</property>
+								<property name="margin-top">16</property>
+								<property name="margin-start">16</property>
+								<property name="margin-end">16</property>
+								<property name="margin-bottom">16</property>
+								<child>
+									<object class="GtkLabel">
+										<property name="margin-top">48</property>
+										<property name="label">Welcome to Hash Folder</property>
+										<style><class name="title-1"/></style>
+										<property name="wrap">true</property>
+										<property name="justify">center</property>
+									</object>
+								</child>
+								<child>
+									<object class="GtkLabel" id="introduction">
+										<property name="halign">start</property>
+										<property name="wrap">true</property>
+										<property name="halign">fill</property>
+										<style><class name="dim-label"/></style>
+									</object>
+								</child>
+								<child>
+									<object class="AdwClamp">
+										<property name="margin-top">8</property>
+										<property name="maximum-size">400</property>
+										<property name="tightening-threshold">300</property>
+										<child>
+											<object class="GtkBox">
+												<property name="orientation">vertical</property>
+												<child>
+													<object class="GtkButton" id="login_btn">
+														<property name="label">Login</property>
+														<property name="sensitive">false</property>
+														<style><class name="pill"/><class name="suggested-action"/></style>
+													</object>
+												</child>
+												<child>
+													<object class="GtkLabel">
+														<property name="label">Not your system? Don't worry, login as guest</property>
+														<property name="halign">start</property>
+														<property name="margin-top">12</property>
+														<property name="margin-bottom">4</property>
+														<property name="margin-start">8</property>
+														<style><class name="caption"/></style>
+													</object>
+												</child>
+												<child>
+													<object class="GtkButton" id="guest_login_btn">
+														<property name="sensitive">false</property>
+														<property name="sensitive" bind-source="login_btn" bind-property="sensitive" bind-flags="default"/>
+														<property name="label">Login as Guest</property>
+														<style><class name="pill"/></style>
+													</object>
+												</child>
+											</object>
+										</child>
+									</object>
+								</child>
+								<child>
+									<object class="AdwBin">
+										<property name="hexpand">true</property>
+										<property name="vexpand">true</property>
+									</object>
+								</child>
+								<child>
+									<object class="GtkBox">
+										<style><class name="linked"/></style>
+										<property name="hexpand">false</property>
+										<property name="halign">center</property>
+										<property name="homogeneous">true</property>
+										<property name="width-request">200</property>
+										<child>
+											<object class="GtkToggleButton" id="theme_auto">
+												<property name="tooltip-text">Follow System</property>
+												<property name="active">true</property>
+												<property name="icon-name">dark-mode-symbolic</property>
+											</object>
+										</child>
+										<child>
+											<object class="GtkToggleButton" id="theme_light">
+												<property name="tooltip-text">Light Theme</property>
+												<property name="icon-name">display-brightness-medium-symbolic</property>
+												<property name="group">theme_auto</property>
+											</object>
+										</child>
+										<child>
+											<object class="GtkToggleButton" id="theme_dark">
+												<property name="tooltip-text">Dark Theme</property>
+												<property name="icon-name">moon-outline-symbolic</property>
+												<property name="group">theme_auto</property>
+											</object>
+										</child>
+									</object>
+								</child>
+								<child>
+									<object class="GtkLabel">
+										<property name="hexpand">false</property>
+										<property name="halign">center</property>
+										<property name="label">Build: v0.0.1 alpha</property>
+										<style><class name="dim-label"/><class name="caption"/></style>
+									</object>
+								</child>
+							</object>
+						</child>
+					</object>
+				</child>
+			</object>
+		</child>
+	</object>
+</interface>

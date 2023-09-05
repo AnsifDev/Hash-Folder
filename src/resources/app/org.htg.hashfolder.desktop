@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+
+Name=Hash Folder
+Comment=Hash Folder
+Icon=org.htg.hashfolder
+Exec=app
+Terminal=false

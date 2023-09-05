@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+	<object class="HtgActivityPage" id="root">
+		<child>
+			<object class="GtkStack" id="content_stack">
+				<child>
+					<object class="GtkStackPage">
+						<property name="name">empty</property>
+						<property name="child">
+							<object class="AdwStatusPage">
+								<property name="icon-name">folder-symbolic</property>
+								<property name="title">Select A Repository</property>
+								<property name="valign">center</property>
+							</object>
+						</property>
+					</object>
+				</child>
+				<child>
+					<object class="GtkStackPage">
+						<property name="name">content</property>
+						<property name="child">
+							<object class="GtkScrolledWindow">
+								<property name="hexpand">true</property>
+								<property name="vexpand">true</property>
+								<property name="hscrollbar-policy">never</property>
+								<child>
+									<object class="AdwClamp">
+										<property name="maximum-size">700</property>
+										<child>
+											<object class="GtkBox">
+												<property name="orientation">vertical</property>
+												<property name="margin-top">8</property>
+												<property name="margin-bottom">8</property>
+												<property name="margin-start">12</property>
+												<property name="margin-end">12</property>
+												<property name="spacing">12</property>
+												<property name="vexpand">false</property>
+												<child>
+													<object class="AdwClamp" id="inner_clamp_head">
+														<property name="tightening-threshold">600</property>
+														<property name="maximum-size">400</property>
+														<child>
+															<object class="GtkBox" id="align_box_head">
+																<!-- <style><class name="card"/></style> -->
+																<property name="spacing">8</property>
+																<property name="orientation">vertical</property>
+																<property name="halign">fill</property>
+																<child>
+																	<object class="AdwAvatar" id="avt">
+																		<property name="size">120</property>
+																		<property name="icon-name">network-server-symbolic</property>
+																		<property name="margin-top">8</property>
+																		<property name="margin-bottom">8</property>
+																		<property name="margin-start">8</property>
+																	</object>
+																</child>
+																<child>
+																	<object class="GtkBox">
+																		<property name="orientation">vertical</property>
+																		<!-- <property name="vexpand">true</property> -->
+																		<property name="valign">center</property>
+																		<property name="margin-top">8</property>
+																		<property name="margin-bottom">8</property>
+																		<property name="margin-start">16</property>
+																		<property name="margin-end">16</property>
+																		<property name="spacing">4</property>
+																		<child>
+																			<object class="GtkBox" id="head_align">
+																				<property name="orientation">vertical</property>
+																				<property name="halign">center</property>
+																				<property name="hexpand">false</property>
+																				<!-- <style><class name="card"/></style> -->
+																				<child>
+																					<object class="GtkLabel" id="repo_name">
+																						<property name="label">Repository Name</property>
+																						<property name="halign">start</property>
+																						<property name="ellipsize">end</property>
+																						<style><class name="title-1"/></style>
+																					</object>
+																				</child>
+																				<child>
+																					<object class="GtkBox">
+																						<property name="margin-top">8</property>
+																						<property name="margin-start">8</property>
+																						<property name="spacing">12</property>
+																						<property name="hexpand">false</property>
+																						<property name="halign">start</property>
+																						<child>
+																							<object class="GtkBox">
+																								<property name="width-request">80</property>
+																								<property name="spacing">2</property>
+																								<property name="orientation">vertical</property>
+																								<child>
+																									<object class="GtkLabel">
+																										<property name="label">Owner</property>
+																										<property name="halign">start</property>
+																										<style><class name="dim-label"/></style>
+																									</object>
+																								</child>
+																								<child>
+																									<object class="GtkLabel">
+																										<property name="label">Visibility</property>
+																										<property name="halign">start</property>
+																										<style><class name="dim-label"/></style>
+																									</object>
+																								</child>
+																							</object>
+																						</child>
+																						<child>
+																							<object class="GtkBox">
+																								<property name="spacing">2</property>
+																								<property name="orientation">vertical</property>
+																								<child>
+																									<object class="GtkLabel" id="repo_owner">
+																										<property name="label">AnsifDev</property>
+																										<property name="halign">start</property>
+																									</object>
+																								</child>
+																								<child>
+																									<object class="GtkLabel" id="repo_visibility">
+																										<property name="label">Public</property>
+																										<property name="halign">start</property>
+																									</object>
+																								</child>
+																							</object>
+																						</child>
+																					</object>
+																				</child>
+																			</object>
+																		</child>
+																		<child>
+																			<object class="GtkBox">
+																				<property name="margin-top">16</property>
+																				<property name="spacing">12</property>
+																				<property name="homogeneous">true</property>
+																				<property name="width-request">300</property>
+																				<property name="hexpand">false</property>
+																				<child>
+																					<object class="GtkButton" id="btn_clone">
+																						<property name="label">Clone</property>
+																						<property name="visible">false</property>
+																						<style><class name="pill"/><class name="suggested-action"/></style>
+																					</object>
+																				</child>
+																				<child>
+																					<object class="GtkButton" id="btn_remove">
+																						<property name="label">Remove</property>
+																						<property name="visible" bind-source="btn_clone" bind-property="visible" bind-flags="invert-boolean"/>
+																						<style><class name="pill"/></style>
+																					</object>
+																				</child>
+																				<child>
+																					<object class="GtkButton" id="btn_open">
+																						<property name="label">Open</property>
+																						<property name="visible" bind-source="btn_clone" bind-property="visible" bind-flags="invert-boolean"/>
+																						<style><class name="pill"/><class name="suggested-action"/></style>
+																					</object>
+																				</child>
+																			</object>
+																		</child>
+																	</object>
+																</child>
+															</object>
+														</child>
+													</object>
+												</child>
+												<child>
+													<object class="GtkBox" id="description_card">
+														<style><class name="card"/></style>
+														<property name="orientation">vertical</property>
+														<property name="spacing">6</property>
+														<child>
+															<object class="GtkLabel">
+																<property name="label">Description</property>
+																<property name="halign">start</property>
+																<property name="margin-start">16</property>
+																<property name="margin-end">16</property>
+																<property name="margin-top">16</property>
+																<style><class name="title-3"/></style>
+															</object>
+														</child>
+														<child>
+															<object class="GtkLabel" id="repo_description">
+																<property name="halign">start</property>
+																<property name="label">Description</property>
+																<property name="wrap">true</property>
+																<property name="margin-start">20</property>
+																<property name="margin-end">16</property>
+																<property name="margin-bottom">16</property>
+																<style><class name="dim-label"/></style>
+															</object>
+														</child>
+													</object>
+												</child>
+												<child>
+													<object class="GtkLabel" id="empty_description">
+														<property name="visible">false</property>
+														<property name="visible" bind-source="description_card" bind-property="visible" bind-flags="invert-boolean"/>
+														<property name="label">No Description</property>
+														<property name="margin-top">8</property>
+														<property name="margin-start">16</property>
+														<property name="margin-bottom">16</property>
+														<property name="halign">start</property>
+														<style><class name="title-3"/><class name="dim-label"/></style>
+													</object>
+												</child>
+												<child>
+													<object class="GtkBox" id="align_box_tiles">
+														<property name="orientation">vertical</property>
+														<property name="spacing">12</property>
+														<property name="homogeneous">true</property>
+														<child>
+															<object class="GtkBox">
+																<property name="orientation">vertical</property>
+																<property name="spacing">6</property>
+																<!-- <property name="height-request">50</property> -->
+																<style><class name="card"/></style>
+																<child>
+																	<object class="GtkLabel">
+																		<property name="label">Properties</property>
+																		<property name="margin-start">16</property>
+																		<property name="margin-end">16</property>
+																		<property name="margin-top">16</property>
+																		<property name="halign">start</property>
+																		<style><class name="title-3"/></style>
+																	</object>
+																</child>
+																<child>
+																	<object class="GtkBox" id="repo_props">
+																		<property name="spacing">16</property>
+																		<property name="margin-start">20</property>
+																		<property name="margin-end">16</property>
+																		<property name="margin-bottom">16</property>
+																	</object>
+																</child>
+															</object>
+														</child>
+														<child>
+															<object class="GtkBox">
+																<property name="orientation">vertical</property>
+																<property name="spacing">12</property>
+																<property name="height-request">50</property>
+																<style><class name="card"/></style>
+																<child>
+																	<object class="GtkLabel">
+																		<property name="label">Languages</property>
+																		<property name="margin-start">16</property>
+																		<property name="margin-end">16</property>
+																		<property name="margin-top">16</property>
+																		<property name="halign">start</property>
+																		<style><class name="title-3"/></style>
+																	</object>
+																</child>
+																<child>
+																	<object class="GtkBox" id="repo_langs">
+																		<property name="spacing">8</property>
+																		<property name="margin-start">20</property>
+																		<property name="margin-end">16</property>
+																		<property name="margin-bottom">16</property>
+																	</object>
+																</child>
+															</object>
+														</child>
+													</object>
+												</child>
+												<child>
+													<object class="AdwClamp">
+														<property name="maximum-size">500</property>
+														<child>
+															<object class="GtkBox">
+																<!-- <style><class name="card"/></style> -->
+																<child>
+																	<object class="GtkButton" id="btn_delete">
+																		<property name="label">Delete Repository</property>
+																		<property name="hexpand">true</property>
+																		<style><class name="pill"/><class name="destructive-action"/></style>
+																	</object>
+																</child>
+															</object>
+														</child>
+													</object>
+												</child>
+											</object>
+										</child>
+									</object>
+								</child>
+							</object>
+						</property>
+					</object>
+				</child>
+			</object>
+		</child>
+		<child>
+			<object class="GtkRevealer" id="term_revealer">
+				<!-- <property name="reveal-child">true</property> -->
+				<child>
+					<object class="GtkBox">
+						<property name="orientation">vertical</property>
+						<property name="margin-start">10</property>
+						<property name="margin-end">10</property>
+						<property name="margin-bottom">10</property>
+						<child>
+							<object class="GtkBox" id="term_head">
+								<style><class name="term-head"/></style>
+								<property name="height-request">40</property>
+								<property name="hexpand">true</property>
+								<property name="halign">fill</property>
+								<child>
+									<object class="GtkLabel">
+										<property name="label">Terminal</property>
+										<property name="hexpand">true</property>
+									</object>
+								</child>
+								<child>
+									<object class="GtkButton" id="term_unreveal">
+										<property name="icon-name">window-close-symbolic</property>
+										<property name="valign">center</property>
+										<property name="margin-end">8</property>
+										<style><class name="flat"/><class name="circular"/></style>
+									</object>
+								</child>
+							</object>
+						</child>
+						<child>
+							<object class="HtgBin" id="term_bin">
+								<property name="vnatural">200</property>
+								<property name="padding">10</property>
+								<child>
+									<object class="VteTerminal" id="term">
+										
+									</object>
+								</child>
+							</object>
+						</child>
+						<style><class name="term-card"/></style>
+					</object>
+				</child>
+			</object>
+		</child>
+	</object>
+</interface>

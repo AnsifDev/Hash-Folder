@@ -1,0 +1,74 @@
+{
+    "id": "org.htg.hashfolder",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "44",
+    "sdk": "org.gnome.Sdk",
+    "command": "app",
+    "modules": [ 
+        {
+            "name": "git",
+            "buildsystem": "simple",
+            "build-commands": [
+                "cp -r * /app"
+            ],
+            "sources": [
+                {
+                    "type":"archive",
+                    "path": "dependencies/git.zip"
+                }
+            ]
+        },
+        {
+            "name": "gh",
+            "buildsystem": "simple",
+            "build-commands": [
+                "cp -r * /app"
+            ],
+            "sources": [
+                {
+                    "type":"archive",
+                    "path": "dependencies/gh_2.33.0_linux_amd64.tar.gz"
+                }
+            ]
+        },
+        {
+            "name": "Application", 
+            "buildsystem": "meson",
+            "modules": [
+                {
+                    "name": "vte",
+                    "buildsystem": "meson",
+                    "config-opts": [
+                        "-Dgtk3=false",
+                        "-Dglade=false",
+                        "-Dgtk4=true"
+                    ],
+                    "sources": [
+                        {
+                            "type": "git",
+                            "branch": "vte-0-72",
+                            "url": "https://github.com/GNOME/vte.git"
+                        }
+                    ]
+                }
+            ],
+            "sources": [
+                {
+                    "type": "dir",
+                    "path": "src"
+                }
+            ]
+        }
+    ],
+    "finish-args": [
+		"--socket=wayland",
+		"--socket=x11",
+		"--socket=fallback-x11",
+		"--share=ipc",
+		"--device=dri",
+        "--share=network",
+        "--socket=pulseaudio",
+        "--socket=ssh-auth",
+        "--filesystem=home"
+	]
+}

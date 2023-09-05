@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<interface>
+	<object class="HtgActivityPage" id="root">
+		<child>
+			<object class="HtgBin">
+				<property name="hnatural">0</property>
+				<child>
+					<object class="GtkBox">
+						<property name="hexpand">false</property>
+						<property name="margin-start">12</property>
+						<property name="margin-end">12</property>
+						<property name="margin-top">12</property>
+						<property name="margin-bottom">8</property>
+						<property name="spacing">4</property>
+						<child>
+							<object class="GtkBox">
+								<style><class name="linked"/></style>
+								<child>
+									<object class="GtkSearchEntry" id="search_entry">
+										<property name="hexpand">true</property>
+										<property name="placeholder-text">Search Repositories</property>
+									</object>
+								</child>
+								<child>
+									<object class="GtkMenuButton" id="filter_btn">
+										<property name="icon-name">funnel-symbolic</property>
+										<property name="tooltip-text">Filters on search</property>
+										<property name="popover">
+											<object class="GtkPopover">
+												<property name="has-arrow">false</property>
+												<child>
+													<object class="GtkBox">
+														<property name="margin-top">4</property>
+														<property name="margin-start">4</property>
+														<property name="margin-end">4</property>
+														<property name="margin-bottom">4</property>
+														<property name="spacing">8</property>
+														<property name="orientation">vertical</property>
+														<child>
+															<object class="GtkCheckButton" id="local_only">
+																<property name="label">Local Repositories only</property>
+															</object>
+														</child>
+														<child>
+															<object class="GtkBox">
+																<style><class name="linked"/></style>
+																<property name="hexpand">true</property>
+																<property name="homogeneous">true</property>
+																<child>
+																	<object class="GtkToggleButton" id="include_all">
+																		<property name="tooltip-text">Include All</property>
+																		<property name="active">true</property>
+																		<property name="icon-name">edit-select-all-symbolic</property>
+																	</object>
+																</child>
+																<child>
+																	<object class="GtkToggleButton" id="private_only">
+																		<property name="tooltip-text">Show Private Only</property>
+																		<property name="icon-name">padlock2-symbolic</property>
+																		<property name="group">include_all</property>
+																	</object>
+																</child>
+																<child>
+																	<object class="GtkToggleButton" id="public_only">
+																		<property name="tooltip-text">Show Public Only</property>
+																		<property name="icon-name">padlock2-open-symbolic</property>
+																		<property name="group">include_all</property>
+																	</object>
+																</child>
+															</object>
+														</child>
+													</object>
+												</child>
+											</object>
+										</property>
+									</object>
+								</child>
+							</object>
+						</child>
+						<child>
+							<object class="GtkButton" id="refresh_repo">
+								<property name="visible" bind-source="add_repo" bind-property="visible" bind-flags="default"/>
+								<property name="icon-name">view-refresh-symbolic</property>
+								<property name="tooltip-text">Refetch Repositories</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkButton" id="add_repo">
+								<property name="icon-name">folder-new-symbolic</property>
+								<property name="tooltip-text">Add New Repo</property>
+							</object>
+						</child>
+					</object>
+				</child>
+			</object>
+		</child>
+		<child>
+			<object class="GtkStack" id="sidebar_stack">
+				<child>
+					<object class="GtkStackPage">
+						<property name="name">empty</property>
+						<property name="child">
+							<object class="AdwStatusPage">
+								<property name="margin-start">32</property>
+								<property name="margin-end">32</property>
+								<property name="icon-name">loupe-large-symbolic</property>
+								<property name="title">No Repositories Found</property>
+								<style><class name="compact"/></style>
+							</object>
+						</property>
+					</object>
+				</child>
+				<child>
+					<object class="GtkStackPage">
+						<property name="name">content</property>
+						<property name="child">
+							<object class="GtkScrolledWindow">
+								<property name="hscrollbar-policy">never</property>
+								<property name="width-request">280</property>
+								<property name="vexpand">true</property>
+								<property name="valign">fill</property>
+								<child>
+									<object class="GtkListBox" id="listbox">
+										<property name="selection-mode">browse</property>
+										<property name="activate-on-single-click">true</property>
+										<style><class name="navigation-sidebar"/></style>
+									</object>
+								</child>
+							</object>
+						</property>
+					</object>
+				</child>
+			</object>
+		</child>
+	</object>
+</interface>
