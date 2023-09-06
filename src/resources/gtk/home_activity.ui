@@ -18,7 +18,7 @@
 				</child>
 				<child type="start">
 					<object class="GtkButton" id="logout_btn">
-						<property name="icon-name">application-exit-rtl-symbolic</property>
+						<property name="icon-name">logout-account-symbolic</property>
 						<property name="tooltip-text">Logout</property>
 					</object>
 				</child>

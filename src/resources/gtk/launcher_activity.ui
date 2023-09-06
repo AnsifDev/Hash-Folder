@@ -65,7 +65,7 @@
 												<child>
 													<object class="GtkButton" id="guest_login_btn">
 														<property name="sensitive">false</property>
-														<property name="sensitive" bind-source="login_btn" bind-property="sensitive" bind-flags="default"/>
+														<!-- <property name="sensitive" bind-source="login_btn" bind-property="sensitive" bind-flags="default"/> -->
 														<property name="label">Login as Guest</property>
 														<style><class name="pill"/></style>
 													</object>

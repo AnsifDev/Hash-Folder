@@ -21,7 +21,7 @@ executable('app', sources, dependencies: dependencies, install: true, export_dyn
 icons = run_command('./.meson_tools/file_scanner.py', 'src/resources/icons', '*.svg', check:true).stdout().strip()
 if icons != ''
     icon_list = icons.split('\n')
-    symbolic_dir = join_paths(get_option('datadir'), 'icons', 'hicolor', 'symbolic', 'actions')
+    symbolic_dir = join_paths(get_option('datadir'), 'icons', 'hicolor', 'symbolic', 'apps')
     install_data(icon_list, install_dir: symbolic_dir)
 endif
 
