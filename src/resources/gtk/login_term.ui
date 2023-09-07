@@ -7,36 +7,62 @@
 			</object>
 		</child>
 		<child>
-			<object class="AdwClamp">
-				<property name="vexpand">true</property>
-				<property name="valign">center</property>
-				<property name="vexpand">true</property>
+			<object class="AdwToastOverlay" id="toast_overlay">
 				<child>
-					<object class="GtkBox">
-						<property name="orientation">vertical</property>
+					<object class="AdwClamp">
+						<property name="vexpand">true</property>
+						<property name="valign">center</property>
+						<property name="vexpand">true</property>
 						<child>
-							<object class="GtkLabel">
-								<property name="label">Logging You In...</property>
-								<property name="justify">center</property>
-								<style><class name="title-2"/></style>
-							</object>
-						</child>
-						<child>
-							<object class="HtgBin">
-								<property name="vnatural">300</property>
-								<property name="margin-start">16</property>
-								<property name="margin-end">16</property>
-								<property name="margin-top">16</property>
-								<property name="margin-bottom">16</property>
+							<object class="GtkBox">
+								<property name="orientation">vertical</property>
 								<child>
-									<object class="VteTerminal" id="term">
-										<property name="margin-start">16</property>
-										<property name="margin-end">16</property>
-										<property name="margin-top">16</property>
-										<property name="margin-bottom">16</property>
+									<object class="GtkLabel">
+										<property name="label">Logging You In...</property>
+										<property name="justify">center</property>
+										<style><class name="title-2"/></style>
 									</object>
 								</child>
-								<style><class name="term-card"/></style>
+								<child>
+									<object class="HtgBin">
+										<property name="vnatural">300</property>
+										<property name="margin">16</property>
+										<property name="padding">16</property>
+										<child>
+											<object class="VteTerminal" id="term">
+												<!-- <property name="input-enabled">false</property> -->
+											</object>
+										</child>
+										<style><class name="term-card"/></style>
+									</object>
+								</child>
+								<child>
+									<object class="HtgBin" id="code_container">
+										<property name="padding">6</property>
+										<property name="halign">center</property>
+										<property name="visible">false</property>
+										<child>
+											<object class="GtkBox">
+												<property name="spacing">6</property>
+												<property name="halign">start</property>
+												<child>
+													<object class="GtkLabel" id="code_view">
+														<property name="margin-start">6</property>
+														<property name="halign">start</property>
+														<property name="label">Code: ACRE-8UI0</property>
+													</object>
+												</child>
+												<child>
+													<object class="GtkButton" id="copy_code">
+														<property name="icon-name">copy-symbolic</property>
+														<style><class name="flat"/></style>
+													</object>
+												</child>
+											</object>	
+										</child>
+										<style><class name="my-small-frame"/></style>
+									</object>
+								</child>
 							</object>
 						</child>
 					</object>

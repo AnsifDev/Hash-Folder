@@ -146,7 +146,7 @@ namespace org.htg.hashfolder {
                         logout.sensitive = false;
 
                         start_progress_indetermination();
-                        run_command.begin("gh auth logout", (src, res) => {
+                        run_command.begin("gh auth logout -h github.com", (src, res) => {
                             stop_progress_indetermination();
                             logout.sensitive = true;
                             run_command.end(res);

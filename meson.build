@@ -25,7 +25,7 @@ if icons != ''
     install_data(icon_list, install_dir: symbolic_dir)
 endif
 
-fs = import('fs')
+fs = import('fs') 
 metainfo = join_paths('src/resources/app', meson.project_name()+'.metainfo.xml')
 if fs.exists(metainfo)
     install_data(metainfo, install_dir: '/app/share/metainfo')

@@ -7,6 +7,11 @@
     border-radius: 10px;
 }
 
+.my-small-frame {
+    border: 1px solid @borders;
+    border-radius: 5px;
+}
+
 .my-textview {
     border: 1px solid @borders;
     border-radius: 5px;

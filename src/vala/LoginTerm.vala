@@ -4,9 +4,22 @@ namespace org.htg.hashfolder {
     public class LoginTerm: Htg.Activity {
         private int step = 0;
         private Terminal term;
+        private string code;
 
         public override void on_create() {
             set_content("login_term.ui");
+
+            var toast_overlay = (Adw.ToastOverlay) builder.get_object("toast_overlay");
+            var code_view = (Gtk.Label) builder.get_object("code_view");
+            var code_container = (Htg.Bin) builder.get_object("code_container");
+            var copy_code = (Gtk.Button) builder.get_object("copy_code");
+            copy_code.clicked.connect(() => {
+                var clipboard = term.get_clipboard();
+                clipboard.set_text(code);
+                
+                var toast = new Adw.Toast("Copied");
+                toast_overlay.add_toast(toast);
+            });
 
             var progress = (Gtk.ProgressBar) builder.get_object("progress");
             var continue_pulsing = true;
@@ -28,7 +41,7 @@ namespace org.htg.hashfolder {
                     
                     get_application().activity_manager.start_activity(this, typeof(SSHKeyActivity));
                 } else {
-                    var dg = new Adw.MessageDialog(get_application().active_window, "Something Went Wrong", @"Unexpected error occured on login. Sub command returned with error code: $(status/256)");
+                    var dg = new Adw.MessageDialog(get_application().active_window, "Something Went Wrong", @"Unexpected error occured on login. Sub command returned with error code: $(status)");
                     dg.add_response("_ok", "OK");
                     dg.present();
                 }
@@ -37,6 +50,7 @@ namespace org.htg.hashfolder {
             term.contents_changed.connect(() => {
                 var data = term.get_text(null, null).strip();
                 if (data.length <= 0) return;
+                //  Htg.run_command.begin(@"echo \"$step: $data\" >> out.txt");
                 if ("Do you want to re-authenticate?" in data && step == 0) {
                     step++;
                     uint8[] inp = {89, 13};
@@ -56,15 +70,21 @@ namespace org.htg.hashfolder {
                 }
                 if ("Press Enter to open github.com in your browser" in data && step == 2) {
                     step++;
-                    var code = data.split(":")[1].split("\n")[0].strip();
+                    code = data.split(":")[1].split("\n")[0].strip();
+                    
                     print("Code: %s\n", code);
+                    code_view.label = @"Code: $code";
+                    code_container.visible = true;
+                    
                     var clipboard = term.get_clipboard();
                     clipboard.set_text(code);
 
                     print("Entering to web-browser\n");
                     var dg = new Adw.MessageDialog(get_application().window, "Login OTP Copied", @"$code is copied to your clipboard. A web browser will now pops up, just paste the code and then you are done.");
+                    dg.add_response("cancel", "Cancel");
                     dg.add_response("ok", "OK");
-                    dg.response.connect(() => {
+                    dg.response.connect((res) => {
+                        if (res == "cancel") return;
                         uint8[] inp = {13};
                         term.feed_child(inp);
                     });
