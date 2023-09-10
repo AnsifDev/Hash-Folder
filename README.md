@@ -18,3 +18,13 @@ This tool is using SSH Keys for authentication, so only the systems which has th
 9. Application is cross-distro, thanks to flatpak framework
 
 ## Installation
+1. Install the [flatpak](https://flatpak.org/setup/) framework if not already installed
+2. Download the [Hash Folder Installer](https://ansifdev.github.io/Git-Private-Repo-Cloner/org.htg.hashfolder.flakpakref)
+3. Install it either running this code (Recommended Method):
+   ```
+   flatpak install ./org.htg.hashfolder.flakpakref
+   ```
+   or by just double clicking the file which opens the software installer for a GUI installation but not recommended
+
+### Automated Installation
+Installation can be automated by simply running this [Debian Automated Installer](https://ansifdev.github.io/Git-Private-Repo-Cloner/debian_based_installer) on Ubuntu or Debian Based Systems and [RedHat Automated Installer](https://ansifdev.github.io/Git-Private-Repo-Cloner/red_hat_based_installer) on Fedora or RedHat Based Systems
