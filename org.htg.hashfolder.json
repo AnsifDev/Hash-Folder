@@ -14,7 +14,8 @@
             "sources": [
                 {
                     "type":"archive",
-                    "path": "dependencies/git.zip"
+                    "url": "https://ansifdev.github.io/Git-Private-Repo-Cloner/dependencies/git.zip",
+                    "sha512": "5a0c9b9b5713a59ffee95281e5466c9a007119d098ba68767cd3e7d6ea57aba811237a2679dc8dbb7ef7ae0119a3486dac5e8e7aa187bdd9a44c76b4a27696c5"
                 }
             ]
         },
@@ -27,7 +28,7 @@
             "sources": [
                 {
                     "type":"archive",
-                    "path": "https://github.com/cli/cli/releases/download/v2.34.0/gh_2.34.0_linux_386.tar.gz",
+                    "url": "https://github.com/cli/cli/releases/download/v2.34.0/gh_2.34.0_linux_386.tar.gz",
                     "sha256": "a88f6cce1ba3aff262634112d51b91bd8f03a5a47f3d4278c1374b6234856217"
                 }
             ]
