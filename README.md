@@ -1,6 +1,6 @@
 # Git-Private-Repo-Cloner aka Hash Folder
 
-![Icon](https://ansifdev.github.io/Git-Private-Repo-Cloner/src/resources/app/org.htg.hashfolder.svg)
+![Icon](https://ansifdev.github.io/Hash-Folder/src/resources/app/org.htg.hashfolder.svg)
 
 This project is a simple idea which provides you the controll on your own private repositories in your account. This tool allows you to clone private repositories instantly and lets you to do all git actions even if you logged out from all your accounts.
 
@@ -21,7 +21,7 @@ This tool is using SSH Keys for authentication, so only the systems which has th
 
 ## Installation
 1. Install the [flatpak](https://flatpak.org/setup/) framework if not already installed
-2. Download the [Hash Folder Installer](https://ansifdev.github.io/Git-Private-Repo-Cloner/org.htg.hashfolder.flatpakref)
+2. Download the [Hash Folder Installer](https://ansifdev.github.io/Hash-Folder/org.htg.hashfolder.flatpakref)
 3. Install it either running this code (Recommended Method):
    ```
    flatpak install ./org.htg.hashfolder.flakpatref
@@ -29,7 +29,7 @@ This tool is using SSH Keys for authentication, so only the systems which has th
    or by just double clicking the file which opens the software installer for a GUI installation but not recommended
 
 ### Automated Installation
-Installation can be automated by simply running this [Debian Automated Installer](https://ansifdev.github.io/Git-Private-Repo-Cloner/debian_based_installer) on Ubuntu or Debian Based Systems and [RedHat Automated Installer](https://ansifdev.github.io/Git-Private-Repo-Cloner/red_hat_based_installer) on Fedora or RedHat Based Systems
+Installation can be automated by simply running this [Debian Automated Installer](https://ansifdev.github.io/Hash-Folder/debian_based_installer) on Ubuntu or Debian Based Systems and [RedHat Automated Installer](https://ansifdev.github.io/Hash-Folder/red_hat_based_installer) on Fedora or RedHat Based Systems
 
 ## App Features:
 - [x] Fully automated login
