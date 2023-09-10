@@ -1,4 +1,4 @@
-# Git-Private-Repo-Cloner aka Hash Folder
+# Hash Folder
 
 ![Icon](https://ansifdev.github.io/Hash-Folder/src/resources/app/org.htg.hashfolder.svg)
 
