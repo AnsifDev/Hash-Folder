@@ -19,7 +19,7 @@ This tool is using SSH Keys for authentication, so only the systems which has th
 
 ## Installation
 1. Install the [flatpak](https://flatpak.org/setup/) framework if not already installed
-2. Download the [Hash Folder Installer](https://ansifdev.github.io/Git-Private-Repo-Cloner/org.htg.hashfolder.flakpakref)
+2. Download the [Hash Folder Installer](https://ansifdev.github.io/Git-Private-Repo-Cloner/org.htg.hashfolder.flatpakref)
 3. Install it either running this code (Recommended Method):
    ```
    flatpak install ./org.htg.hashfolder.flakpakref
