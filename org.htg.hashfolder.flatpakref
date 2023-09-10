@@ -1,7 +1,7 @@
 [Flatpak Ref]
 Name=org.htg.hashfolder
 Title=Hash Folder
-Url=https://ansifdev.github.io/Git-Private-Repo-Cloner/repo
+Url=https://ansifdev.github.io/Hash-Folder/repo
 RuntimeRepo=https://dl.flathub.org/repo/flathub.flatpakrepo
 SuggestRemoteName=hashtag-apps
 IsRuntime=false

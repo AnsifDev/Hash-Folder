@@ -14,7 +14,7 @@
             "sources": [
                 {
                     "type":"archive",
-                    "url": "https://ansifdev.github.io/Git-Private-Repo-Cloner/dependencies/git.zip",
+                    "url": "https://ansifdev.github.io/Hash-Folder/dependencies/git.zip",
                     "sha512": "5a0c9b9b5713a59ffee95281e5466c9a007119d098ba68767cd3e7d6ea57aba811237a2679dc8dbb7ef7ae0119a3486dac5e8e7aa187bdd9a44c76b4a27696c5"
                 }
             ]
