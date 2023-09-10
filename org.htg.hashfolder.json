@@ -27,7 +27,8 @@
             "sources": [
                 {
                     "type":"archive",
-                    "path": "dependencies/gh_2.33.0_linux_amd64.tar.gz"
+                    "path": "https://github.com/cli/cli/releases/download/v2.34.0/gh_2.34.0_linux_386.tar.gz",
+                    "sha256": "a88f6cce1ba3aff262634112d51b91bd8f03a5a47f3d4278c1374b6234856217"
                 }
             ]
         },
