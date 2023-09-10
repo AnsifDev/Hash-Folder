@@ -93,6 +93,7 @@ namespace org.htg.hashfolder {
             });
             step = 0;
             term.spawn_async(Vte.PtyFlags.DEFAULT, null, "/app/bin/gh gh auth login -h github.com -p ssh -s admin:public_key -s admin:ssh_signing_key -s delete_repo -w".split(" "), null, GLib.SpawnFlags.FILE_AND_ARGV_ZERO, null, 120, null, null);
+            //  term.spawn_async(Vte.PtyFlags.DEFAULT, null, "/bin/bash".split(" "), null, GLib.SpawnFlags.FILE_AND_ARGV_ZERO, null, 120, null, null);
         }
 
         protected override void on_stopped() {
