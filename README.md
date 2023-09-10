@@ -1,5 +1,7 @@
 # Git-Private-Repo-Cloner aka Hash Folder
 
+![Icon](https://ansifdev.github.io/Git-Private-Repo-Cloner/src/resources/icons/org.htg.hashfolder.svg)
+
 This project is a simple idea which provides you the controll on your own private repositories in your account. This tool allows you to clone private repositories instantly and lets you to do all git actions even if you logged out from all your accounts.
 
 NB: The system which the repository is cloned only be connected if and only if the key is authorized in the github. If the authurization revoked from your side from any client the system which uses that key will not able to connect to your account anymore. This gives you the controll on your repository from cloned devices
