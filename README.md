@@ -1,4 +1,4 @@
-# Git-Private-Repo-Cloner aka Hash Folder
+# Hash Folder
 
 ![Icon](https://ansifdev.github.io/Hash-Folder/src/resources/app/org.htg.hashfolder.svg)
 
@@ -32,13 +32,13 @@ This tool is using SSH Keys for authentication, so only the systems which has th
 Installation can be automated by simply running this [Debian Automated Installer](https://ansifdev.github.io/Hash-Folder/debian_based_installer) on Ubuntu or Debian Based Systems and [RedHat Automated Installer](https://ansifdev.github.io/Hash-Folder/red_hat_based_installer) on Fedora or RedHat Based Systems
 
 ## App Features:
-- [x] Fully automated login
-- [x] SSH Port Configuration via app
-- [x] Browsable and Clonable Repository Management Page
-- [x] Repository Searching and Filtering
-- [x] Responssive UI (Compatable on Mobile Form Facter)
-- [x] Theme aware UI which can change its theme by its self
-- [ ] Suggesting for changing the SSH Port if cloning fails
-- [ ] Open with feature for cloned repositories
-- [ ] Device Manager Page which can manage the access of other systems
-- [ ] Guest Mode and Clear System from Account Options
+- [x]  Fully automated login
+- [x]  SSH Port Configuration via app
+- [x]  Browsable and Clonable Repository Management Page
+- [x]  Repository Searching and Filtering
+- [x]  Responssive UI (Compatable on Mobile Form Facter)
+- [x]  Theme aware UI which can change its theme by its self
+- [ ]  Suggesting for changing the SSH Port if cloning fails
+- [ ]  Open with feature for cloned repositories
+- [ ]  Device Manager Page which can manage the access of other systems
+- [ ]  Guest Mode and Clear System from Account Options
