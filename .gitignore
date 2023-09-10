@@ -5,3 +5,5 @@
 !/src
 !/dependencies
 !/.meson_tools
+!/org.htg.hashfolder.flatpakref
+!/repo

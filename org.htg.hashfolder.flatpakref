@@ -1,0 +1,7 @@
+[Flatpak Ref]
+Name=org.htg.hashfolder
+Branch=stable
+Title=Hash Folder
+Url=https://ansifdev.github.io/Git-Private-Repo-Cloner/repo/
+RuntimeRepo=https://dl.flathub.org/repo/flathub.flatpakrepo
+IsRuntime=false
