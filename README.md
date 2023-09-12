@@ -24,7 +24,7 @@ This tool is using SSH Keys for authentication, so only the systems which has th
 2. Download the [Hash Folder Installer](https://ansifdev.github.io/Hash-Folder/org.htg.hashfolder.flatpakref)
 3. Install it either running this code (Recommended Method):
    ```
-   flatpak install ./org.htg.hashfolder.flakpatref
+   flatpak install ./org.htg.hashfolder.flatpakref
    ```
    or by just double clicking the file which opens the software installer for a GUI installation but not recommended
 
