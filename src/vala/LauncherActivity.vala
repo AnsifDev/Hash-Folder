@@ -36,14 +36,33 @@ namespace org.htg.hashfolder {
             theme_light.toggled.connect (update_theme);
 
             //Visible widget setup
-            var intro_label = (Label) builder.get_object("introduction");
-            var file = File.new_for_uri("resource:///org/htg/hashfolder/introduction.txt");
-            try {
-                var file_input_stream = file.read();
-                var data_input_stream = new DataInputStream(file_input_stream);
-                var file_str = data_input_stream.read_upto("\0", -1, null, null);
-                intro_label.label = file_str;
-            } catch (Error e) { error("%s\n", e.message); }
+            //  var intro_label = (Label) builder.get_object("introduction");
+            //  var file = File.new_for_uri("resource:///org/htg/hashfolder/introduction.txt");
+            //  try {
+            //      var file_input_stream = file.read();
+            //      var data_input_stream = new DataInputStream(file_input_stream);
+            //      var file_str = data_input_stream.read_upto("\0", -1, null, null);
+            //      intro_label.label = file_str;
+            //  } catch (Error e) { error("%s\n", e.message); }
+
+            var ic_main = (Picture) builder.get_object("ic_main");
+            //  ic_main.file = File.new_for_path("/app/share/icons/hicolor/scalable/apps/home-banner.svg");
+            ic_main.file = File.new_for_uri("resource:///org/htg/hashfolder/home-banner.svg");
+            if (ic_main.file.query_exists()) print("True\n");
+            else print("False\n");
+            //  var animation_target = new Adw.CallbackAnimationTarget((value) => {
+            //      var opacity_val = value;
+            //      var scale_val = 200 + 200*value;
+            //      ic_main.opacity = opacity_val;
+            //      ic_main.pixel_size = (int) scale_val;
+            //  });
+            //  var animation = new Adw.TimedAnimation(ic_main, 0, 1, 500, animation_target);
+            //  animation.alternate = true;
+            //  Timeout.add_once(500, () => {
+            //      Idle.add_once(() => {
+            //          animation.play();
+            //      });
+            //  });
 
             login_btn = (Button) builder.get_object("login_btn");
             login_btn.clicked.connect(() => {

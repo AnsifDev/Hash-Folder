@@ -2,6 +2,9 @@ using Gtk, Gee, Json;
 
 namespace org.htg.hashfolder {
     public HashMap<string, Value?>? load_ssh_config() {
+        if (!File.new_for_path(Environment.get_home_dir()+"/.ssh/config").query_exists()) 
+            return new HashMap<string, Value?>();
+
         string c;
         try { FileUtils.get_contents(Environment.get_home_dir()+"/.ssh/config", out c); }
         catch (Error e) { critical(e.message); return null; }

@@ -36,13 +36,6 @@ namespace org.htg.hashfolder {
 
             progress = (ProgressBar) builder.get_object("progress");
 
-            //Repository subpage
-            var repo_page_back = (Button) builder.get_object ("repo_page_back");
-            var viewstack = (Adw.ViewStack) builder.get_object ("viewstack");
-            var repo_activity_frag = new RepoActivity (this, viewstack, repo_page_back);
-            var repo_container = (Adw.Bin) builder.get_object ("repo_container");
-            repo_container.child = repo_activity_frag.content;
-
             //Theme settings
             theme_auto = (ToggleButton) builder.get_object ("theme_auto");
             theme_auto.toggled.connect (update_theme);
@@ -92,6 +85,13 @@ namespace org.htg.hashfolder {
             clear_folder.visible = current_path != def_path;
             def_folder.subtitle = current_path;
 
+            //Repository subpage
+            var repo_page_back = (Button) builder.get_object ("repo_page_back");
+            var viewstack = (Adw.ViewStack) builder.get_object ("viewstack");
+            var repo_activity_frag = new RepoActivity (this, viewstack, repo_page_back);
+            var repo_container = (Adw.Bin) builder.get_object ("repo_container");
+            repo_container.child = repo_activity_frag.content;
+
             base.on_create();
         }
 
@@ -113,10 +113,12 @@ namespace org.htg.hashfolder {
         }
 
         public void start_progress_indetermination() {
-            if (progress_running++ == 0) {
+            progress_running++;
+            if (progress_running == 0) progress_running++;
+            if (progress_running == 1) {
                 Timeout.add(100, () => {
                     progress.pulse();
-                    if (progress_running == 0) progress.fraction = 0;
+                    if (progress_running == 0) { progress.fraction = 0; progress_running = -1; }
                     return progress_running > 0;
                 });
             }
@@ -125,7 +127,7 @@ namespace org.htg.hashfolder {
         public void stop_progress_indetermination() {
             if (progress_running-- == 0) {
                 critical("No progress indetermination exists");
-                progress_running = 0;
+                progress_running++;
             }
         }
 

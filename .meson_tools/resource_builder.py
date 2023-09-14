@@ -13,6 +13,7 @@ def get_src_files(root: str = None):
         if os.path.isdir(os.path.join(root if root else "", files[i])):
             folder = files.pop(i)
             if folder == "__pycache__": continue
+            if os.path.join(root if root else "", folder) == "src/resources/icons-symbolic": continue
             if os.path.join(root if root else "", folder) == "src/resources/icons": continue
             if os.path.join(root if root else "", folder) == "src/resources/app": continue
             for file in os.listdir(os.path.join(root if root else "", folder)): 

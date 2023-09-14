@@ -18,6 +18,13 @@ sources += gnome.compile_resources('resources', 'resources.xml', source_dir: 'sr
  
 executable('app', sources, dependencies: dependencies, install: true, export_dynamic: true)
  
+icons_symbolic = run_command('./.meson_tools/file_scanner.py', 'src/resources/icons-symbolic', '*.svg', check:true).stdout().strip()
+if icons_symbolic != ''
+    icon_list = icons_symbolic.split('\n')
+    symbolic_dir = join_paths(get_option('datadir'), 'icons', 'hicolor', 'scalable', 'apps')
+    install_data(icon_list, install_dir: symbolic_dir)
+endif
+
 icons = run_command('./.meson_tools/file_scanner.py', 'src/resources/icons', '*.svg', check:true).stdout().strip()
 if icons != ''
     icon_list = icons.split('\n')

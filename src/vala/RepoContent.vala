@@ -136,7 +136,7 @@ namespace org.htg.hashfolder {
             term_bin = (Htg.Bin) builder.get_object("term_bin");
             var term = (Vte.Terminal) builder.get_object("term");
 
-            clone_mgr = new CloneManager(term_revealer, term_unreveal, term, user_settings["clone_path"].get_string());
+            clone_mgr = new CloneManager(this, term_revealer, term_unreveal, term, user_settings["clone_path"].get_string());
             clone_mgr.cloning_started.connect(((HomeActivity) parent).start_progress_indetermination);
             clone_mgr.cloning_ended.connect(((HomeActivity) parent).stop_progress_indetermination);
             clone_mgr.clone_finished.connect((status, data) => {
@@ -294,13 +294,15 @@ namespace org.htg.hashfolder {
         }
 
         private class CloneManager: Object {
+            private RepoContent outer_class;
             private Revealer term_revealer;
             private Button term_unreveal;
             private Vte.Terminal term;
             private string clone_path;
             private ArrayList<HashMap<string, Value?>> tasks = new ArrayList<HashMap<string, Value?>>();
 
-            public CloneManager(Revealer term_revealer, Button term_unreveal, Vte.Terminal term, string clone_path) {
+            public CloneManager(RepoContent outer_class, Revealer term_revealer, Button term_unreveal, Vte.Terminal term, string clone_path) {
+                this.outer_class = outer_class;
                 this.term_revealer = term_revealer;
                 this.term_unreveal = term_unreveal;
                 this.term = term;
@@ -313,7 +315,7 @@ namespace org.htg.hashfolder {
                 term.child_exited.connect((status) => {
                     var data = tasks.remove_at(0);
                     clone_finished(status, data);
-                    if (tasks.size > 0) start_task(); 
+                    if (tasks.size > 0 || false) start_task(); 
                     else cloning_ended();
                 });
             }
@@ -337,7 +339,6 @@ namespace org.htg.hashfolder {
             public bool is_cloning() { return tasks.size > 0; }
 
             private void start_task() {
-                print("Hello");
                 var repo_name = tasks[0]["name"].get_string();
                 var args = new ArrayList<string>();
                 args.add_all_array(@"/app/bin/gh gh repo clone $repo_name".split(" "));
@@ -357,9 +358,22 @@ namespace org.htg.hashfolder {
 
             public signal void cloning_started() { term_unreveal.visible = !(term_revealer.reveal_child = true); }
 
-            public signal void clone_finished(int status, HashMap<string, Value?> data);
+            //  private ArrayList<string> timer_params_queue = new ArrayList<string>();
+            public signal void clone_finished(int status, HashMap<string, Value?> data) {
+                //  timer_params_queue.add();
+                var repo_name = data["name"].get_string();
+                var user = outer_class.app_settings["user"].get_string();
+                var email = outer_class.user_settings["email"].get_string();
+                Htg.run_command.begin(@"git -C \"$clone_path/$repo_name\" config user.name $user", () => {
+                    Htg.run_command.begin(@"git -C \"$clone_path/$repo_name\" config user.email $email", () => {
+                        print("Yes Completed\n");
+                    });
+                });
+            }
 
             public signal void cloning_ended() { term_unreveal.visible = true; }
+
+            //  private void run_clone_post() {}
         }
     }
 }
