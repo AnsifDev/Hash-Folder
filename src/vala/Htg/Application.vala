@@ -27,6 +27,7 @@ namespace Htg {
                 window = new Adw.Window();
                 window.set_default_size(600, 450);
                 window.application = this;
+                window.title = "Hash Folder";
                 window.content = activity_manager = new ActivityManager();
                 window.close_request.connect(on_window_closed);
                 window.add_css_class("devel");
