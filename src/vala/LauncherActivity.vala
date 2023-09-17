@@ -1,6 +1,6 @@
 using Gee, Gtk, Htg;
 
-namespace org.htg.hashfolder {
+namespace HashFolder {
     public class LauncherActivity: Htg.Activity {
         private Htg.Settings app_settings;
 
@@ -46,35 +46,31 @@ namespace org.htg.hashfolder {
             //  } catch (Error e) { error("%s\n", e.message); }
 
             var ic_main = (Picture) builder.get_object("ic_main");
-            //  ic_main.file = File.new_for_path("/app/share/icons/hicolor/scalable/apps/home-banner.svg");
-            ic_main.file = File.new_for_uri("resource:///org/htg/hashfolder/home-banner.svg");
-            if (ic_main.file.query_exists()) print("True\n");
-            else print("False\n");
-            //  var animation_target = new Adw.CallbackAnimationTarget((value) => {
-            //      var opacity_val = value;
-            //      var scale_val = 200 + 200*value;
-            //      ic_main.opacity = opacity_val;
-            //      ic_main.pixel_size = (int) scale_val;
-            //  });
-            //  var animation = new Adw.TimedAnimation(ic_main, 0, 1, 500, animation_target);
-            //  animation.alternate = true;
-            //  Timeout.add_once(500, () => {
-            //      Idle.add_once(() => {
-            //          animation.play();
-            //      });
-            //  });
+            ic_main.file = File.new_for_uri("resource:///org/htg/hashfolder/home_banner.png");
 
             login_btn = (Button) builder.get_object("login_btn");
             login_btn.clicked.connect(() => {
                 get_application().activity_manager.start_activity(this, typeof(LoginTerm));
             });
 
+            var animation_target = new Adw.CallbackAnimationTarget((value) => {
+                ic_main.opacity = value;
+                login_btn.opacity = value;
+            });
+            var animation = new Adw.TimedAnimation(ic_main, 0, 1, 500, animation_target);
+            animation.alternate = true;
+            Timeout.add_once(500, () => {
+                Idle.add_once(() => {
+                    animation.play();
+                });
+            });
+
             progress = (ProgressBar) builder.get_object("progress");
 
-            var guest_login_btn = (Button) builder.get_object("guest_login_btn");
-            guest_login_btn.clicked.connect(() => {
-                finish();
-            });
+            //  var guest_login_btn = (Button) builder.get_object("guest_login_btn");
+            //  guest_login_btn.clicked.connect(() => {
+            //      finish();
+            //  });
 
             //SSH State Fetching
             var ssh_config = (HashMap<string, Value?>) load_ssh_config();

@@ -70,7 +70,7 @@
                                                         </property>
                                                     </object>
                                                 </child>
-                                                <!-- <child>
+                                                <child>
                                                     <object class="AdwActionRow">
                                                         <property name="title">Clone after creation</property>
                                                         <child>
@@ -82,7 +82,7 @@
                                                         </child>
                                                         <property name="activatable-widget">clone_check</property>
                                                     </object>
-                                                </child> -->
+                                                </child>
                                             </object>
                                         </child>
                                         <child>

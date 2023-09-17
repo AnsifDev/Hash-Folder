@@ -1,6 +1,6 @@
 using Gtk, Gee;
 
-namespace org.htg.hashfolder {
+namespace HashFolder {
     class NewRepoActivity: Htg.Activity {
         private Box base_box;
         private Box bottom_box;
@@ -10,7 +10,7 @@ namespace org.htg.hashfolder {
         private Button create_btn;
         private bool waiting_to_change = false;
         private ProgressBar progress;
-        //  private CheckButton clone_check;
+        private CheckButton clone_check;
 
         private Htg.Settings app_settings;
         private Htg.Settings user_settings;
@@ -88,7 +88,7 @@ namespace org.htg.hashfolder {
                 repo_name_valid.visible = !(create_btn.sensitive = valid);
             });
 
-            //  clone_check = (CheckButton) builder.get_object("clone_check");
+            clone_check = (CheckButton) builder.get_object("clone_check");
             var description = (TextView) builder.get_object("description");
 
             create_btn = (Button) builder.get_object("create_btn");
@@ -96,8 +96,8 @@ namespace org.htg.hashfolder {
                 var source_available = folder_row.subtitle.length > 0;
                 if (source_available) {
                     var file = File.new_for_path(folder_row.subtitle+"/.git");
-                    if (file.query_exists()) Htg.run_command.begin(@"rm -rf $(folder_row.subtitle.replace(" ", "\\ "))/.git");
-                    Htg.run_command.begin(@"git -C $(folder_row.subtitle.replace(" ", "\\ ")) init");
+                    if (file.query_exists()) Posix.system(@"rm -rf $(folder_row.subtitle.replace(" ", "\\ "))/.git");
+                    Htg.run_command.begin(@"git -C $(folder_row.subtitle.replace(" ", "\\ ")) init --initial-branch main");
                 }
 
                 var public_visible = visibility.selected != 0;
@@ -127,35 +127,58 @@ namespace org.htg.hashfolder {
                         dg_create_failed.present();
                         return;
                     };
-                    
-                    if (source_available) {
-                        var repo_cache_path = @"$(Environment.get_user_cache_dir())/$(get_application().application_id)/repo_cache";
-                        Htg.run_command.begin(@"gh repo view $(repo_name.text.strip()) --json=id > $repo_cache_path", (src, res) => {
-                            status = Htg.run_command.end(res);
-                            if (status != 0) {
-                                var dg_clone_failed = new Adw.MessageDialog(get_application().active_window, "Repo Fetch Error", @"Repository creation suceeded but clone registeration failed. Sub command returned with error code: $status");
-                                dg_clone_failed.add_response("_ok", "OK");
-                                dg_clone_failed.present();
-                                return;
-                            };
 
-                            continue_pulsing = false;
-                            try {
-                                var data = new Htg.JsonEngine().parse_file_to_hashmap(repo_cache_path);
-                                var local_repos = (HashMap<string, Value?>) user_settings["local_repos"];
-                                local_repos[data["id"].get_string()] = folder_row.subtitle;
-                            } catch (Error e) { critical(e.message); }
+                    var repo_cache_path = @"$(Environment.get_user_cache_dir())/$(get_application().application_id)/repo_cache";
+                    Htg.run_command.begin(@"gh repo view $(repo_name.text.strip()) --json=createdAt,description,diskUsage,forkCount,id,languages,name,owner,url,visibility > $repo_cache_path", (src, res) => {
+                        status = Htg.run_command.end(res);
+                        if (status != 0) {
+                            var dg_clone_failed = new Adw.MessageDialog(get_application().active_window, "Repo Fetch Error", @"Repository creation suceeded but clone registeration failed. Sub command returned with error code: $status");
+                            dg_clone_failed.add_response("_ok", "OK");
+                            dg_clone_failed.present();
+                            return;
+                        };
 
-                            var dg = new Adw.MessageDialog(get_application().active_window, "Do Commits and Pushing", "Repository is configured but changes in the local repository is not commited or pushed to the cloud repository. Please go to the local repository folder and do commits and pushing changes to upload all changes to the cloud");
-                            dg.add_response("_ok", "OK");
-                            dg.present();
-
-                            finish();
-                        });
-                    } else {
                         continue_pulsing = false;
-                        finish();
-                    }
+                        try {
+                            var data = new Htg.JsonEngine().parse_file_to_hashmap(repo_cache_path);
+                            var local_repos = (HashMap<string, Value?>) user_settings["local_repos"];
+                            local_repos[data["id"].get_string()] = folder_row.subtitle;
+
+                            var result = new HashMap<string, Value?>();
+                            result["local_status"] = source_available ? 2: clone_check.active? 1: 0;
+                            result["repo_data"] = data;
+                            finish_with_result(result);
+                        } catch (Error e) { critical(e.message); }
+                    });
+                    
+                    //  if (source_available) {
+                        
+                    //      Htg.run_command.begin(@"gh repo view $(repo_name.text.strip()) --json=id > $repo_cache_path", (src, res) => {
+                    //          status = Htg.run_command.end(res);
+                    //          if (status != 0) {
+                    //              var dg_clone_failed = new Adw.MessageDialog(get_application().active_window, "Repo Fetch Error", @"Repository creation suceeded but clone registeration failed. Sub command returned with error code: $status");
+                    //              dg_clone_failed.add_response("_ok", "OK");
+                    //              dg_clone_failed.present();
+                    //              return;
+                    //          };
+
+                    //          continue_pulsing = false;
+                    //          try {
+                    //              var data = new Htg.JsonEngine().parse_file_to_hashmap(repo_cache_path);
+                    //              var local_repos = (HashMap<string, Value?>) user_settings["local_repos"];
+                    //              local_repos[data["id"].get_string()] = folder_row.subtitle;
+                    //          } catch (Error e) { critical(e.message); }
+
+                    //          var dg = new Adw.MessageDialog(get_application().active_window, "Do Commits and Pushing", "Repository is configured but changes in the local repository is not commited or pushed to the cloud repository. Please go to the local repository folder and do commits and pushing changes to upload all changes to the cloud");
+                    //          dg.add_response("_ok", "OK");
+                    //          dg.present();
+
+                    //          finish_with_result(null);
+                    //      });
+                    //  } else {
+                    //      continue_pulsing = false;
+                    //      finish_with_result(null);
+                    //  }
                 });
 
             });

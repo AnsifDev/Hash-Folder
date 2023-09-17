@@ -1,6 +1,6 @@
 using Gtk, Gee, Htg;
 
-namespace org.htg.hashfolder {
+namespace HashFolder {
     public class HomeActivity: Activity {
         private ToggleButton theme_auto;
         private ToggleButton theme_light;
@@ -116,10 +116,14 @@ namespace org.htg.hashfolder {
             progress_running++;
             if (progress_running == 0) progress_running++;
             if (progress_running == 1) {
+                progress.visible = true;
                 Timeout.add(100, () => {
                     progress.pulse();
-                    if (progress_running == 0) { progress.fraction = 0; progress_running = -1; }
-                    return progress_running > 0;
+                    if (progress_running == 0) {
+                        progress.fraction = 0;
+                        progress_running = -1;
+                        progress.visible = false;
+                    } return progress_running > 0;
                 });
             }
         }

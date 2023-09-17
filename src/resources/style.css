@@ -12,6 +12,20 @@
     border-radius: 5px;
 }
 
+.my-pill-left {
+    border-bottom-left-radius: 22px;
+    border-top-left-radius: 22px;
+    padding-right: 0px;
+    padding-left: 24px;
+}
+
+.my-pill-right {
+    border-bottom-right-radius: 22px;
+    border-top-right-radius: 22px;
+    padding-left: 6px;
+    padding-right: 12px;
+}
+
 .my-textview {
     border: 1px solid @borders;
     border-radius: 5px;

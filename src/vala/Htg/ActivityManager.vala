@@ -7,6 +7,7 @@ namespace Htg {
         private Stack stack;
         private Button nav_back;
         private ArrayList<Activity> activity_stack = new ArrayList<Activity>();
+        private ArrayList<InvokeTuple?> invoker_stack  = new ArrayList<InvokeTuple?>();
     
         public bool can_navigate_back { get; private set; default = false;}
 
@@ -55,6 +56,15 @@ namespace Htg {
             can_navigate_back = activity_stack.size > 1;
         }
 
+        public void start_activity_with_request(Activity? current_activity, Type activity_class, int request_id, Value? data = null) {
+            start_activity(current_activity, activity_class, data);
+            invoker_stack.insert(0, InvokeTuple() {
+                from = current_activity,
+                to = activity_stack[0],
+                request_id = request_id
+            });
+        }
+
         public void start_activity(Activity? current_activity, Type activity_class, Value? data = null) {
             if (current_activity == null && activity_stack.size != 0 || current_activity != null && !current_activity.started) 
             { critical("Only started activities can invoke start_activity method"); return; }
@@ -76,10 +86,17 @@ namespace Htg {
             launch_instance(current_activity, new_activity, data);
         }
 
-        internal void end_activity(Activity activity, Value? data = null) {
+        internal void end_activity_with_result(Activity activity, Value? result) {
+            end_activity(activity);
+            var invoke_tuple = invoker_stack.remove_at(0);
+            if (activity_stack.size > 0 && activity_stack[0] == invoke_tuple.from && activity == invoke_tuple.to) 
+                activity_stack[0].on_result_available(invoke_tuple.request_id, result);
+        }
+
+        internal void end_activity(Activity activity) {
             activity_stack.remove(activity);
             if (activity.started) {
-                if (activity_stack.size > 0) launch_instance(activity, activity_stack[0], data);
+                if (activity_stack.size > 0) launch_instance(activity, activity_stack[0]);
                 else activity.perform_stop();
             }
 
@@ -98,6 +115,12 @@ namespace Htg {
 
         public void add_child(Builder builder, Object child, string? type) {
             critical("No childing is possible for this widget");
+        }
+
+        private struct InvokeTuple {
+            public Activity from;
+            public Activity to;
+            public int request_id;
         }
     }
 }

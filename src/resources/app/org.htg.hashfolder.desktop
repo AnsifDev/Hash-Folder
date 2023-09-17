@@ -4,6 +4,6 @@ Type=Application
 
 Name=Hash Folder
 Comment=Hash Folder
-Icon=org.htg.hashfolder
+Icon=org.htg.hashfolder.Devel
 Exec=app
 Terminal=false

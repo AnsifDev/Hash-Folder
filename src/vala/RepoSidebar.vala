@@ -1,8 +1,9 @@
 using Gee, Gtk;
 
-namespace org.htg.hashfolder {
+namespace HashFolder {
     public class RepoSidebar: Htg.ActivityFragment {
         private ListBox listbox;
+        private HashMap<string, Value?> repo_store;
         private ArrayList<Value?> original_list;
         private ArrayList<HashMap<string, Value?>> filtered_list = new ArrayList<HashMap<string, Value?>>();
 
@@ -27,7 +28,10 @@ namespace org.htg.hashfolder {
             var user = (string) app_settings["user"];
             user_settings = parent.get_application().get_settings(user);
 
-            this.original_list = "repos" in user_settings? (ArrayList<Value?>) user_settings["repos"]: new ArrayList<Value?> ();
+            if (!user_settings.contains ("repos")) user_settings["repos"] = new ArrayList<Value?> ();
+            original_list = (ArrayList<Value?>) user_settings["repos"];
+            if (!user_settings.contains ("repo_store")) user_settings["repo_store"] = new HashMap<string, Value?>();
+            repo_store = (HashMap<string, Value?>) user_settings["repo_store"];
             //  this.original_list = new ArrayList<Value?> ();
 
             sidebar_stack = (Stack) builder.get_object ("sidebar_stack");
@@ -41,7 +45,7 @@ namespace org.htg.hashfolder {
 
             var add_repo = (Button) builder.get_object("add_repo");
             add_repo.clicked.connect(() => {
-                parent.get_application().activity_manager.start_activity(parent, typeof(NewRepoActivity));
+                parent.get_application().activity_manager.start_activity_with_request(parent, typeof(NewRepoActivity), 1);
             });
 
             refresh_repo = (Button) builder.get_object("refresh_repo");
@@ -52,6 +56,7 @@ namespace org.htg.hashfolder {
             search_entry = (SearchEntry) builder.get_object("search_entry");
             search_entry.set_key_capture_widget (parent.get_application ().active_window);
             search_entry.search_changed.connect(() => {
+                if (search_entry.text.length == 1 && add_repo.visible) search_entry.grab_focus ();
                 add_repo.visible = search_entry.text.length == 0;
                 update_filter ();
             });
@@ -78,10 +83,32 @@ namespace org.htg.hashfolder {
             var file = File.new_for_path(repo_cache_path);
             if (!file.get_parent().query_exists()) try { file.get_parent().make_directory_with_parents(); }
             catch (Error e) { critical(e.message); }
+
+            refresh();
+            parent.on_result_available.connect((request_id, result) => {
+                if (request_id == 1) {
+                    var result_map = (HashMap<string, Value?>) result;
+                    var repo_data = (HashMap<string, Value?>) result_map["repo_data"];
+                    var repo_id = repo_data["id"].get_string();
+                    original_list.insert (0, repo_id);
+                    repo_store[repo_id] = repo_data;
+                    update_filter ();
+                    listbox.select_row ((ListBoxRow) listbox.get_first_child());
+                    item_selected(repo_data);
+                }
+            });
         }
 
-        protected override void on_started() {
-            refresh();
+        internal void remove_repo(HashMap<string, Value?> repo_data) {
+            var repo_id = repo_data["id"].get_string();
+            for (int i = 0; i < original_list.size; i++) if (original_list[i].get_string() == repo_id) {
+                original_list.remove_at (i);
+                break;
+            }
+
+            repo_store.unset(repo_id);
+            update_filter ();
+            listbox.select_row ((ListBoxRow) listbox.get_first_child());
         }
 
         internal void refresh() {
@@ -96,7 +123,16 @@ namespace org.htg.hashfolder {
                 var status = Htg.run_command.end(res);
                 if (status == 0) try {
                     var repos_list = new Htg.JsonEngine().parse_file_to_array(repo_cache_path);
-                    user_settings["repos"] = this.original_list = repos_list;
+
+                    repo_store = new HashMap<string, Value?>();
+                    original_list.clear();
+                    foreach (var repo_data in repos_list) {
+                        var id = ((HashMap<string, Value?>) repo_data)["id"].get_string();
+                        repo_store[id] = repo_data;
+                        original_list.add (id);
+                    }
+
+                    user_settings["repo_store"] = repo_store;
                 } catch (Error e) { critical (e.message); }
                 else {
                     var dg = new Adw.MessageDialog (parent.get_application ().active_window, "Repository Fetch Failed", null);
@@ -111,8 +147,9 @@ namespace org.htg.hashfolder {
             filtered_list.clear();
             if (!user_settings.contains ("local_repos")) user_settings["local_repos"] = new HashMap<string, Value?>();
             var local_repos = (HashMap<string, Value?>) user_settings["local_repos"];
-            foreach (var value in original_list) {
-                var hashmap = (HashMap<string, Value?>) value;
+            foreach (var id in original_list) {
+                if (!repo_store.has_key (id.get_string())) { critical ("Unxpected id: %s in repos of user_settings", id.get_string()); continue; }
+                var hashmap = (HashMap<string, Value?>) repo_store[id.get_string()];
                 var name_ok = search_entry.text in (string) hashmap["name"];
                 var visiblity_public = (string) hashmap["visibility"] == "PUBLIC";
                 var visiblity_ok = visiblity_public == public_only.active || (!visiblity_public) == private_only.active || include_all.active;
@@ -159,7 +196,11 @@ namespace org.htg.hashfolder {
             }
 
             public override Widget setup_widget () {
-                return new MyListBoxRow();
+                var row = new MyListBoxRow();
+                //  row.activate.connect(() => {
+                //      print("Hello\n");
+                //  });
+                return row;
             }
 
             public override void bind_widget (Gtk.Widget row, HashMap<string, Value?> data) {

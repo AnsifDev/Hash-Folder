@@ -1,6 +1,6 @@
 using Vte, Posix, Gee;
 
-namespace org.htg.hashfolder {
+namespace HashFolder {
     public class LoginTerm: Htg.Activity {
         private int step = 0;
         private Terminal term;
@@ -23,6 +23,7 @@ namespace org.htg.hashfolder {
 
             var progress = (Gtk.ProgressBar) builder.get_object("progress");
             var continue_pulsing = true;
+            var data_queue = new ArrayList<string>();
 
             Timeout.add(100, () => {
                 progress.pulse();
@@ -45,51 +46,66 @@ namespace org.htg.hashfolder {
                     dg.add_response("_ok", "OK");
                     dg.present();
                 }
-                finish();
+                //  finish();
             });
             term.contents_changed.connect(() => {
                 var data = term.get_text(null, null).strip();
                 if (data.length <= 0) return;
                 //  Htg.run_command.begin(@"echo \"$step: $data\" >> out.txt");
-                if ("Do you want to re-authenticate?" in data && step == 0) {
-                    step++;
-                    uint8[] inp = {89, 13};
-                    term.feed_child(inp);
-                }
-                if ("Generate a new SSH key to add to your GitHub account?" in data && step < 2) {
-                    step++;
-                    if (step == 1) step++;
-                    uint8[] inp = {78, 13};
-                    term.feed_child(inp);
-                }
-                if ("Upload your SSH public key to your GitHub account?" in data && step < 2) {
-                    step++;
-                    if (step == 1) step++;
-                    uint8[] inp = {27, 91, 65, 13};
-                    term.feed_child(inp);
-                }
-                if ("Press Enter to open github.com in your browser" in data && step == 2) {
-                    step++;
-                    code = data.split(":")[1].split("\n")[0].strip();
-                    
-                    print("Code: %s\n", code);
-                    code_view.label = @"Code: $code";
-                    code_container.visible = true;
-                    
-                    var clipboard = term.get_clipboard();
-                    clipboard.set_text(code);
+                if (data in data_queue) return;
+                data_queue.add(data);
+                if (data_queue.size == 1) {
+                    Timeout.add(500, () => {
+                        var current_data = data_queue.remove_at(0);
+                        //  print("Running...\n");
+                        //  print("Running...\n%s\n", current_data);
+                        if ("Do you want to re-authenticate?" in current_data && step == 0) {
+                            step++;
+                            uint8[] inp = {89, 13};
+                            term.feed_child(inp);
+                        }
+                        if ("Generate a new SSH key to add to your GitHub account?" in current_data && step < 2) {
+                            step++;
+                            if (step == 1) step++;
+                            uint8[] inp = {78, 13};
+                            term.feed_child(inp);
+                        }
+                        if ("Upload your SSH public key to your GitHub account?" in current_data && step < 2) {
+                            step++;
+                            if (step == 1) step++;
+                            uint8[] inp = {27, 91, 65, 13};
+                            term.feed_child(inp);
+                        }
+                        if ("Press Enter to open github.com in your browser" in current_data && step == 2) {
+                            step++;
+                            code = current_data.split(":")[1].split("\n")[0].strip();
+                            
+                            print("Code: %s\n", code);
+                            code_view.label = @"Code: $code";
+                            code_container.visible = true;
+                            
+                            var clipboard = term.get_clipboard();
+                            clipboard.set_text(code);
 
-                    print("Entering to web-browser\n");
-                    var dg = new Adw.MessageDialog(get_application().window, "Login OTP Copied", @"$code is copied to your clipboard. A web browser will now pops up, just paste the code and then you are done.");
-                    dg.add_response("cancel", "Cancel");
-                    dg.add_response("ok", "OK");
-                    dg.response.connect((res) => {
-                        if (res == "cancel") return;
-                        uint8[] inp = {13};
-                        term.feed_child(inp);
+                            var dg = new Adw.MessageDialog(get_application().window, "Login OTP Copied", @"$code is copied to your clipboard. A web browser will now pops up, just paste the code and then you are done.");
+                            dg.add_response("cancel", "Cancel");
+                            dg.add_response("ok", "OK");
+                            dg.response.connect((res) => {
+                                if (res == "cancel") return;
+                                uint8[] inp = {13};
+                                term.feed_child(inp);
+                                print("Entering to web-browser\n");
+                            });
+                            dg.present();
+                        }
+
+                        //  Idle.add_once(() => {
+                            
+                        //  });
+                        return data_queue.size != 0;
                     });
-                    dg.present();
                 }
+                
             });
             step = 0;
             term.spawn_async(Vte.PtyFlags.DEFAULT, null, "/app/bin/gh gh auth login -h github.com -p ssh -s admin:public_key -s admin:ssh_signing_key -s delete_repo -w".split(" "), null, GLib.SpawnFlags.FILE_AND_ARGV_ZERO, null, 120, null, null);

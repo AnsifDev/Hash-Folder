@@ -1,6 +1,6 @@
 using Gee, Gtk, Htg;
 
-namespace org.htg.hashfolder {
+namespace HashFolder {
     public class SSHKeyActivity: Htg.Activity {private Box base_box;
         private Box bottom_box;
         private Box content_box;

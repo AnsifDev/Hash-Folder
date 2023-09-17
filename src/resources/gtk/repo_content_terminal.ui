@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <object class="GtkRevealer" id="root">
+        <!-- <property name="reveal-child">true</property> -->
+        <child>
+            <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="margin-start">10</property>
+                <property name="margin-end">10</property>
+                <property name="margin-bottom">10</property>
+                <child>
+                    <object class="GtkBox" id="term_head">
+                        <style><class name="term-head"/></style>
+                        <property name="height-request">40</property>
+                        <property name="hexpand">true</property>
+                        <property name="halign">fill</property>
+                        <child>
+                            <object class="GtkLabel">
+                                <property name="label">Terminal</property>
+                                <property name="hexpand">true</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="term_unreveal">
+                                <property name="icon-name">window-close-symbolic</property>
+                                <property name="valign">center</property>
+                                <property name="margin-end">8</property>
+                                <style><class name="flat"/><class name="circular"/></style>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+                <child>
+                    <object class="HtgBin" id="term_bin">
+                        <property name="padding">10</property>
+                        <property name="vnatural">200</property>
+                        <child>
+                            <object class="VteTerminal" id="term"/>
+                        </child>
+                    </object>
+                </child>
+                <style><class name="term-card"/></style>
+            </object>
+        </child>
+    </object>
+</interface>

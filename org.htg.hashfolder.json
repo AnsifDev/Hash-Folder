@@ -1,10 +1,10 @@
 {
     "id": "org.htg.hashfolder",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "44",
+    "runtime-version": "master",
     "sdk": "org.gnome.Sdk",
     "command": "app",
-    "modules": [ 
+    "modules": [
         {
             "name": "git",
             "buildsystem": "simple",

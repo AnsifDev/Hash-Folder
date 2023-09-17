@@ -1,6 +1,6 @@
 using Gtk, Gee;
 
-namespace org.htg.hashfolder {
+namespace HashFolder {
     class RepoActivity: Htg.ActivityFragment {
         private RepoSidebar sidebar_frag;
         private RepoContent content_frag;
@@ -41,7 +41,11 @@ namespace org.htg.hashfolder {
             ((Adw.Bin) builder.get_object("sidebar")).set_child(sidebar_frag.content);
 
             content_frag = new RepoContent(parent, breakpoint);
-            content_frag.on_update_request.connect(sidebar_frag.refresh);
+            content_frag.on_repo_deleted.connect((repo_data) => {
+                sidebar_frag.remove_repo(repo_data);
+                leaflet.navigate(Adw.NavigationDirection.BACK);
+                page_back.visible = false;
+            });
             ((Adw.Bin) builder.get_object("content")).set_child(content_frag.content);
 
             sidebar_frag.item_selected.connect(content_frag.show_item);
@@ -51,6 +55,38 @@ namespace org.htg.hashfolder {
             });
 
             //  leaflet.set_chi
+        }
+
+        protected override void on_destroy() {
+            var app_settings = parent.get_application().get_settings("app");
+            var user = app_settings["user"].get_string();
+            var user_settings = parent.get_application().get_settings(user);
+            if (!user_settings.contains("local_repos")) user_settings["local_repos"] = new HashMap<string, Value?>();
+            var local_repos = (HashMap<string, Value?>) user_settings["local_repos"];
+            var repo_store = (HashMap<string, Value?>) user_settings["repo_store"];
+            var app = parent.get_application();
+
+            foreach (var repo_id in local_repos.keys) {
+                if (!repo_store.has_key(repo_id)) continue;
+                var repo_data = (HashMap<string, Value?>) repo_store[repo_id];
+                
+                //  print(@"$repo_id, repo_data is null: $(repo_data == null), repo has banner: $(repo_data.has_key("banner"))\n");
+                if (repo_data.has_key("banner") && repo_data["banner"].get_boolean()) {
+                    app.hold();
+                    
+                    var repo_path = local_repos[repo_id].get_string();
+
+                    Htg.run_command.begin(@"git -C \"$repo_path\" add --all", () => {
+                        Htg.run_command.begin(@"git -C \"$repo_path\" commit -a -m init", () => {
+                            Htg.run_command.begin(@"git -C \"$repo_path\" push", on_task_completed);
+                        });
+                    });
+                }
+            }
+        }
+
+        private void on_task_completed() {
+            parent.get_application().release();
         }
     }
 }

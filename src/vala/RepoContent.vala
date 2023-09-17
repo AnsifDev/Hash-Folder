@@ -1,6 +1,6 @@
 using Gee, Gtk;
 
-namespace org.htg.hashfolder {
+namespace HashFolder {
     public class RepoContent: Htg.ActivityFragment {
         private Stack content_stack;
         private Adw.Clamp inner_clamp_head;
@@ -21,11 +21,13 @@ namespace org.htg.hashfolder {
 
         private Button btn_clone;
         private Button btn_open;
+        private Button btn_open_with;
         private Button btn_remove;
         private Button btn_delete;
 
-        private Htg.Bin term_bin;
-        private CloneManager clone_mgr;
+        private RepoContentTerminal terminal;
+        private Adw.Banner banner;
+        //  private CloneManager clone_mgr;
         private HashMap<string, Value?> local_repos;
 
         private Htg.Settings app_settings;
@@ -56,13 +58,26 @@ namespace org.htg.hashfolder {
             description_card = (Box) builder.get_object("description_card");
             btn_clone = (Button) builder.get_object("btn_clone");
             btn_open = (Button) builder.get_object("btn_open");
+            btn_open_with = (Button) builder.get_object("btn_open_with");
             btn_remove = (Button) builder.get_object("btn_remove");
             btn_delete = (Button) builder.get_object("btn_delete");
+            banner = (Adw.Banner) builder.get_object("banner");
 
             btn_clone.clicked.connect(on_button_clicked);
             btn_open.clicked.connect(on_button_clicked);
+            btn_open_with.clicked.connect(on_button_clicked);
             btn_remove.clicked.connect(on_button_clicked);
             btn_delete.clicked.connect(on_button_clicked);
+
+            banner.button_clicked.connect(() => {
+                var repo_id = (string) data["id"];
+                var repo_path = local_repos[repo_id].get_string();
+                data["banner"] = banner.revealed = false;
+
+                terminal.add_task(@"$repo_id-stage-sync", @"/app/bin/git git -C \"$repo_path\" add --all");
+                terminal.add_task(@"$repo_id-commit-sync", @"/app/bin/git git -C \"$repo_path\" commit -a -m init");
+                terminal.add_task(@"$repo_id-push-sync", @"/app/bin/git git -C \"$repo_path\" push");
+            });
 
             repo_langs.width_request = 260;
             var repo_langs_left = new Box(Gtk.Orientation.VERTICAL, 2);
@@ -118,6 +133,35 @@ namespace org.htg.hashfolder {
             }, (widget, data) => {
                 ((Label) widget).label = ((string) data);
             });
+            
+            terminal = (RepoContentTerminal) builder.get_object("term");
+            terminal.on_task_completed.connect((id, status) => {
+                if (id.has_suffix("-clone")) {
+                    var repo_store = (HashMap<string, Value?>) user_settings["repo_store"];
+                    var clone_path = user_settings["clone_path"].get_string();
+
+                    var repo_id = id.replace("-clone", "");
+                    //  print("%s\n", repo_id);
+                    var current_repo_id = data["id"].get_string();
+
+                    var repo_data = (HashMap<string, Value?>) repo_store[repo_id];
+                    var repo_name = repo_data["name"].get_string();
+                    var email = user_settings["email"].get_string();
+                    
+                    if (status == 0) {
+                        local_repos[repo_id] = @"$clone_path/$repo_name";
+                        var repo_path = (string) local_repos[repo_id];
+                        if (current_repo_id == repo_id) btn_clone.visible = false;
+                        terminal.add_task(@"$repo_id-user-config", @"/app/bin/git git -C \"$repo_path\" config user.name $user");
+                        terminal.add_task(@"$repo_id-email-config", @"/app/bin/git git -C \"$repo_path\" config user.email $email");
+                    }
+                    if (current_repo_id == repo_id) btn_clone.sensitive = true;
+                }
+            });
+            terminal.notify["sleeping"].connect(() => {
+                if (terminal.sleeping) ((HomeActivity) parent).stop_progress_indetermination();
+                else ((HomeActivity) parent).start_progress_indetermination();
+            });
 
             breakpoint.notify["narrow"].connect (() => {
                 inner_clamp_head.tightening_threshold = breakpoint.narrow ? 600: 400;
@@ -126,26 +170,43 @@ namespace org.htg.hashfolder {
                 head_align.margin_start = breakpoint.narrow? 0: 12;
                 align_box_head.orientation = breakpoint.narrow ? Orientation.VERTICAL: Orientation.HORIZONTAL;
                 align_box_tiles.orientation = breakpoint.narrow ? Orientation.VERTICAL: Orientation.HORIZONTAL;
-                term_bin.vnatural = breakpoint.narrow ? 200: 300;
-                term_bin.queue_resize();
+                terminal.term_bin.vnatural = breakpoint.narrow ? 200: 300;
+                terminal.term_bin.queue_resize();
             });
 
-            var term_revealer = (Gtk.Revealer) builder.get_object("term_revealer");
-            term_revealer.transition_type = RevealerTransitionType.SLIDE_UP;
-            var term_unreveal = (Button) builder.get_object("term_unreveal");
-            term_bin = (Htg.Bin) builder.get_object("term_bin");
-            var term = (Vte.Terminal) builder.get_object("term");
+            //  var term_revealer = (Gtk.Revealer) builder.get_object("term_revealer");
+            //  term_revealer.transition_type = RevealerTransitionType.SLIDE_UP;
+            //  var term_unreveal = (Button) builder.get_object("term_unreveal");
+            //  term_bin = (Htg.Bin) builder.get_object("term_bin");
 
-            clone_mgr = new CloneManager(this, term_revealer, term_unreveal, term, user_settings["clone_path"].get_string());
-            clone_mgr.cloning_started.connect(((HomeActivity) parent).start_progress_indetermination);
-            clone_mgr.cloning_ended.connect(((HomeActivity) parent).stop_progress_indetermination);
-            clone_mgr.clone_finished.connect((status, data) => {
-                if (status == 0) {
-                    var clone_path = user_settings["clone_path"].get_string();
-                    local_repos[data["id"].get_string()] = @"$clone_path/$(data["name"].get_string())";
-                    if (this.data == data) btn_clone.visible = false;
-                }
-                if (this.data == data) btn_clone.sensitive = true;
+            //  clone_mgr = new CloneManager(this, term_revealer, term_unreveal, term, user_settings["clone_path"].get_string());
+            //  clone_mgr.cloning_started.connect(((HomeActivity) parent).start_progress_indetermination);
+            //  clone_mgr.cloning_ended.connect(((HomeActivity) parent).stop_progress_indetermination);
+            //  clone_mgr.clone_finished.connect((status, data) => {
+            //      if (status == 0) {
+            //          var clone_path = user_settings["clone_path"].get_string();
+            //          local_repos[data["id"].get_string()] = @"$clone_path/$(data["name"].get_string())";
+            //          if (this.data == data) btn_clone.visible = false;
+            //      }
+            //      if (this.data == data) btn_clone.sensitive = true;
+            //  });
+
+            parent.on_result_available.connect((request_id, result) => {
+                var result_map = (HashMap<string, Value?>) result;
+                var repo_data = (HashMap<string, Value?>) result_map["repo_data"];
+                var local_status = (int) result_map["local_status"];
+                var repo_id = (string) repo_data["id"];
+
+                var email = user_settings["email"].get_string();
+                var repo_path = local_repos[repo_id].get_string();
+
+                if (local_status == 2) { //If source attached
+                    terminal.add_task(@"$repo_id-user-config", @"/app/bin/git git -C \"$repo_path\" config user.name $user");
+                    terminal.add_task(@"$repo_id-email-config", @"/app/bin/git git -C \"$repo_path\" config user.email $email");
+                    terminal.add_task(@"$repo_id-stage-sync", @"/app/bin/git git -C \"$repo_path\" add --all");
+                    terminal.add_task(@"$repo_id-commit-sync", @"/app/bin/git git -C \"$repo_path\" commit -a -m init");
+                    terminal.add_task(@"$repo_id-push-sync", @"/app/bin/git git -C \"$repo_path\" push --set-upstream origin main");
+                } else if (local_status == 1) on_button_clicked(btn_clone);
             });
         }
 
@@ -185,7 +246,8 @@ namespace org.htg.hashfolder {
 
             description_card.visible = repo_description.label.length > 0;
             btn_clone.visible = !(user_settings.contains("local_repos") && local_repos.has_key(id));
-            btn_clone.sensitive = !(data in clone_mgr);
+            btn_clone.sensitive = !(@"$id-clone" in terminal);
+            banner.revealed = data.has_key("banner") && data["banner"].get_boolean();
         }
 
         private void on_button_clicked(Button button) {
@@ -193,11 +255,40 @@ namespace org.htg.hashfolder {
             if (button == btn_clone) {
                 button.sensitive = false;
                 Htg.run_command.begin(@"rm -rf $clone_path/$(data["name"].get_string())");
-                clone_mgr.start_clone(data);
+                //  clone_mgr.start_clone(data);
+                var repo_name = data["name"].get_string();
+                var repo_id = data["id"].get_string();
+                terminal.add_task(@"$repo_id-clone", @"/app/bin/gh gh repo clone $repo_name $clone_path/$repo_name");
+                //  terminal.add_task("temp", "/bin/echo echo hello\\ world");
             } else if (button == btn_open) {
                 var file = File.new_for_path(local_repos[data["id"].get_string()].get_string());
                 var file_launcher = new FileLauncher(file);
-                file_launcher.launch.begin(parent.get_application().active_window, null);
+                file_launcher.launch.begin(parent.get_application().active_window, null, (src, res) => {
+                    if (!banner.revealed) {
+                        var repo_id = (string) data["id"];
+                        var repo_path = local_repos[repo_id].get_string();
+                        terminal.add_task(@"$repo_id-pull-sync", @"/app/bin/git git -C \"$repo_path\" pull");
+                    }
+                    try { 
+                        var result = file_launcher.launch.end(res);
+                        if (result) data["banner"] = banner.revealed = true;
+                    } catch (Error e) {}
+                });
+            } else if (button == btn_open_with) {
+                var file = File.new_for_path(local_repos[data["id"].get_string()].get_string());
+                var file_launcher = new FileLauncher(file);
+                file_launcher.always_ask = true;
+                file_launcher.launch.begin(parent.get_application().active_window, null, (src, res) => {
+                    if (!banner.revealed) {
+                        var repo_id = (string) data["id"];
+                        var repo_path = local_repos[repo_id].get_string();
+                        terminal.add_task(@"$repo_id-pull-sync", @"/app/bin/git git -C \"$repo_path\" pull");
+                    }
+                    try { 
+                        var result = file_launcher.launch.end(res);
+                        if (result) data["banner"] = banner.revealed = true;
+                    } catch (Error e) {}
+                });
             } else if (button == btn_remove) {
                 var dg = new Adw.MessageDialog(parent.get_application().active_window, "Remove Repository?", "This will remove the repository only from this device");
                 dg.add_response("_cancel", "Cancel");
@@ -220,11 +311,17 @@ namespace org.htg.hashfolder {
                 dg.response.connect((res) => {
                     if (res == "_remove") {
                         ((HomeActivity) parent).start_progress_indetermination();
-                
+
+                        var repo_id = data["id"].get_string();
+                        if (local_repos.has_key(repo_id)) {
+                            var repo_path = local_repos[repo_id].get_string().replace(" ", "\\ ");
+                            Htg.run_command.begin(@"rm -rf $(repo_path)/.git");
+                            local_repos.unset(repo_id);
+                        }
+
                         var repo_name = data["name"].get_string();
                         Htg.run_command.begin(@"gh repo delete $repo_name --yes", (src, res) => {
                             var status = Htg.run_command.end(res);
-                            ((HomeActivity) parent).stop_progress_indetermination();
                             if (status != 0) {
                                 dg = new Adw.MessageDialog(parent.get_application().active_window, "Task Failed", @"Repository is not removed. Subcommand returned with error code: $status");
                                 dg.add_response("_ok", "OK");
@@ -233,7 +330,8 @@ namespace org.htg.hashfolder {
                             }
 
                             content_stack.set_visible_child_name("empty");
-                            on_update_request();
+                            on_repo_deleted(data);
+                            ((HomeActivity) parent).stop_progress_indetermination();
                         });
                     }
                 });
@@ -241,7 +339,7 @@ namespace org.htg.hashfolder {
             }
         }
 
-        public signal void on_update_request();
+        public signal void on_repo_deleted(HashMap<string, Value?> repo_data);
 
         private class ProgressView: Box {
             
@@ -293,87 +391,84 @@ namespace org.htg.hashfolder {
             }
         }
 
-        private class CloneManager: Object {
-            private RepoContent outer_class;
-            private Revealer term_revealer;
-            private Button term_unreveal;
-            private Vte.Terminal term;
-            private string clone_path;
-            private ArrayList<HashMap<string, Value?>> tasks = new ArrayList<HashMap<string, Value?>>();
+        //  private class CloneManager: Object {
+        //      //  private RepoContent outer_class;
+        //      //  private Revealer term_revealer;
+        //      //  private Button term_unreveal;
+        //      //  private Vte.Terminal term;
+        //      private RepoContentTerminal terminal;
+        //      private string clone_path;
+        //      private ArrayList<HashMap<string, Value?>> tasks = new ArrayList<HashMap<string, Value?>>();
 
-            public CloneManager(RepoContent outer_class, Revealer term_revealer, Button term_unreveal, Vte.Terminal term, string clone_path) {
-                this.outer_class = outer_class;
-                this.term_revealer = term_revealer;
-                this.term_unreveal = term_unreveal;
-                this.term = term;
-                this.clone_path = clone_path;
+        //      public CloneManager(RepoContentTerminal terminal, string clone_path) {
+        //          this.terminal = terminal;
+        //          //  this.term_revealer = term_revealer;
+        //          //  this.term_unreveal = term_unreveal;
+        //          //  this.term = term;
+        //          this.clone_path = clone_path;
 
-                term_unreveal.clicked.connect(() => {
-                    term_revealer.reveal_child = false;
-                });
+        //          //  term.child_exited.connect((status) => {
+        //          //      var data = tasks.remove_at(0);
+        //          //      clone_finished(status, data);
+        //          //      if (tasks.size > 0 || false) start_task(); 
+        //          //      else cloning_ended();
+        //          //  });
+        //      }
 
-                term.child_exited.connect((status) => {
-                    var data = tasks.remove_at(0);
-                    clone_finished(status, data);
-                    if (tasks.size > 0 || false) start_task(); 
-                    else cloning_ended();
-                });
-            }
+        //      public void start_clone(HashMap<string, Value?> data) {
+        //          tasks.add(data);
+        //          if (tasks.size == 1) {
+        //              start_task();
+        //              cloning_started();
+        //          }
+        //      }
 
-            public void start_clone(HashMap<string, Value?> data) {
-                tasks.add(data);
-                if (tasks.size == 1) {
-                    start_task();
-                    cloning_started();
-                }
-            }
+        //      public void stop_clone(HashMap<string, Value?> data) {
+        //          uint8[] inp = {3};
+        //          if (tasks[0] == data) term.feed_child(inp);
+        //          tasks.remove(data);
+        //      }
 
-            public void stop_clone(HashMap<string, Value?> data) {
-                uint8[] inp = {3};
-                if (tasks[0] == data) term.feed_child(inp);
-                tasks.remove(data);
-            }
+        //      public bool contains(HashMap<string, Value?> data) { return data in tasks; }
 
-            public bool contains(HashMap<string, Value?> data) { return data in tasks; }
+        //      public bool is_cloning() { return tasks.size > 0; }
 
-            public bool is_cloning() { return tasks.size > 0; }
+        //      private void start_task() {
+        //          var repo_name = tasks[0]["name"].get_string();
+        //          var args = new ArrayList<string>();
+        //          args.add_all_array(@"/app/bin/gh gh repo clone $repo_name".split(" "));
+        //          args.add(@"$clone_path/$repo_name");
+        //          term.spawn_async(
+        //              Vte.PtyFlags.DEFAULT, 
+        //              null, 
+        //              args.to_array(), 
+        //              null, 
+        //              GLib.SpawnFlags.FILE_AND_ARGV_ZERO, 
+        //              null, 
+        //              120, 
+        //              null, 
+        //              null
+        //          );
+        //      }
 
-            private void start_task() {
-                var repo_name = tasks[0]["name"].get_string();
-                var args = new ArrayList<string>();
-                args.add_all_array(@"/app/bin/gh gh repo clone $repo_name".split(" "));
-                args.add(@"$clone_path/$repo_name");
-                term.spawn_async(
-                    Vte.PtyFlags.DEFAULT, 
-                    null, 
-                    args.to_array(), 
-                    null, 
-                    GLib.SpawnFlags.FILE_AND_ARGV_ZERO, 
-                    null, 
-                    120, 
-                    null, 
-                    null
-                );
-            }
+        //      public signal void cloning_started() { term_unreveal.visible = !(term_revealer.reveal_child = true); }
 
-            public signal void cloning_started() { term_unreveal.visible = !(term_revealer.reveal_child = true); }
+        //      //  private ArrayList<string> timer_params_queue = new ArrayList<string>();
+        //      public signal void clone_finished(int status, HashMap<string, Value?> data) {
+        //          //  timer_params_queue.add();
+        //          var repo_name = data["name"].get_string();
+        //          var user = outer_class.app_settings["user"].get_string();
+        //          var email = outer_class.user_settings["email"].get_string();
+        //          Htg.run_command.begin(@"git -C \"$clone_path/$repo_name\" config user.name $user", () => {
+        //              Htg.run_command.begin(@"git -C \"$clone_path/$repo_name\" config user.email $email", () => {
+        //                  print("Yes Completed\n");
+        //              });
+        //          });
+        //      }
 
-            //  private ArrayList<string> timer_params_queue = new ArrayList<string>();
-            public signal void clone_finished(int status, HashMap<string, Value?> data) {
-                //  timer_params_queue.add();
-                var repo_name = data["name"].get_string();
-                var user = outer_class.app_settings["user"].get_string();
-                var email = outer_class.user_settings["email"].get_string();
-                Htg.run_command.begin(@"git -C \"$clone_path/$repo_name\" config user.name $user", () => {
-                    Htg.run_command.begin(@"git -C \"$clone_path/$repo_name\" config user.email $email", () => {
-                        print("Yes Completed\n");
-                    });
-                });
-            }
+        //      public signal void cloning_ended() { term_unreveal.visible = true; }
 
-            public signal void cloning_ended() { term_unreveal.visible = true; }
-
-            //  private void run_clone_post() {}
-        }
+        //      //  private void run_clone_post() {}
+        //  }
     }
 }

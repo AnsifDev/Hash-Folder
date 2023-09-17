@@ -31,13 +31,13 @@ if icons != ''
     symbolic_dir = join_paths(get_option('datadir'), 'icons', 'hicolor', 'symbolic', 'apps')
     install_data(icon_list, install_dir: symbolic_dir)
 endif
-
+ 
 fs = import('fs') 
 metainfo = join_paths('src/resources/app', meson.project_name()+'.metainfo.xml')
 if fs.exists(metainfo) 
     install_data(metainfo, install_dir: '/app/share/metainfo')
 endif
-
+ 
 desktop = join_paths('src/resources/app', meson.project_name()+'.desktop')
 if fs.exists(desktop)
     install_data(desktop, install_dir: '/app/share/applications')

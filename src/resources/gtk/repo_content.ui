@@ -2,6 +2,12 @@
 <interface>
 	<object class="HtgActivityPage" id="root">
 		<child>
+			<object class="AdwBanner" id="banner">
+				<property name="title">Changes might not be uploaded</property>
+				<property name="button-label">Save</property>
+			</object>
+		</child>
+		<child>
 			<object class="GtkStack" id="content_stack">
 				<child>
 					<object class="GtkStackPage">
@@ -150,10 +156,26 @@
 																					</object>
 																				</child>
 																				<child>
-																					<object class="GtkButton" id="btn_open">
-																						<property name="label">Open</property>
+																					<object class="GtkBox">
 																						<property name="visible" bind-source="btn_clone" bind-property="visible" bind-flags="invert-boolean"/>
-																						<style><class name="pill"/><class name="suggested-action"/></style>
+																						<child>
+																							<object class="GtkButton" id="btn_open">
+																								<property name="label">Open</property>
+																								<property name="hexpand">true</property>
+																								<property name="halign">fill</property>
+																								<style><class name="my-pill-left"/><class name="suggested-action"/></style>
+																							</object>
+																						</child>
+																						<child>
+																							<object class="GtkButton" id="btn_open_with">
+																								<property name="icon-name">pan-down-symbolic</property>
+																								<property name="hexpand">false</property>
+																								<property name="halign">end</property>
+																								<property name="tooltip-text">Open with</property>
+																								<style><class name="my-pill-right"/><class name="suggested-action"/></style>
+																							</object>
+																						</child>
+																						<style><class name="linked"/></style>
 																					</object>
 																				</child>
 																			</object>
@@ -204,6 +226,23 @@
 														<style><class name="title-3"/><class name="dim-label"/></style>
 													</object>
 												</child>
+												<!-- <child>
+													<object class="GtkListBox">
+														<property name="selection-mode">none</property>
+														<child>
+															<object class="AdwActionRow">
+																<property name="title">Github Remote Actions</property>
+																<child>
+																	<object class="GtkButton">
+																		<property name="label">Pull</property>
+																		<property name="valign">center</property>
+																	</object>
+																</child>
+															</object>
+														</child>
+														<style><class name="boxed-list"/></style>
+													</object>
+												</child> -->
 												<child>
 													<object class="GtkBox" id="align_box_tiles">
 														<property name="orientation">vertical</property>
@@ -291,9 +330,9 @@
 			</object>
 		</child>
 		<child>
-			<object class="GtkRevealer" id="term_revealer">
+			<object class="HashFolderRepoContentTerminal" id="term"/>
 				<!-- <property name="reveal-child">true</property> -->
-				<child>
+				<!-- <child>
 					<object class="GtkBox">
 						<property name="orientation">vertical</property>
 						<property name="margin-start">10</property>
@@ -335,7 +374,7 @@
 						<style><class name="term-card"/></style>
 					</object>
 				</child>
-			</object>
+			</object> -->
 		</child>
 	</object>
 </interface>

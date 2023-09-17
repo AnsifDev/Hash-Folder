@@ -29,6 +29,7 @@ namespace Htg {
                 window.application = this;
                 window.content = activity_manager = new ActivityManager();
                 window.close_request.connect(on_window_closed);
+                window.add_css_class("devel");
                 settings.bind("width", window, "default-width", 1067);
                 settings.bind("height", window, "default-height", 800);
                 settings.bind("maximized", window, "maximized", false);
@@ -39,17 +40,22 @@ namespace Htg {
             window.present();
         }
 
-        public override void shutdown() {
+        //  public override void shutdown() {
+        //      activity_manager.clear_nav_stack();
+        //      if (activity_manager.can_navigate_back) activity_manager.navigate_back();
+        //      foreach (var filename in opened_settings.keys)
+        //          try { opened_settings[filename].save(); }
+        //          catch (Error e) { critical("%s: %s\n", filename, e.message); }
+        //      base.shutdown();
+        //  }
+
+        private bool on_window_closed(Window window) {
+            settings.unbind(window);
             activity_manager.clear_nav_stack();
             if (activity_manager.can_navigate_back) activity_manager.navigate_back();
             foreach (var filename in opened_settings.keys)
                 try { opened_settings[filename].save(); }
                 catch (Error e) { critical("%s: %s\n", filename, e.message); }
-            base.shutdown();
-        }
-
-        private bool on_window_closed(Window window) {
-            settings.unbind(window);
             return false;
         }
     }

@@ -35,6 +35,10 @@ namespace Htg {
             get_application().activity_manager.end_activity(this);
         }
 
+        protected void finish_with_result(Value? result) {
+            get_application().activity_manager.end_activity_with_result(this, result);
+        }
+
         protected void set_content(string layout_name) {
             if (started) { critical("Setting ui file after construction not allowed"); return; }
             if (activity_page != null) { warning("Setting content is availed for only once!!!"); return; }
@@ -54,10 +58,6 @@ namespace Htg {
             else fragments.add(fragment);
         }
 
-        public void set_default_header_visible(bool visible) {
-            
-        }
-
         // Lifecycle Methods
         internal virtual void on_create() {}
 
@@ -73,7 +73,14 @@ namespace Htg {
             foreach (var fragment in fragments) fragment.on_destroy();
         }
 
+        internal virtual signal void on_result_available(int request_id, Value? result);
+
         // Lifecycle Handlers
+        //  internal void perform_start_with_request(int request_id, Value? data = null) {
+        //      this.request_id = request_id;
+        //      perform_start(data);
+        //  }
+
         internal void perform_start(Value? data = null) {
             if (started) { critical("Activity already started!!!"); return; }
             if (data != null) intent_data = data;
