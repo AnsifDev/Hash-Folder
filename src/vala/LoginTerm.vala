@@ -1,5 +1,5 @@
 using Vte, Posix, Gee;
-
+ 
 namespace HashFolder {
     public class LoginTerm: Htg.Activity {
         private int step = 0;
