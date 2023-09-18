@@ -264,14 +264,14 @@ namespace HashFolder {
                 var file = File.new_for_path(local_repos[data["id"].get_string()].get_string());
                 var file_launcher = new FileLauncher(file);
                 file_launcher.launch.begin(parent.get_application().active_window, null, (src, res) => {
-                    if (!banner.revealed) {
-                        var repo_id = (string) data["id"];
-                        var repo_path = local_repos[repo_id].get_string();
-                        terminal.add_task(@"$repo_id-pull-sync", @"/app/bin/git git -C \"$repo_path\" pull");
-                    }
                     try { 
-                        var result = file_launcher.launch.end(res);
-                        if (result) data["banner"] = banner.revealed = true;
+                        if (file_launcher.launch.end(res)) {
+                            if (!banner.revealed) {
+                                var repo_id = (string) data["id"];
+                                var repo_path = local_repos[repo_id].get_string();
+                                terminal.add_task(@"$repo_id-pull-sync", @"/app/bin/git git -C \"$repo_path\" pull");
+                            } data["banner"] = banner.revealed = true;
+                        }
                     } catch (Error e) {}
                 });
             } else if (button == btn_open_with) {
@@ -279,14 +279,14 @@ namespace HashFolder {
                 var file_launcher = new FileLauncher(file);
                 file_launcher.always_ask = true;
                 file_launcher.launch.begin(parent.get_application().active_window, null, (src, res) => {
-                    if (!banner.revealed) {
-                        var repo_id = (string) data["id"];
-                        var repo_path = local_repos[repo_id].get_string();
-                        terminal.add_task(@"$repo_id-pull-sync", @"/app/bin/git git -C \"$repo_path\" pull");
-                    }
                     try { 
-                        var result = file_launcher.launch.end(res);
-                        if (result) data["banner"] = banner.revealed = true;
+                        if (file_launcher.launch.end(res)) {
+                            if (!banner.revealed) {
+                                var repo_id = (string) data["id"];
+                                var repo_path = local_repos[repo_id].get_string();
+                                terminal.add_task(@"$repo_id-pull-sync", @"/app/bin/git git -C \"$repo_path\" pull");
+                            } data["banner"] = banner.revealed = true;
+                        }
                     } catch (Error e) {}
                 });
             } else if (button == btn_remove) {
