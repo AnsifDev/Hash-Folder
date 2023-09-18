@@ -41,6 +41,7 @@ namespace HashFolder {
                     app["user"] = ((HashMap<string, Value?>) gh_config["github.com"])["user"].get_string();
                     
                     get_application().activity_manager.start_activity(this, typeof(SSHKeyActivity));
+                    finish();
                 } else {
                     var dg = new Adw.MessageDialog(get_application().active_window, "Something Went Wrong", @"Unexpected error occured on login. Sub command returned with error code: $(status)");
                     dg.add_response("_ok", "OK");
