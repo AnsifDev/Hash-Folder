@@ -39,106 +39,157 @@
 						<property name="name">home</property>
 						<property name="icon-name">user-home-symbolic</property>
 						<property name="child">
-							<object class="AdwClamp">
+							<object class="GtkScrolledWindow">
 								<child>
-									<object class="GtkBox">
-										<property name="spacing">16</property>
-										<property name="orientation">vertical</property>
-										<property name="margin-start">16</property>
-										<property name="margin-end">16</property>
-										<property name="margin-top">16</property>
-										<property name="margin-bottom">16</property>
-										<child>
-											<object class="AdwAvatar" id="avt">
-												<property name="size">100</property>
-												<property name="margin-top">16</property>
-											</object>
-										</child>
-										<child>
-											<object class="GtkLabel" id="acc_name">
-												<property name="label">Welcome AnsifDev</property>
-												<style><class name="title-1"/></style>
-											</object>
-										</child>
-										<child>
-											<object class="AdwPreferencesGroup">
-												<property name="title">Account Configurations</property>
-												<child>
-													<object class="AdwActionRow">
-														<property name="title">Use SSH Port 443</property>
-														<property name="subtitle">ASIET Lab Systems? Turn this on for cloning purpose</property>
-														<child>
-															<object class="GtkSwitch" id="ssh_port">
-																<property name="vexpand">false</property>
-																<property name="valign">center</property>
-															</object>
-														</child>
-														<property name="activatable-widget">ssh_port</property>
-													</object>
-												</child>
-												<child>
-													<object class="AdwActionRow" id="def_folder">
-														<property name="title">Repository Download Location</property>
-														<property name="subtitle">/home/ansif/AnsifDev</property>
-														<style><class name="property"/></style>
-														<child>
-															<object class="GtkButton" id="clear_folder">
-																<style><class name="flat"/></style>
-																<property name="visible">false</property>
-																<property name="margin-top">8</property>
-																<property name="margin-bottom">8</property>
-																<property name="tooltip-text">Clear folder</property>
-																<property name="icon-name">eraser5-symbolic</property>
-															</object>
-														</child>
-														<child>
-															<object class="GtkButton" id="open_folder">
-																<style><class name="flat"/></style>
-																<property name="margin-top">8</property>
-																<property name="margin-bottom">8</property>
-																<property name="tooltip-text">Set folder</property>
-																<property name="icon-name">folder-open-symbolic</property>
-															</object>
-														</child>
-														<property name="activatable-widget">open_folder</property>
-													</object>
-												</child>
-											</object>
-										</child>
+									<object class="AdwClamp">
 										<child>
 											<object class="GtkBox">
-												<style><class name="linked"/></style>
-												<property name="hexpand">false</property>
-												<property name="vexpand">true</property>
-												<property name="halign">center</property>
-												<property name="valign">end</property>
-												<property name="homogeneous">true</property>
-												<property name="width-request">200</property>
+												<property name="spacing">16</property>
+												<property name="orientation">vertical</property>
+												<property name="margin-start">16</property>
+												<property name="margin-end">16</property>
+												<property name="margin-top">16</property>
+												<property name="margin-bottom">16</property>
 												<child>
-													<object class="GtkToggleButton" id="theme_auto">
-														<property name="tooltip-text">Follow System</property>
-														<property name="active">true</property>
-														<property name="icon-name">dark-mode-symbolic</property>
+													<object class="AdwAvatar" id="avt">
+														<property name="size">100</property>
+														<property name="margin-top">16</property>
 													</object>
 												</child>
 												<child>
-													<object class="GtkToggleButton" id="theme_light">
-														<property name="tooltip-text">Light Theme</property>
-														<property name="icon-name">display-brightness-medium-symbolic</property>
-														<property name="group">theme_auto</property>
+													<object class="GtkLabel" id="acc_name">
+														<property name="label">Welcome AnsifDev</property>
+														<style><class name="title-1"/></style>
 													</object>
 												</child>
 												<child>
-													<object class="GtkToggleButton" id="theme_dark">
-														<property name="tooltip-text">Dark Theme</property>
-														<property name="icon-name">moon-outline-symbolic</property>
-														<property name="group">theme_auto</property>
+													<object class="AdwPreferencesGroup">
+														<property name="title">Account Configurations</property>
+														<child>
+															<object class="AdwActionRow">
+																<property name="title">Use SSH Port 443</property>
+																<property name="subtitle">ASIET Lab Systems? Turn this on for cloning purpose</property>
+																<child>
+																	<object class="GtkSwitch" id="ssh_port">
+																		<property name="vexpand">false</property>
+																		<property name="valign">center</property>
+																	</object>
+																</child>
+																<property name="activatable-widget">ssh_port</property>
+															</object>
+														</child>
+														<child>
+															<object class="AdwActionRow" id="def_folder">
+																<property name="title">Repository Download Location</property>
+																<property name="subtitle">/home/ansif/AnsifDev</property>
+																<style><class name="property"/></style>
+																<child>
+																	<object class="GtkButton" id="clear_folder">
+																		<style><class name="flat"/></style>
+																		<property name="visible">false</property>
+																		<property name="margin-top">8</property>
+																		<property name="margin-bottom">8</property>
+																		<property name="tooltip-text">Clear folder</property>
+																		<property name="icon-name">eraser5-symbolic</property>
+																	</object>
+																</child>
+																<child>
+																	<object class="GtkButton" id="open_folder">
+																		<style><class name="flat"/></style>
+																		<property name="margin-top">8</property>
+																		<property name="margin-bottom">8</property>
+																		<property name="tooltip-text">Set folder</property>
+																		<property name="icon-name">folder-open-symbolic</property>
+																	</object>
+																</child>
+																<property name="activatable-widget">open_folder</property>
+															</object>
+														</child>
+													</object>
+												</child>
+												<child>
+													<object class="AdwPreferencesGroup">
+														<property name="title">Repository Configurations</property>
+														<property name="sensitive">false</property>
+														<child>
+															<object class="AdwActionRow">
+																<property name="title">Allow auto download</property>
+																<property name="subtitle">All the repositories will be pulled on each login</property>
+																<child>
+																	<object class="GtkSwitch" id="auto_download">
+																		<property name="vexpand">false</property>
+																		<property name="valign">center</property>
+																	</object>
+																</child>
+																<property name="activatable-widget">ssh_port</property>
+															</object>
+														</child>
+														<child>
+															<object class="AdwActionRow">
+																<property name="title">Allow auto upload</property>
+																<property name="subtitle">All the repositories will be pushed on each app exit</property>
+																<child>
+																	<object class="GtkSwitch" id="auto_upload">
+																		<property name="vexpand">false</property>
+																		<property name="active">true</property>
+																		<property name="valign">center</property>
+																	</object>
+																</child>
+																<property name="activatable-widget">ssh_port</property>
+															</object>
+														</child>
+														<child>
+															<object class="AdwActionRow">
+																<property name="title">Allow local repositories discoverable</property>
+																<property name="subtitle">All the repositories downloaded will be discoverable even logged out</property>
+																<child>
+																	<object class="GtkSwitch" id="discoverable">
+																		<property name="vexpand">false</property>
+																		<property name="sensitive">false</property>
+																		<property name="valign">center</property>
+																	</object>
+																</child>
+																<property name="activatable-widget">ssh_port</property>
+															</object>
+														</child>
+													</object>
+												</child>
+												<child>
+													<object class="GtkBox">
+														<style><class name="linked"/></style>
+														<property name="hexpand">false</property>
+														<property name="vexpand">true</property>
+														<property name="halign">center</property>
+														<property name="valign">end</property>
+														<property name="homogeneous">true</property>
+														<property name="width-request">200</property>
+														<child>
+															<object class="GtkToggleButton" id="theme_auto">
+																<property name="tooltip-text">Follow System</property>
+																<property name="active">true</property>
+																<property name="icon-name">dark-mode-symbolic</property>
+															</object>
+														</child>
+														<child>
+															<object class="GtkToggleButton" id="theme_light">
+																<property name="tooltip-text">Light Theme</property>
+																<property name="icon-name">display-brightness-medium-symbolic</property>
+																<property name="group">theme_auto</property>
+															</object>
+														</child>
+														<child>
+															<object class="GtkToggleButton" id="theme_dark">
+																<property name="tooltip-text">Dark Theme</property>
+																<property name="icon-name">moon-outline-symbolic</property>
+																<property name="group">theme_auto</property>
+															</object>
+														</child>
 													</object>
 												</child>
 											</object>
-										</child>
+										</child>				
 									</object>
-								</child>				
+								</child>
 							</object>
 						</property>
 					</object>

@@ -143,10 +143,64 @@ namespace HashFolder {
 
         private void on_button_clicked(Button button) {
             if (button == logout) {
-                var dg = new Adw.MessageDialog (get_application().active_window, "Logout?", "You are going to logout from this app. Logout will only detach the github account, will not clear your data such as cloned repositories. Would you like to clear all the data which belongs this account?");
+                var listbox = new ListBox();
+                listbox.add_css_class("boxed-list");
+                //  listbox.sensitive = false;
+
+                var git_logout_row = new Adw.ActionRow();
+                git_logout_row.title = "Detach Git Account";
+                git_logout_row.subtitle = "Logs you out and blocks further account management";
+                git_logout_row.sensitive = false;
+                listbox.append(git_logout_row);
+
+                var git_auto_push_row = new Adw.ActionRow();
+                git_auto_push_row.title = "Push uncommited changes";
+                git_auto_push_row.subtitle = "Pushing every uncomitted changes to the account";
+                git_auto_push_row.sensitive = false;
+                listbox.append(git_auto_push_row);
+
+                var git_clear_local_repos_row = new Adw.ActionRow();
+                git_clear_local_repos_row.title = "Clear all downloaded repos";
+                git_clear_local_repos_row.subtitle = "Deletes all downloaded repositories on logout";
+                listbox.append(git_clear_local_repos_row);
+
+                var git_clear_ssh_key_row = new Adw.ActionRow();
+                git_clear_ssh_key_row.title = "Clear SSH Key";
+                git_clear_ssh_key_row.subtitle = "Removing this device's SSH Key from both this machine and from the github account";
+                listbox.append(git_clear_ssh_key_row);
+
+                var git_logout_check = new CheckButton();
+                git_logout_check.add_css_class("selection-mode");
+                git_logout_check.active = true;
+                git_logout_check.valign = Align.CENTER;
+                git_logout_row.add_suffix(git_logout_check);
+                git_logout_row.activatable_widget = git_logout_check;
+
+                var git_auto_push_check = new CheckButton();
+                git_auto_push_check.add_css_class("selection-mode");
+                git_auto_push_check.active = true;
+                git_auto_push_check.valign = Align.CENTER;
+                git_auto_push_row.add_suffix(git_auto_push_check);
+                git_auto_push_row.activatable_widget = git_auto_push_check;
+
+                var git_clear_local_repos_check = new CheckButton();
+                git_clear_local_repos_check.add_css_class("selection-mode");
+                git_clear_local_repos_check.valign = Align.CENTER;
+                git_clear_local_repos_row.add_suffix(git_clear_local_repos_check);
+                git_clear_local_repos_row.activatable_widget = git_clear_local_repos_check;
+
+                var git_clear_ssh_key_check = new CheckButton();
+                git_clear_ssh_key_check.add_css_class("selection-mode");
+                git_clear_ssh_key_check.valign = Align.CENTER;
+                git_clear_ssh_key_row.add_suffix(git_clear_ssh_key_check);
+                git_clear_ssh_key_row.activatable_widget = git_clear_ssh_key_check;
+                git_clear_ssh_key_row.activatable_widget = git_clear_ssh_key_check;
+
+                var dg = new Adw.MessageDialog (get_application().active_window, "Logout?", "You are going to logout from this app. Choose actions needed to be taken on Logout");
                 dg.add_response ("cancel", "Cancel");
                 dg.add_response ("logout", "Logout");
                 dg.set_response_appearance ("logout", Adw.ResponseAppearance.SUGGESTED);
+                dg.extra_child = listbox;
                 dg.response.connect((res) => {
                     if (res == "logout") {
                         logout.sensitive = false;
@@ -160,6 +214,7 @@ namespace HashFolder {
                         });
                     }
                 });
+
                 dg.present();
             } else if (button == open_folder) {
                 var dg = new FileDialog();

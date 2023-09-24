@@ -82,6 +82,7 @@ namespace HashFolder {
                         });
                     });
                 }
+                repo_data["banner"] = false;
             }
         }
 

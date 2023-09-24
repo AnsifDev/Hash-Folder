@@ -248,6 +248,23 @@ namespace HashFolder {
             btn_clone.visible = !(user_settings.contains("local_repos") && local_repos.has_key(id));
             btn_clone.sensitive = !(@"$id-clone" in terminal);
             banner.revealed = data.has_key("banner") && data["banner"].get_boolean();
+
+            if (!banner.revealed) {
+                var repo_id = (string) data["id"];
+
+                if (local_repos.has_key(repo_id)) {
+                    var repo_path = local_repos[repo_id].get_string();
+                    var cache_file = @"$(Environment.get_user_cache_dir())/$(parent.get_application().application_id)/porcelain_cache";
+                    Htg.run_command.begin(@"git -C $repo_path status --porcelain > $cache_file", (src, res) => {
+                        if (Htg.run_command.end(res) == 0) {
+                            string fc;
+                            try { FileUtils.get_contents(cache_file, out fc); }
+                            catch (Error e) {}
+                            if (fc.length != 0) data["banner"] = banner.revealed = true;
+                        } else print("Error\n");
+                    });
+                }
+            }
         }
 
         private void on_button_clicked(Button button) {
@@ -260,35 +277,46 @@ namespace HashFolder {
                 var repo_id = data["id"].get_string();
                 terminal.add_task(@"$repo_id-clone", @"/app/bin/gh gh repo clone $repo_name $clone_path/$repo_name");
                 //  terminal.add_task("temp", "/bin/echo echo hello\\ world");
-            } else if (button == btn_open) {
+            } else if (button == btn_open || button == btn_open_with) {
                 var file = File.new_for_path(local_repos[data["id"].get_string()].get_string());
+
+                if (!file.query_exists()) { btn_clone.visible = true; return; }
                 var file_launcher = new FileLauncher(file);
+                if (button == btn_open_with) file_launcher.always_ask = true;
                 file_launcher.launch.begin(parent.get_application().active_window, null, (src, res) => {
                     try { 
                         if (file_launcher.launch.end(res)) {
                             if (!banner.revealed) {
                                 var repo_id = (string) data["id"];
                                 var repo_path = local_repos[repo_id].get_string();
-                                terminal.add_task(@"$repo_id-pull-sync", @"/app/bin/git git -C \"$repo_path\" pull");
-                            } data["banner"] = banner.revealed = true;
+                                var cache_file = @"$(Environment.get_user_cache_dir())/$(parent.get_application().application_id)/porcelain_cache";
+                                Htg.run_command.begin(@"git -C $repo_path status --porcelain > $cache_file", (src, res) => {
+                                    if (Htg.run_command.end(res) == 0) {
+                                        string fc;
+                                        try { FileUtils.get_contents(cache_file, out fc); }
+                                        catch (Error e) {}
+                                        if (fc.length == 0) terminal.add_task(@"$repo_id-pull-sync", @"/app/bin/git git -C \"$repo_path\" pull");
+                                    } else print("Error\n");
+                                });
+                            } 
                         }
                     } catch (Error e) {}
                 });
-            } else if (button == btn_open_with) {
-                var file = File.new_for_path(local_repos[data["id"].get_string()].get_string());
-                var file_launcher = new FileLauncher(file);
-                file_launcher.always_ask = true;
-                file_launcher.launch.begin(parent.get_application().active_window, null, (src, res) => {
-                    try { 
-                        if (file_launcher.launch.end(res)) {
-                            if (!banner.revealed) {
-                                var repo_id = (string) data["id"];
-                                var repo_path = local_repos[repo_id].get_string();
-                                terminal.add_task(@"$repo_id-pull-sync", @"/app/bin/git git -C \"$repo_path\" pull");
-                            } data["banner"] = banner.revealed = true;
-                        }
-                    } catch (Error e) {}
-                });
+            //  } else if (button == btn_open_with) {
+            //      var file = File.new_for_path(local_repos[data["id"].get_string()].get_string());
+            //      var file_launcher = new FileLauncher(file);
+            //      file_launcher.always_ask = true;
+            //      file_launcher.launch.begin(parent.get_application().active_window, null, (src, res) => {
+            //          try { 
+            //              if (file_launcher.launch.end(res)) {
+            //                  if (!banner.revealed) {
+            //                      var repo_id = (string) data["id"];
+            //                      var repo_path = local_repos[repo_id].get_string();
+            //                      terminal.add_task(@"$repo_id-pull-sync", @"/app/bin/git git -C \"$repo_path\" pull");
+            //                  } data["banner"] = banner.revealed = true;
+            //              }
+            //          } catch (Error e) {}
+            //      });
             } else if (button == btn_remove) {
                 var dg = new Adw.MessageDialog(parent.get_application().active_window, "Remove Repository?", "This will remove the repository only from this device");
                 dg.add_response("_cancel", "Cancel");
