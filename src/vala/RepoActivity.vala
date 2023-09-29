@@ -54,13 +54,35 @@ namespace HashFolder {
                 page_back.visible = leaflet.folded && viewstack.visible_child_name == "repos";
             });
 
-            //  leaflet.set_chi
+            do_auto_download();
+        }
+
+        private void do_auto_download() {
+            var app_settings = parent.get_application().get_settings("app");
+            var user = app_settings["user"].get_string();
+            var user_settings = parent.get_application().get_settings(user);
+            var auto_download = user_settings["auto_download"].get_boolean();
+            if (!auto_download) return;
+
+            if (!user_settings.contains("local_repos")) user_settings["local_repos"] = new HashMap<string, Value?>();
+            var local_repos = (HashMap<string, Value?>) user_settings["local_repos"];
+            var repo_store = (HashMap<string, Value?>) user_settings["repo_store"];
+
+            foreach (var repo_id in local_repos.keys) {
+                if (!repo_store.has_key(repo_id)) continue;
+                
+                var repo_path = local_repos[repo_id].get_string();
+                content_frag.terminal.add_task(@"$repo_id-pull-sync", @"/app/bin/git git -C \"$repo_path\" pull");
+            }
         }
 
         protected override void on_destroy() {
             var app_settings = parent.get_application().get_settings("app");
             var user = app_settings["user"].get_string();
             var user_settings = parent.get_application().get_settings(user);
+            var auto_upload = user_settings["auto_upload"].get_boolean();
+            if (!auto_upload) return;
+
             if (!user_settings.contains("local_repos")) user_settings["local_repos"] = new HashMap<string, Value?>();
             var local_repos = (HashMap<string, Value?>) user_settings["local_repos"];
             var repo_store = (HashMap<string, Value?>) user_settings["repo_store"];
@@ -77,7 +99,7 @@ namespace HashFolder {
                     var repo_path = local_repos[repo_id].get_string();
 
                     Htg.run_command.begin(@"git -C \"$repo_path\" add --all", () => {
-                        Htg.run_command.begin(@"git -C \"$repo_path\" commit -a -m init", () => {
+                        Htg.run_command.begin(@"git -C \"$repo_path\" commit -a -m update", () => {
                             Htg.run_command.begin(@"git -C \"$repo_path\" push", on_task_completed);
                         });
                     });

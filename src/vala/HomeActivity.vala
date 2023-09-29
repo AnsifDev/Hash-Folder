@@ -13,6 +13,9 @@ namespace HashFolder {
         private Button open_folder;
         private Button logout;
         private ProgressBar progress;
+        private Switch auto_download;
+        private Switch auto_upload;
+        private Switch discoverable;
 
         private int progress_running = 0;
 
@@ -85,6 +88,15 @@ namespace HashFolder {
             clear_folder.visible = current_path != def_path;
             def_folder.subtitle = current_path;
 
+            auto_download = (Switch) builder.get_object("auto_download");
+            user_settings.bind("auto_download", auto_download, "active", false);
+
+            auto_upload = (Switch) builder.get_object("auto_upload");
+            user_settings.bind("auto_upload", auto_upload, "active", true);
+
+            discoverable = (Switch) builder.get_object("discoverable");
+            user_settings.bind("discoverable", discoverable, "active", true);
+
             //Repository subpage
             var repo_page_back = (Button) builder.get_object ("repo_page_back");
             var viewstack = (Adw.ViewStack) builder.get_object ("viewstack");
@@ -147,16 +159,15 @@ namespace HashFolder {
                 listbox.add_css_class("boxed-list");
                 //  listbox.sensitive = false;
 
-                var git_logout_row = new Adw.ActionRow();
-                git_logout_row.title = "Detach Git Account";
-                git_logout_row.subtitle = "Logs you out and blocks further account management";
-                git_logout_row.sensitive = false;
-                listbox.append(git_logout_row);
+                //  var git_logout_row = new Adw.ActionRow();
+                //  git_logout_row.title = "Detach Git Account";
+                //  git_logout_row.subtitle = "Logs you out and blocks further account management";
+                //  git_logout_row.sensitive = false;
+                //  listbox.append(git_logout_row);
 
                 var git_auto_push_row = new Adw.ActionRow();
                 git_auto_push_row.title = "Push uncommited changes";
                 git_auto_push_row.subtitle = "Pushing every uncomitted changes to the account";
-                git_auto_push_row.sensitive = false;
                 listbox.append(git_auto_push_row);
 
                 var git_clear_local_repos_row = new Adw.ActionRow();
@@ -166,19 +177,20 @@ namespace HashFolder {
 
                 var git_clear_ssh_key_row = new Adw.ActionRow();
                 git_clear_ssh_key_row.title = "Clear SSH Key";
-                git_clear_ssh_key_row.subtitle = "Removing this device's SSH Key from both this machine and from the github account";
+                git_clear_ssh_key_row.subtitle = "Revoke this device's access to your account";
+                git_clear_ssh_key_row.sensitive = false;
                 listbox.append(git_clear_ssh_key_row);
 
-                var git_logout_check = new CheckButton();
-                git_logout_check.add_css_class("selection-mode");
-                git_logout_check.active = true;
-                git_logout_check.valign = Align.CENTER;
-                git_logout_row.add_suffix(git_logout_check);
-                git_logout_row.activatable_widget = git_logout_check;
+                //  var git_logout_check = new CheckButton();
+                //  git_logout_check.add_css_class("selection-mode");
+                //  git_logout_check.active = true;
+                //  git_logout_check.valign = Align.CENTER;
+                //  git_logout_row.add_suffix(git_logout_check);
+                //  git_logout_row.activatable_widget = git_logout_check;
 
                 var git_auto_push_check = new CheckButton();
                 git_auto_push_check.add_css_class("selection-mode");
-                git_auto_push_check.active = true;
+                //  git_auto_push_check.active = true;
                 git_auto_push_check.valign = Align.CENTER;
                 git_auto_push_row.add_suffix(git_auto_push_check);
                 git_auto_push_row.activatable_widget = git_auto_push_check;
@@ -196,7 +208,7 @@ namespace HashFolder {
                 git_clear_ssh_key_row.activatable_widget = git_clear_ssh_key_check;
                 git_clear_ssh_key_row.activatable_widget = git_clear_ssh_key_check;
 
-                var dg = new Adw.MessageDialog (get_application().active_window, "Logout?", "You are going to logout from this app. Choose actions needed to be taken on Logout");
+                var dg = new Adw.MessageDialog (get_application().active_window, "Logout?", "You are going to logout from this app. Choose additional actions needed to be taken on Logout");
                 dg.add_response ("cancel", "Cancel");
                 dg.add_response ("logout", "Logout");
                 dg.set_response_appearance ("logout", Adw.ResponseAppearance.SUGGESTED);
@@ -204,13 +216,44 @@ namespace HashFolder {
                 dg.response.connect((res) => {
                     if (res == "logout") {
                         logout.sensitive = false;
-
                         start_progress_indetermination();
-                        run_command.begin("gh auth logout -h github.com", (src, res) => {
+
+                        logout_task_handler.begin(() => {
+                            if (!user_settings.contains("local_repos")) user_settings["local_repos"] = new HashMap<string, Value?>();
+                            var local_repos = (HashMap<string, Value?>) user_settings["local_repos"];
+                            var repo_store = (HashMap<string, Value?>) user_settings["repo_store"];
+
+                            var rm_keys = new ArrayList<string>();
+                            foreach (var repo_id in local_repos.keys) {
+                                if (!repo_store.has_key(repo_id)) continue;
+                                var repo_data = (HashMap<string, Value?>) repo_store[repo_id];
+                                var repo_path = local_repos[repo_id].get_string();
+                                //Pushing uncommited
+                                //  print(@"$(repo_data["name"].get_string())\n");
+                                //  foreach (var key in repo_data.keys) print(@"\t$key\n");
+                                if (git_auto_push_check.active && repo_data.has_key("banner") && repo_data["banner"].get_boolean()) {
+                                    Posix.system(@"git -C \"$repo_path\" add --all");
+                                    Posix.system(@"git -C \"$repo_path\" commit -a -m update");
+                                    Posix.system(@"git -C \"$repo_path\" push");
+                                    repo_data["banner"] = false;
+                                }
+
+                                //Clearing Local Repositories
+                                if (git_clear_local_repos_check.active) {
+                                    Posix.system(@"rm -rf $(repo_path)");
+                                    rm_keys.add(repo_id);
+                                }
+
+                                //  repo_data["banner"] = false;
+                            }
+
+                            while(rm_keys.size > 0) local_repos.unset(rm_keys.remove_at(0));
+
+                            //  Posix.system("gh auth logout -h github.com");
+                        }, (src, res) => {
                             stop_progress_indetermination();
                             logout.sensitive = true;
-                            run_command.end(res);
-                            finish();
+                            //  finish();
                         });
                     }
                 });
@@ -236,6 +279,59 @@ namespace HashFolder {
                 def_folder.subtitle = filepath;
                 clear_folder.visible = false;
             }
+        }
+
+        //  private class CommandSequencer: Object {
+        //      private ArrayList<string> sync_queue = new ArrayList<string>();
+        //      private ArrayList<string> async_queue = new ArrayList<string>();
+        //      private HashMap<string, string> cmd_store = new HashMap<string, string>();
+        //      private int async_count = 0;
+
+        //      public bool sleeping {
+        //          get;
+        //          private set;
+        //          default = true;
+        //      }
+
+        //      public void add_task(string id, string command, bool sync = false) {
+        //          sleeping = false;
+        //          if (!sync) async_count++;
+                
+        //          cmd_store[id] = command;
+        //          if (sync) sync_queue.add(id);
+        //          else if (sync_queue.size == 0) Htg.run_command.begin(command, (src, res) => {
+        //              async_count--;
+        //              if (async_count == 0) sleeping = true;
+        //          });
+        //          else async_queue.add(id);
+
+        //          if (sync_queue.size == 1) Htg.run_command.begin(cmd_store[sync_queue[0]], on_sync_task_completed);
+        //      }
+
+        //      private void on_sync_task_completed(Object? src, AsyncResult res) {
+        //          //  on_task_completed(sync_queue.remove_at(0), Htg.run_command.end(res));
+        //          if (sync_queue.size > 0) Htg.run_command.begin(cmd_store[sync_queue[0]], on_sync_task_completed);
+        //          else {
+        //              async_count += async_queue.size;
+        //              while(async_queue.size > 0) Htg.run_command.begin(cmd_store[async_queue.remove_at(0)], (src, res) => {
+        //                  async_count--;
+        //                  if (async_count == 0) sleeping = true;
+        //              });
+        //          }
+        //      }
+
+        //      //  public signal void on_task_completed(string id, int status);
+        //  }
+
+        private delegate void TaskBeginCallback();
+
+        private async void logout_task_handler(TaskBeginCallback callback) {
+            var t = new Thread<void>("sub-command", () => {
+                callback();
+                Idle.add(logout_task_handler.callback);
+            });
+            yield;
+            t.join();
         }
     }
 }

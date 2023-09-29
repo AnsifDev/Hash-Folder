@@ -25,7 +25,7 @@ namespace HashFolder {
         private Button btn_remove;
         private Button btn_delete;
 
-        private RepoContentTerminal terminal;
+        internal RepoContentTerminal terminal;
         private Adw.Banner banner;
         //  private CloneManager clone_mgr;
         private HashMap<string, Value?> local_repos;

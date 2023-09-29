@@ -130,7 +130,7 @@
 									<object class="GtkLabel">
 										<property name="hexpand">false</property>
 										<property name="halign">center</property>
-										<property name="label">Build: v0.0.4 alpha</property>
+										<property name="label">Build: v0.0.5 alpha</property>
 										<style><class name="dim-label"/><class name="caption"/></style>
 									</object>
 								</child>

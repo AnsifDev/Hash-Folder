@@ -85,6 +85,7 @@ namespace HashFolder {
             catch (Error e) { critical(e.message); }
 
             refresh();
+            //  update_filter ();
             parent.on_result_available.connect((request_id, result) => {
                 if (request_id == 1) {
                     var result_map = (HashMap<string, Value?>) result;
@@ -124,15 +125,19 @@ namespace HashFolder {
                 if (status == 0) try {
                     var repos_list = new Htg.JsonEngine().parse_file_to_array(repo_cache_path);
 
-                    repo_store = new HashMap<string, Value?>();
+                    //  if (!user_settings.contains("repo_store")) user_settings["repo_store"] = new HashMap<string, Value?>();
+                    //  repo_store = (HashMap<string, Value?>) user_settings["repo_store"];
                     original_list.clear();
                     foreach (var repo_data in repos_list) {
                         var id = ((HashMap<string, Value?>) repo_data)["id"].get_string();
-                        repo_store[id] = repo_data;
+                        if (!repo_store.has_key (id)) repo_store[id] = new HashMap<string, Value?>();
+                        var stored_repo_data = (HashMap<string, Value?>) repo_store[id];
+                        foreach (var key in ((HashMap<string, Value?>) repo_data).keys) 
+                            stored_repo_data[key] = ((HashMap<string, Value?>) repo_data)[key];
                         original_list.add (id);
                     }
 
-                    user_settings["repo_store"] = repo_store;
+                    //  user_settings["repo_store"] = repo_store;
                 } catch (Error e) { critical (e.message); }
                 else {
                     var dg = new Adw.MessageDialog (parent.get_application ().active_window, "Repository Fetch Failed", null);
