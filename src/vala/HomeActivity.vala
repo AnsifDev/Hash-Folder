@@ -168,6 +168,7 @@ namespace HashFolder {
                 var git_auto_push_row = new Adw.ActionRow();
                 git_auto_push_row.title = "Push uncommited changes";
                 git_auto_push_row.subtitle = "Pushing every uncomitted changes to the account";
+                git_auto_push_row.sensitive = false;
                 listbox.append(git_auto_push_row);
 
                 var git_clear_local_repos_row = new Adw.ActionRow();
@@ -249,11 +250,11 @@ namespace HashFolder {
 
                             while(rm_keys.size > 0) local_repos.unset(rm_keys.remove_at(0));
 
-                            //  Posix.system("gh auth logout -h github.com");
+                            Posix.system("gh auth logout -h github.com");
                         }, (src, res) => {
                             stop_progress_indetermination();
                             logout.sensitive = true;
-                            //  finish();
+                            finish();
                         });
                     }
                 });
